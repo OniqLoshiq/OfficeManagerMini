@@ -396,7 +396,7 @@ namespace OMM.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("leavingReasons");
+                    b.ToTable("LeavingReasons");
                 });
 
             modelBuilder.Entity("OMM.Domain.Project", b =>

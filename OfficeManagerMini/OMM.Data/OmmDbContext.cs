@@ -19,7 +19,7 @@ namespace OMM.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<EmployeesProjectsPositions> EmployeesProjectsRoles { get; set; }
-        public DbSet<LeavingReason> leavingReasons { get; set; }
+        public DbSet<LeavingReason> LeavingReasons { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<ProjectPosition> ProjectPositions { get; set; }
