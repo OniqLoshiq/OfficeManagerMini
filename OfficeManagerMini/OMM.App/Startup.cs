@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OMM.Data;
 using OMM.Domain;
+using OMM.App.Extensions;
+using OMM.Data.Seeding;
 
 namespace OMM.App
 {
@@ -55,6 +57,13 @@ namespace OMM.App
                 .AddEntityFrameworkStores<OmmDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //Database seeding services
+            services.AddScoped<AssetTypeSeeder>();
+            services.AddScoped<DepartmentSeeder>();
+            services.AddScoped<LeavingReasonSeeder>();
+            services.AddScoped<ProjectPositionSeeder>();
+            services.AddScoped<StatusSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +80,8 @@ namespace OMM.App
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseDataBaseSeeding();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
