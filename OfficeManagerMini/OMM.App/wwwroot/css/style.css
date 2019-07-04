@@ -11,6 +11,11 @@ body{
     padding-top:54px;
 }
 
+.nav-header{
+    font-weight:bold;
+    font-size:17px;
+}
+
 /*.allButFooter {
     min-height: calc(100vh - 50px);
 }*/
@@ -30,13 +35,18 @@ footer {
     /*min-height: calc(100vh - 165px);*/
 }
 
+small{
+    font-size: 12px;
+}
+
 /*Sidebar css */
 
 #sidebar {
-    width: 190px;
+    width: 200px;
     overflow-y: auto;
     transition: all 0.5s ease;
     color: #fff;
+    background-color: rgba(255, 0, 0, 0.4);
 }
 
     #sidebar .sidebar-header {
@@ -96,6 +106,12 @@ footer {
     }
 }
 
+@media (max-width: 590px) {
+    #sidebar span {
+        font-size: 0.73rem;
+    }
+}
+
 @media (max-width: 767px) {
     #sidebar img {
         width: 40px;
@@ -106,8 +122,8 @@ footer {
         border-bottom: none;
         max-width: 80px;
         min-width: 80px;
-        display: inline-block;
     }
+
     .main-col {
         min-height: calc(100vh - 165px);
     }
