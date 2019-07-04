@@ -1,0 +1,114 @@
+﻿.bg-omm-greenery {
+    background-color: #88B04B;
+}
+
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
+
+body{
+    padding-top:54px;
+}
+
+/*.allButFooter {
+    min-height: calc(100vh - 50px);
+}*/
+
+footer {
+    font-size: small;
+    bottom: 0;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*Main css */
+.main-col {
+    min-height: calc(100vh - 107px);
+    /*min-height: calc(100vh - 165px);*/
+}
+
+/*Sidebar css */
+
+#sidebar {
+    width: 190px;
+    overflow-y: auto;
+    transition: all 0.5s ease;
+    color: #fff;
+}
+
+    #sidebar .sidebar-header {
+        padding: 20px;
+        background: #6d7fcc;
+    }
+
+    #sidebar ul.components {
+        padding: 20px 0;
+        border-bottom: 1px solid #47748b;
+    }
+
+    #sidebar ul p {
+        color: #fff;
+        padding: 10px;
+    }
+
+    #sidebar ul li a {
+        padding: 10px;
+        display: block;
+    }
+
+        #sidebar ul li a:hover {
+            color: #7386D5;
+            background: #fff;
+        }
+
+    #sidebar ul li.active > a, #sidebar a[aria-expanded="true"] {
+        color: #fff;
+        background: #6d7fcc;
+    }
+    #sidebar ul ul a {
+        font-size: 0.9em !important;
+        color: #FFFFFF;
+        text-decoration: none;
+        background: #6d7fcc;
+    }
+
+    #sidebar sidenav-header-inner {
+        
+    }
+
+    #sidebar img {
+        width: 95px;
+    }
+
+    .sidenav-header{
+        padding-top:20px;
+        padding-bottom:10px;
+        border-bottom: 1px solid;
+        background: red;
+    }
+
+@media (max-width: 647px) {
+    #sidebar span {
+        font-size: 0.79rem;
+    }
+}
+
+@media (max-width: 767px) {
+    #sidebar img {
+        width: 40px;
+    }
+    .sidenav-header {
+        padding-top: 10px;
+        padding-bottom: 7px;
+        border-bottom: none;
+        max-width: 80px;
+        min-width: 80px;
+        display: inline-block;
+    }
+    .main-col {
+        min-height: calc(100vh - 165px);
+    }
+}

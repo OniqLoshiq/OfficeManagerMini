@@ -5,24 +5,16 @@
 @inject UserManager<Employee> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
     <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+        <a class="nav-link pl-0" href="#" title="Notifications"><i class="fas fa-bell fa-lg"></i></a>
     </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
+    <li class="nav-item dropdown">
+        <a class="nav-link ml-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" title="Profile" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user fa-lg"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-left mt-2 col-4 " aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Profile</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-power-off mr-2"></i>Logout</a>
+        </div>
     </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
 </ul>
