@@ -19,4 +19,9 @@
     <ProjectReference Include="..\OMM.Services\OMM.Services.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Areas\Management\Models\" />
+  </ItemGroup>
+
 </Project>
