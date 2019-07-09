@@ -114,11 +114,11 @@ small{
 
 @media (max-width: 767px) {
     #sidebar img {
-        width: 40px;
+        width: 35px;
     }
     .sidenav-header {
-        padding-top: 10px;
-        padding-bottom: 7px;
+        padding-top: 7px;
+        padding-bottom: 4px;
         border-bottom: none;
         max-width: 80px;
         min-width: 80px;
