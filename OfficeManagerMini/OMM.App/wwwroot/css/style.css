@@ -16,10 +16,6 @@ body{
     font-size:17px;
 }
 
-/*.allButFooter {
-    min-height: calc(100vh - 50px);
-}*/
-
 footer {
     font-size: small;
     bottom: 0;
@@ -99,6 +95,10 @@ small{
         border-bottom: 1px solid;
         background: red;
     }
+
+img.card-img-top{
+    width:120px;
+}
 
 @media (max-width: 647px) {
     #sidebar span {
