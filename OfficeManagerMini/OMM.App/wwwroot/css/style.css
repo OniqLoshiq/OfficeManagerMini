@@ -16,6 +16,10 @@ body{
     font-size:17px;
 }
 
+.hr-oom {
+    border: 1px solid rgba(0,0,0,.1);
+}
+
 footer {
     font-size: small;
     bottom: 0;
@@ -98,6 +102,14 @@ small{
 
 img.card-img-top{
     width:120px;
+}
+
+.btn.dropdown-toggle {
+    border: 1px solid #ced4da !important;
+}
+
+.form-control.flatpickr-input{
+    background-color: white !important;
 }
 
 @media (max-width: 647px) {
