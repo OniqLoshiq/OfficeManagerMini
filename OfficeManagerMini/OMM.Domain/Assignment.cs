@@ -24,7 +24,7 @@ namespace OMM.Domain
 
         public bool IsProjectRelated { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime StartingDate { get; set; }
 
         public DateTime? Deadline { get; set; }
 

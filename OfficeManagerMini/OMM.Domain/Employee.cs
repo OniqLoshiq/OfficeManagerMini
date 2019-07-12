@@ -28,6 +28,8 @@ namespace OMM.Domain
 
         public string FullName { get; set; }
 
+        public DateTime DateOfBirth { get; set; }
+
         public DateTime AppointedOn { get; set; }
 
         public DateTime? LeftOn { get; set; }
