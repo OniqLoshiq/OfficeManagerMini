@@ -21,7 +21,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning text-secondary">Executor</div>
                 </div>
-                <select class="form-control selectpicker show-tick" id="executor" name="executor" data-style="btn-white" data-live-search="true">
+                <select class="form-control selectpicker show-tick" id="executor" name="executor" data-style="btn-white" data-live-search="true" data-width="auto">
                     <option selected disabled>To:</option>
                     <optgroup label="Management Board">
                         <option>Oniq</option>
@@ -91,25 +91,54 @@
     </div>
     <hr class="hr-oom" />
     <div class="form-row">
-        <div class="form-group col-md-3 mb-0">
-            <label for="type">Style</label>
-            <input type="text" class="form-control" id="type">
+        <div class="form-group col-md-2 mb-0">
+            <label for="status">Status</label>
+            <select class="form-control" id="status">
+                <option selected>In Process</option>
+                <option>Frozen</option>
+                <option>Waiting</option>
+                <option>Delayed</option>
+                <option>Completed</option>
+            </select>
         </div>
-        <div class="form-group col-md-9 mb-0">
-            <label for="type">Project</label>
-            <input type="text" class="form-control" id="type">
+        <div class="form-group form-check col-md-2 mb-0 text-center">
+            <label class="form-check-label ">Is Project Related</label>
+            <div class="custom-control custom-switch pt-3 d-flex justify-content-center">
+                <input type="checkbox" class="custom-control-input" id="isProjectRelated" onclick="myProjects()">
+                <label class="custom-control-label" for="isProjectRelated">No / Yes</label>
+            </div>
+        </div>
+        <div class="form-group col-md-8 mb-0">
+            <label for="project">Project</label>
+            <fieldset id="toggle-checkbox" disabled>
+                <div class="input-group mb-1">
+                    <select class="form-control selectpicker" id="project" name="project" data-style="btn-white" data-live-search="true" data-width="auto">
+                        <option value="0" selected disabled>Project</option>
+                        <option value="1">Project number 1</option>
+                        <option value="2">Project number 2</option>
+                        <option value="3">Project number 3</option>
+                    </select>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <hr class="hr-oom" />
+    <div class="form-row">
+        <div class="form-group col mb-0">
+            <label for="progressInput">Assignment progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">0</output>%</span></label>
+            <input type="range" class="custom-range" id="progressInput" name="progress" value="0" min="0" max="100" oninput="progressOutput.value = progressInput.value">
         </div>
     </div>
     <hr class="hr-oom" />
     <div class="form-row">
         <div class="form-group col-md-3 mb-0">
             <label for="type">Type</label>
-            <input type="text" class="form-control" id="type">
+            <input type="text" class="form-control" id="type" name="type">
         </div>
         <div class="form-group col-md-4 flatpickrcontainer mb-0">
             <label for="startingDate">Starting Date</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="startingDate" data-input>
+                <input type="text" class="form-control" id="startingDate" name="startingDate" data-input>
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
                 </div>
@@ -118,7 +147,7 @@
         <div class="form-group col-md-4 flatpickrcontainer mb-0">
             <label for="deadline">Deadline</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="deadline" data-input>
+                <input type="text" class="form-control" id="deadline" name="deadline" data-input>
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
                 </div>
@@ -160,9 +189,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-
-        // js initialization
-
         flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday default is sunday
 
         document.getElementsByClassName("flatpickrcontainer").flatpickr({
