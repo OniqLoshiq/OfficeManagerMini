@@ -1,16 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Assignment";
 }
 
 <h4 class="mb-3 text-center">Create Assignment</h4>
-
+<hr class="hr-oom" style="width:300px;" />
 <form>
     <div class="form-row">
         <div class="form-group col-md-6 mb-0">
             <label class="sr-only" for="Assignor">Assignor</label>
             <div class="input-group mb-2">
                 <div class="input-group-prepend">
-                    <div class="input-group-text bg-warning text-secondary">Assignor</div>
+                    <div class="input-group-text bg-warning text-secondary"><strong>Assignor</strong></div>
                 </div>
                 <input type="text" class="form-control" id="Assignor" value="OniqLoshiq" disabled>
             </div>
@@ -19,7 +19,7 @@
             <label class="sr-only" for="executor">Executor</label>
             <div class="input-group mb-2">
                 <div class="input-group-prepend">
-                    <div class="input-group-text bg-warning text-secondary">Executor</div>
+                    <div class="input-group-text bg-warning text-secondary"><strong>Executor</strong></div>
                 </div>
                 <select class="form-control selectpicker show-tick" id="executor" name="executor" data-style="btn-white" data-live-search="true" data-width="auto">
                     <option selected disabled>To:</option>
@@ -57,7 +57,7 @@
             <label class="sr-only" for="assistants">Assistants</label>
             <div class="input-group mb-1">
                 <div class="input-group-prepend">
-                    <div class="input-group-text bg-warning text-secondary">Assistants</div>
+                    <div class="input-group-text bg-warning text-secondary"><strong>Assistants</strong></div>
                 </div>
                 <select class="form-control selectpicker show-tick" id="assistants" name="assistants" data-style="btn-white" data-live-search="true" multiple data-actions-box="true" data-width="auto">
                     <optgroup label="Management Board">
@@ -173,10 +173,11 @@
         <label for="mytextarea">Description</label>
         <textarea id="mytextarea"></textarea>
     </div>
-    <hr class="hr-oom" />
+    <hr class="hr-oom w-25" />
     <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-outline-warning">Create</button>
     </div>
+    <hr class="hr-oom w-25" />
 </form>
 
 
