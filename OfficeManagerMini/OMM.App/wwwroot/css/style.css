@@ -20,6 +20,10 @@ body{
     border: 1px solid rgba(0,0,0,.1);
 }
 
+form label{
+    font-weight:bold;
+}
+
 footer {
     font-size: small;
     bottom: 0;
@@ -102,6 +106,10 @@ small{
 
 img.card-img-top{
     width:120px;
+}
+
+.proj-participant-img {
+    width: 35px;
 }
 
 .btn.dropdown-toggle {
