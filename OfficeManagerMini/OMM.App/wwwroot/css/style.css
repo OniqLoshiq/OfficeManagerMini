@@ -154,3 +154,33 @@ img.card-img-top{
         justify-content: flex-start !important;
     }
 }
+
+.forecast-container {
+    color: #d5d6dc;
+    width: 100%;
+}
+
+.forecast-today {
+    width: 34%;
+}
+
+.forecast-week {
+    width: 11%;
+    min-width: 88px;
+}
+
+.forecast-content-color:nth-child(2n) {
+    background-color: #454962;
+}
+
+.forecast-content-color:nth-child(2n+1) {
+    background-color: #838596;
+}
+
+.forecast-header-color:nth-child(2n+1) {
+    background-color: #6e7185;
+}
+
+.forecast-header-color:nth-child(2n) {
+    background-color: #313551;
+}
