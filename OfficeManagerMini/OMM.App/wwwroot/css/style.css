@@ -184,3 +184,22 @@ img.card-img-top{
 .forecast-header-color:nth-child(2n) {
     background-color: #313551;
 }
+
+.reg-employee input, .form-control, .form-control.flatpickr-input {
+    background: transparent !important;
+    border: none;
+    border-bottom: 2px double #ffc107;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+    .reg-employee input:focus, .form-control:focus {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-color: #007bff
+    }
+
+.reg-employee .company-data{
+    background: red;
+}
