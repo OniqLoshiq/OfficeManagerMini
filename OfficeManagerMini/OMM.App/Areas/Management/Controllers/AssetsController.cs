@@ -6,14 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OMM.App.Areas.Management.Controllers
 {
-    public class EmployeesController : BaseController
+    public class AssetsController : BaseController
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Register()
+        public IActionResult Create()
         {
             return View();
         }

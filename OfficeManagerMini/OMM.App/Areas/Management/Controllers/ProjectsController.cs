@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OMM.App.Areas.Management.Controllers
 {
-    [Area("Management")]
-    public class ProjectsController : Controller
+    public class ProjectsController : BaseController
     {
         public IActionResult Create()
         {
