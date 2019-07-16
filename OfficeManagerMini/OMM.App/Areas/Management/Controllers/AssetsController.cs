@@ -8,6 +8,11 @@ namespace OMM.App.Areas.Management.Controllers
 {
     public class AssetsController : BaseController
     {
+        public IActionResult All()
+        {
+            return View();
+        }
+
         public IActionResult Create()
         {
             return View();
