@@ -185,7 +185,7 @@ img.card-img-top{
     background-color: #313551;
 }
 
-.reg-employee input, .form-control, .form-control.flatpickr-input {
+.management input, .management .form-control, .management .form-control.flatpickr-input, .management .btn.dropdown-toggle {
     background: transparent !important;
     border: none;
     border-bottom: 2px double #ffc107;
@@ -194,12 +194,19 @@ img.card-img-top{
     border-radius: 0;
 }
 
-    .reg-employee input:focus, .form-control:focus {
+    .management input:focus, .management .form-control:focus {
         -webkit-box-shadow: none;
         box-shadow: none;
-        border-color: #007bff
+        border-color: #007bff;
     }
 
-.reg-employee .company-data{
-    background: red;
+.management .btn.dropdown-toggle {
+    border: none !important;
+    border-bottom: 2px double #ffc107 !important;
 }
+
+    .management .company-data {
+        background-image: url('/images/registerEmployeeBG.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
