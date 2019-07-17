@@ -8,7 +8,7 @@ namespace OMM.App.Areas.Management.Controllers
 {
     public class EmployeesController : BaseController
     {
-        public IActionResult Index()
+        public IActionResult All()
         {
             return View();
         }

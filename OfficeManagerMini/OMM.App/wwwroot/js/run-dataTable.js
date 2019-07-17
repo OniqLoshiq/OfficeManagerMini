@@ -1,6 +1,5 @@
 ﻿$(document).ready(function () {
     var table = $('#myDataTable').DataTable({
-        lengthChange: true,
         buttons: ['copy', 'excel', 'pdf', 'colvis']
     });
 
