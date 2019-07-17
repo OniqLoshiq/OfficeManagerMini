@@ -222,8 +222,9 @@ img.card-img-top {
 }
 
     .dataTables_paginate .page-link:hover {
-        color: #ffc107;
+        color: #007bff;
     }
+
 
 
 /*#myDataTable th, #myDataTable td {
@@ -240,4 +241,10 @@ img.card-img-top {
 
 .empl-list-img {
     width: 31px;
+}
+
+.empl-list-inactive-img {
+    width: 31px;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
 }

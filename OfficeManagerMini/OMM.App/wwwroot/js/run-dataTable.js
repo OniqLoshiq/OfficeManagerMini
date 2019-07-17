@@ -5,4 +5,14 @@
 
     table.buttons().container()
         .appendTo('#myDataTable_wrapper .col-md-6:eq(0)');
+
+    var id = document.getElementById("myDataTableInactiveEmpl");
+    if (id) {
+        var table2 = $('#myDataTableInactiveEmpl').DataTable({
+            buttons: ['copy', 'excel', 'pdf', 'colvis']
+        });
+
+        table2.buttons().container()
+            .appendTo('#myDataTableInactiveEmpl_wrapper .col-md-6:eq(0)');
+    }
 });
