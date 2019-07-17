@@ -226,7 +226,7 @@ img.card-img-top {
     }
 
 
-
+/*Options to config table behaviour*/
 /*#myDataTable th, #myDataTable td {
     /*word-break: break-word;
     max-width: 50px;
@@ -248,3 +248,8 @@ img.card-img-top {
     -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
 }
+
+/*Options to config disabled background color in input field*/
+/*.profile-gen-info .form-control:disabled, .employeeProfile .form-control[readonly] {
+    background-color: #ffdc4c;
+}*/

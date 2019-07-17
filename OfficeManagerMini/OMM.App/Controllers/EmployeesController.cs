@@ -17,5 +17,10 @@ namespace OMM.App.Controllers
         {
             return View();
         }
+
+        public IActionResult Profile()
+        {
+            return View();
+        }
     }
 }

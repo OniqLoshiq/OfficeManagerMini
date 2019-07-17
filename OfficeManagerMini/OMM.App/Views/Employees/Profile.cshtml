@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h4 class="mb-3 text-center">Profile</h4>
+<hr class="hr-oom" style="width:300px;" />
+
+<nav class="employeeProfile mb-3">
+    <div class="nav nav-tabs d-flex justify-content-end" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-info-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-info" aria-selected="true">General Information</a>
+        <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-authentication" aria-selected="false">Security Authentication</a>
+        <a class="nav-item nav-link" id="nav-assets-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-assets" aria-selected="false">Personal Assets</a>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab"><partial name="_ProfileGeneralInformationPartialView" /></div>
+    <div class="tab-pane fade" id="nav-authentication" role="tabpanel" aria-labelledby="nav-authentication-tab"><partial name="_ProfileSecurityAuthenticationPartialView" /></div>
+    <div class="tab-pane fade" id="nav-assets" role="tabpanel" aria-labelledby="nav-assets-tab"><partial name="_ProfilePersonalAssetsPartialView" /></div>
+</div>
