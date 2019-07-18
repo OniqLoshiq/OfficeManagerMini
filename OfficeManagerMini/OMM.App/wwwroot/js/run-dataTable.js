@@ -1,6 +1,14 @@
 ﻿$(document).ready(function () {
     var table = $('#myDataTable').DataTable({
-        buttons: ['copy', 'excel', 'pdf', 'colvis']
+        buttons: ['copy', 'excel', 'pdf',
+            {
+                extend: 'print',
+                exportOptions: {
+                    stripHtml: false,
+                }
+            },
+
+            'colvis']
     });
 
     table.buttons().container()
@@ -9,7 +17,15 @@
     var id = document.getElementById("myDataTableInactiveEmpl");
     if (id) {
         var table2 = $('#myDataTableInactiveEmpl').DataTable({
-            buttons: ['copy', 'excel', 'pdf', 'colvis']
+            buttons: ['copy', 'excel', 'pdf',
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        stripHtml: false,
+                    }
+                },
+
+                'colvis']
         });
 
         table2.buttons().container()
