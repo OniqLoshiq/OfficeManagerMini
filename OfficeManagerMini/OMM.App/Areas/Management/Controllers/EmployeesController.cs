@@ -17,5 +17,15 @@ namespace OMM.App.Areas.Management.Controllers
         {
             return View();
         }
+
+        public IActionResult Edit()
+        {
+            return View();
+        }
+
+        public IActionResult Release()
+        {
+            return View();
+        }
     }
 }
