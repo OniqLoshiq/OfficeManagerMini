@@ -261,3 +261,53 @@ img.card-img-top {
 .empl-profile a {
     color: #017aff;
 }
+
+.empl-rel img {
+    width: 90px;
+}
+
+.empl-rel .form-control:disabled, .empl-rel .form-control[readonly] {
+    background-color: rgba(233, 236, 239, 0.3) !important;
+}
+
+.empl-rel input, .empl-rel .form-control {
+    border-bottom: 2px double #17a2b8;
+}
+
+/*
+    purple: #6f42c1
+    teal:   #20c997
+    cyan:   #17a2b8
+*/
+
+#myDataTableReleasedItems thead, .empl-rel-items button {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+#collapseReleasedItems .dataTables_paginate .page-item.active .page-link {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+#collapseReleasedItems .dataTables_paginate .page-link {
+    color: #212529;
+}
+
+    #collapseReleasedItems .dataTables_paginate .page-link:hover {
+        color: #ffc107;
+    }
+
+#collapseInactiveEmployees .dataTables_paginate .page-item.active .page-link {
+    background-color: #868e96;
+    border-color: #868e96;
+}
+
+#collapseInactiveEmployees .dataTables_paginate .page-link {
+    color: #212529;
+}
+
+    #collapseInactiveEmployees .dataTables_paginate .page-link:hover {
+        color: #007bff;
+    }
+

@@ -1,0 +1,256 @@
+﻿
+@{
+    ViewData["Title"] = "Release Employee";
+}
+
+<h4 class="mb-3 text-center">Release Employee</h4>
+<hr class="hr-oom" style="width:300px;" />
+
+<div class="d-flex justify-content-center empl-rel mb-3">
+    <img src="~/images/avatar.jpg" alt="avatar" class="rounded img-thumbnail">
+</div>
+
+<form>
+    <div class="form-row management empl-rel">
+        <div class="form-group col-md-6 personal-data px-3">
+            <div class="form-row">
+                <div class="form-group col-lg-4">
+                    <label for="firstName">First name</label>
+                    <input type="text" class="form-control" id="firstName" value="Oniq" disabled>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="middleName">Middle name</label>
+                    <input type="text" class="form-control" id="middleName" value="Dokka" disabled>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="lastName">Last name</label>
+                    <input type="text" class="form-control" id="lastName" value="Loshiq" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fullName">Full name</label>
+                <input type="text" class="form-control" id="fullName" value="Oniq D. Loshiq" disabled>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-lg-6">
+                    <label for="dateOfBirth">Date of birth</label>
+                    <input type="text" class="form-control" id="dateOfBirth" name="dateOfBirth" value="01-12-1999" disabled>
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="personalPhoneNumber">Pers. phone number</label>
+                    <input type="tel" class="form-control" id="personalPhoneNumber" value="8888888888" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-6 company-data px-3">
+            <div class="form-row">
+                <div class="form-group col-lg-10">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" value="oniqloshiq@ludnica.com" disabled>
+                </div>
+                <div class="form-group col-lg-2">
+                    <label for="accessLevel">Access</label>
+                    <input type="text" class="form-control" id="accessLevel" value="10" disabled>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-lg-6">
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control" id="department" value="Management board" disabled>
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="position">Position</label>
+                    <input type="text" class="form-control" id="position" value="Web Dev" disabled>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-lg-6">
+                    <label for="appointedOn">Appointed on</label>
+                    <input type="text" class="form-control" id="appointedOn" name="appointedOn" value="18-07-2019" disabled>
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="phoneNumber">Phone number</label>
+                    <input type="tel" class="form-control" id="phoneNumber" value="9999999999" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="d-flex justify-content-end mt-2">
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#removeEmpl">Remove Employee</button>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="removeEmpl" tabindex="-1" role="dialog" aria-labelledby="removeEmployee" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="removeEmplModalLongTitle">Remove Employee</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to release this employee?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-success" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-danger">Release employee</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<hr class="hr-oom mt-3" style="width:300px;" />
+<h5 class="mb-3 text-center empl-rel-items">
+    <button type="button" class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseReleasedItems" aria-expanded="false" aria-controls="collapseReleasedItems">
+        Items to be released
+    </button>
+</h5>
+<hr class="hr-oom" style="width:300px;" />
+
+<div class="collapse" id="collapseReleasedItems">
+    <table id="myDataTableReleasedItems" class="display table-sm table table-striped table-light table-hover table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th scope="col">Inv. number</th>
+                <th scope="col">Type</th>
+                <th scope="col">Make</th>
+                <th scope="col">Model</th>
+                <th scope="col">Ref. number</th>
+                <th scope="col">Aquired On</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+            <tr>
+                <td>1907-F-OMM-123</td>
+                <td>Software</td>
+                <td>Microsoft</td>
+                <td>Microsoft Office</td>
+                <td>BSLAFDULWR18891SD</td>
+                <td>17-07-2019</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/run-dataTable.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+}
+
