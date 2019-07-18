@@ -6,11 +6,11 @@
 <h4 class="mb-3 text-center">Profile</h4>
 <hr class="hr-oom" style="width:300px;" />
 
-<nav class="employeeProfile mb-3">
+<nav class="empl-profile mb-3">
     <div class="nav nav-tabs d-flex justify-content-end" id="nav-tab" role="tablist">
-        <a class="nav-item nav-link active" id="nav-info-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-info" aria-selected="true">General Information</a>
-        <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-authentication" aria-selected="false">Security Authentication</a>
-        <a class="nav-item nav-link" id="nav-assets-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-assets" aria-selected="false">Personal Assets</a>
+        <a class="nav-item nav-link active" id="nav-info-tab" data-toggle="tab" href="#nav-info" role="tab" aria-controls="nav-info" aria-selected="true">General Information</a>
+        <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab" href="#nav-authentication" role="tab" aria-controls="nav-authentication" aria-selected="false">Security Authentication</a>
+        <a class="nav-item nav-link" id="nav-assets-tab" data-toggle="tab" href="#nav-assets" role="tab" aria-controls="nav-assets" aria-selected="false">Personal Assets</a>
     </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
@@ -18,3 +18,20 @@
     <div class="tab-pane fade" id="nav-authentication" role="tabpanel" aria-labelledby="nav-authentication-tab"><partial name="_ProfileSecurityAuthenticationPartialView" /></div>
     <div class="tab-pane fade" id="nav-assets" role="tabpanel" aria-labelledby="nav-assets-tab"><partial name="_ProfilePersonalAssetsPartialView" /></div>
 </div>
+
+
+
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/run-dataTable.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+}

@@ -253,3 +253,11 @@ img.card-img-top {
 /*.profile-gen-info .form-control:disabled, .employeeProfile .form-control[readonly] {
     background-color: #ffdc4c;
 }*/
+
+.empl-profile .active {
+    color: #ffc108 !important;
+}
+
+.empl-profile a {
+    color: #017aff;
+}
