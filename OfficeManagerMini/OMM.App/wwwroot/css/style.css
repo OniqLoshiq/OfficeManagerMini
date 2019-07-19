@@ -156,36 +156,6 @@ img.card-img-top {
     }
 }
 
-.forecast-container {
-    color: #d5d6dc;
-    width: 100%;
-}
-
-.forecast-today {
-    width: 34%;
-}
-
-.forecast-week {
-    width: 11%;
-    min-width: 88px;
-}
-
-.forecast-content-color:nth-child(2n) {
-    background-color: #454962;
-}
-
-.forecast-content-color:nth-child(2n+1) {
-    background-color: #838596;
-}
-
-.forecast-header-color:nth-child(2n+1) {
-    background-color: #6e7185;
-}
-
-.forecast-header-color:nth-child(2n) {
-    background-color: #313551;
-}
-
 .management input, .management .form-control, .management .form-control.flatpickr-input, .management .btn.dropdown-toggle {
     background: transparent !important;
     border: none;
@@ -310,4 +280,55 @@ img.card-img-top {
     #collapseInactiveEmployees .dataTables_paginate .page-link:hover {
         color: #007bff;
     }
+
+
+.forecast-container {
+    color: #d5d6dc;
+    background-color: #6e7185;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.forecast-today {
+    width: 34%;
+}
+
+.forecast-week {
+    width: 11%;
+    min-width: 90px !important;
+}
+
+.forecast-week-img{
+    width: 55px;
+}
+
+.forecast-today-img {
+    width: 35px;
+}
+
+.forecast-today-temp {
+    font-size: 16px;
+}
+
+.forecast-week-max-temp {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.forecast-week-min-temp {
+    font-size: 14px;
+}
+
+.forecast-content-color:nth-child(2n) {
+    background-color: #454962;
+}
+
+@media (max-width: 1070px) {
+    .forecast-week {
+        width: 16.66% ;
+    }
+    .forecast-today{
+        width: 100%;
+    }
+}
 
