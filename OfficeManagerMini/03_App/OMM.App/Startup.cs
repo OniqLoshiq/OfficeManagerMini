@@ -60,7 +60,10 @@ namespace OMM.App
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<OmmDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton<IAuthorizationPolicyProvider, MinimumAccessLevelPolicyProvider>();
             services.AddSingleton<IAuthorizationHandler, MinimumAccessLevelAuthorizationHandler>();
