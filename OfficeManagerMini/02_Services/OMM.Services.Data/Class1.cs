@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OMM.Services
+namespace OMM.Services.Data
 {
     public class Class1
     {

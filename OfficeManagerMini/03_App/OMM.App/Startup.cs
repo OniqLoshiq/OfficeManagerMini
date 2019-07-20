@@ -10,6 +10,9 @@ using OMM.Data;
 using OMM.Domain;
 using OMM.App.Extensions;
 using OMM.Data.Seeding;
+using OMM.Services.AutoMapper;
+using OMM.App.Models;
+using System.Globalization;
 
 namespace OMM.App
 {
@@ -31,6 +34,9 @@ namespace OMM.App
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(ErrorViewModel).Assembly);
 
             services.AddDbContext<OmmDbContext>(options =>
                 options.UseSqlServer(
@@ -76,6 +82,9 @@ namespace OMM.App
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
             app.UseDataBaseSeeding();
 
