@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\01_Data\OMM.Data\OMM.Data.csproj" />
     <ProjectReference Include="..\..\02_Services\OMM.Services.AutoMapper\OMM.Services.AutoMapper.csproj" />
     <ProjectReference Include="..\..\02_Services\OMM.Services.Data\OMM.Services.Data.csproj" />
+    <ProjectReference Include="..\OMM.App.Infrastructure\OMM.App.Infrastructure.csproj" />
   </ItemGroup>
 
 

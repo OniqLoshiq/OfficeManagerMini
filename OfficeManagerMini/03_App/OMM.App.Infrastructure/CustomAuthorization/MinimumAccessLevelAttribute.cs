@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using OMM.App.Common;
+using OMM.App.Infrastructure.Common;
 
 namespace OMM.App.Infrastructure.CustomAuthorization
 {
-    internal class MinimumAccessLevelAttribute : AuthorizeAttribute
+    public class MinimumAccessLevelAttribute : AuthorizeAttribute
     {
         public MinimumAccessLevelAttribute(int accessLevel) => AccessLevel = accessLevel;
 
@@ -11,7 +11,7 @@ namespace OMM.App.Infrastructure.CustomAuthorization
         {
             get
             {
-                if (int.TryParse(Policy.Substring(Constants.POLICY_PREFIX.Length), out var accessLevel))
+                if (int.TryParse(Policy.Substring(InfrastructureConstants.POLICY_PREFIX.Length), out var accessLevel))
                 {
                     return accessLevel;
                 }
@@ -19,7 +19,7 @@ namespace OMM.App.Infrastructure.CustomAuthorization
             }
             set
             {
-                Policy = $"{Constants.POLICY_PREFIX}{value.ToString()}";
+                Policy = $"{InfrastructureConstants.POLICY_PREFIX}{value.ToString()}";
             }
         }
     }

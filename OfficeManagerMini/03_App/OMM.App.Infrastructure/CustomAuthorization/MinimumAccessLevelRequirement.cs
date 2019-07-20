@@ -2,7 +2,7 @@
 
 namespace OMM.App.Infrastructure.CustomAuthorization
 {
-    internal class MinimumAccessLevelRequirement : IAuthorizationRequirement
+    public class MinimumAccessLevelRequirement : IAuthorizationRequirement
     {
         public int MinimumAccessLevel { get; private set; }
 
