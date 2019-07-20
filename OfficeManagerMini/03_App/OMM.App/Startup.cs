@@ -13,6 +13,8 @@ using OMM.Data.Seeding;
 using OMM.Services.AutoMapper;
 using OMM.App.Models;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
+using OMM.App.Infrastructure.CustomAuthorization;
 
 namespace OMM.App
 {
@@ -59,6 +61,9 @@ namespace OMM.App
                 .AddEntityFrameworkStores<OmmDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSingleton<IAuthorizationPolicyProvider, MinimumAccessLevelPolicyProvider>();
+            services.AddSingleton<IAuthorizationHandler, MinimumAccessLevelAuthorizationHandler>();
 
             //Database seeding services
             services.AddScoped<AssetTypeSeeder>();

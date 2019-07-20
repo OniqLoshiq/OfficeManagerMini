@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMM.Services.AutoMapper", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMM.Services.Data", "02_Services\OMM.Services.Data\OMM.Services.Data.csproj", "{6802BFED-E439-47A5-AAD1-2A462DB3FCED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMM.App.Infrastructure", "03_App\OMM.App.Infrastructure\OMM.App.Infrastructure.csproj", "{085A8227-EB15-497F-8FBA-1D0D00B5D21D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{6802BFED-E439-47A5-AAD1-2A462DB3FCED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6802BFED-E439-47A5-AAD1-2A462DB3FCED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6802BFED-E439-47A5-AAD1-2A462DB3FCED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{085A8227-EB15-497F-8FBA-1D0D00B5D21D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{085A8227-EB15-497F-8FBA-1D0D00B5D21D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{085A8227-EB15-497F-8FBA-1D0D00B5D21D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{085A8227-EB15-497F-8FBA-1D0D00B5D21D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{5C79B685-B1FB-4B06-93FB-3FD6A4BE84F6} = {0B9836DD-BF3E-4810-A646-6290E4918CF7}
 		{4586AEB7-AA94-4053-91B7-E977123647E7} = {8CA2F52C-6F97-4032-8861-3D56A5DE0E78}
 		{6802BFED-E439-47A5-AAD1-2A462DB3FCED} = {8CA2F52C-6F97-4032-8861-3D56A5DE0E78}
+		{085A8227-EB15-497F-8FBA-1D0D00B5D21D} = {0B9836DD-BF3E-4810-A646-6290E4918CF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AFA94DCB-DD4C-4BD5-AC07-584A43E0117C}
