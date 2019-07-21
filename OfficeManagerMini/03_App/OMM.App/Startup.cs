@@ -16,6 +16,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
 using OMM.App.Infrastructure.CustomAuthorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using System;
 
 namespace OMM.App
 {
@@ -62,7 +63,11 @@ namespace OMM.App
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<OmmDbContext>();
 
-            services.ConfigureApplicationCookie(options => options.LoginPath = "/Employees/Login");
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Employees/Login";
+                options.AccessDeniedPath = "/Employees/AccessDenied";
+            });
 
             services.AddMvc(options =>
             {
