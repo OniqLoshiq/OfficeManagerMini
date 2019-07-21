@@ -44,7 +44,7 @@ namespace OMM.Domain
         
 
         [ForeignKey(nameof(Department))]
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
         public virtual Department Department { get; set; }
 
         [ForeignKey(nameof(LeavingReason))]
