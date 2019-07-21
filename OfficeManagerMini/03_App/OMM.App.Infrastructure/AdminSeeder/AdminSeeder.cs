@@ -19,6 +19,8 @@ namespace OMM.App.Infrastructure.AdminSeeder
         private const string AdminPassword = "12345";
 
         private const string AdminRole = "Admin";
+
+        private const string AdminPicture = "https://res.cloudinary.com/ommini/image/upload/v1563736712/Employees/admin_profile.jpg";
         
         private const int AdminAccessLevel = 10;
 
@@ -47,7 +49,8 @@ namespace OMM.App.Infrastructure.AdminSeeder
                     UserName = AdminUsername,
                     Email = AdminEmail,
                     AccessLevel = AdminAccessLevel,
-                    IsActive = true
+                    IsActive = true,
+                    ProfilePicture = AdminPicture
                 };
 
                 var result = userManager.CreateAsync(admin, AdminPassword).GetAwaiter().GetResult();
