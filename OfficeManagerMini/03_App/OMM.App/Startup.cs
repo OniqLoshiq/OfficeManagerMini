@@ -81,6 +81,7 @@ namespace OMM.App
             services.AddScoped<LeavingReasonSeeder>();
             services.AddScoped<ProjectPositionSeeder>();
             services.AddScoped<StatusSeeder>();
+            services.AddScoped<RolesSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -102,7 +103,7 @@ namespace OMM.App
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
             app.UseDataBaseSeeding();
-            app.UseSeedRolesAndAdmin();
+            app.UseAdminSeeding();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

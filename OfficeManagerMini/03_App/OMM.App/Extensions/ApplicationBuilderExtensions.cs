@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using OMM.App.Infrastructure.RolesAdminSeeder;
+using OMM.App.Infrastructure.AdminSeeder;
 using OMM.Data;
 using OMM.Data.Seeding;
 using System.Linq;
@@ -24,13 +24,13 @@ namespace OMM.App.Extensions
             }
         }
 
-        public static void UseSeedRolesAndAdmin(this IApplicationBuilder app)
+        public static void UseAdminSeeding(this IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                var rolesAdminSeeder = new RolesAdminSeeder(serviceScope.ServiceProvider);
+                var adminSeeder = new AdminSeeder(serviceScope.ServiceProvider);
 
-                rolesAdminSeeder.Seed();
+                adminSeeder.Seed();
             }
         }
     }

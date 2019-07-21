@@ -6,44 +6,41 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using OMM.Data;
+using OMM.App.Infrastructure.Common;
 
-namespace OMM.App.Infrastructure.RolesAdminSeeder
+namespace OMM.App.Infrastructure.AdminSeeder
 {
-    public class RolesAdminSeeder
+    public class AdminSeeder
     {
-        private readonly string[] Roles = { "Admin", "Management", "HR", "Employee" };
-   
         private const string AdminUsername = "root@admin.com";
 
         private const string AdminEmail = "root@admin.com";
 
         private const string AdminPassword = "12345";
 
+        private const string AdminRole = "Admin";
+        
         private const int AdminAccessLevel = 10;
 
         private readonly IServiceProvider provider;
 
-        public RolesAdminSeeder(IServiceProvider provider)
+        public AdminSeeder(IServiceProvider provider)
         {
             this.provider = provider;
         }
 
         public void Seed()
         {
-            var roleManager = this.provider.GetService<RoleManager<IdentityRole>>();
-
-            this.SeedRoles(roleManager).GetAwaiter().GetResult();
-
             var context = this.provider.GetService<OmmDbContext>();
 
             var userManager = this.provider.GetService<UserManager<Employee>>();
 
-            this.SeedFirstUser(context, userManager).GetAwaiter().GetResult();
+            this.SeedAdminUser(context, userManager).GetAwaiter().GetResult();
         }
 
-        private async Task SeedFirstUser(OmmDbContext context , UserManager<Employee> userManager)
+        private async Task SeedAdminUser(OmmDbContext context , UserManager<Employee> userManager)
         {
-            if (!context.Users.Any())
+            if (!context.Users.Any(u => u.UserName == AdminUsername))
             {
                 Employee admin = new Employee()
                 {
@@ -57,22 +54,9 @@ namespace OMM.App.Infrastructure.RolesAdminSeeder
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(admin, "Admin");
+                    await userManager.AddToRoleAsync(admin, AdminRole);
 
-                    await userManager.AddClaimAsync(admin, new Claim("AccessLevel", admin.AccessLevel.ToString()));
-                }
-            }
-        }
-
-        private async Task SeedRoles(RoleManager<IdentityRole> roleManager)
-        {
-            foreach (var roleName in Roles)
-            {
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
-
-                if (!roleExist)
-                {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                    await userManager.AddClaimAsync(admin, new Claim(InfrastructureConstants.ACCESS_LEVEL_CLAIM, admin.AccessLevel.ToString()));
                 }
             }
         }
