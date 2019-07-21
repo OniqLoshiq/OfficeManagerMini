@@ -15,6 +15,7 @@ using OMM.App.Models;
 using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
 using OMM.App.Infrastructure.CustomAuthorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace OMM.App
 {
@@ -36,6 +37,7 @@ namespace OMM.App
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
 
             AutoMapperConfig.RegisterMappings(
                 typeof(ErrorViewModel).Assembly);
@@ -60,8 +62,13 @@ namespace OMM.App
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<OmmDbContext>();
 
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Employees/Login");
+
             services.AddMvc(options =>
             {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
