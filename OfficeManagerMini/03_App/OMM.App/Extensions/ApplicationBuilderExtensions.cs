@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using OMM.App.Infrastructure.RolesAdminSeeder;
 using OMM.Data;
 using OMM.Data.Seeding;
 using System.Linq;
@@ -20,6 +21,16 @@ namespace OMM.App.Extensions
                     .Select(t => (ISeeder)serviceScope.ServiceProvider.GetRequiredService(t))
                     .ToList()
                     .ForEach(seeder => seeder.Seed());
+            }
+        }
+
+        public static void UseSeedRolesAndAdmin(this IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var rolesAdminSeeder = new RolesAdminSeeder(serviceScope.ServiceProvider);
+
+                rolesAdminSeeder.Seed();
             }
         }
     }

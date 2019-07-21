@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\01_Data\OMM.Data\OMM.Data.csproj" />
+  </ItemGroup>
+
 </Project>

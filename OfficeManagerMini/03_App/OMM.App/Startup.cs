@@ -102,6 +102,7 @@ namespace OMM.App
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
             app.UseDataBaseSeeding();
+            app.UseSeedRolesAndAdmin();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
