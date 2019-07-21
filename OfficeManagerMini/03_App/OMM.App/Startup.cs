@@ -17,6 +17,10 @@ using Microsoft.AspNetCore.Authorization;
 using OMM.App.Infrastructure.CustomAuthorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System;
+using OMM.Services.Data;
+using OMM.Services.Data.DTOs.Employees;
+using OMM.App.Infrastructure.ViewComponents.Models;
+using CloudinaryDotNet;
 
 namespace OMM.App
 {
@@ -41,7 +45,9 @@ namespace OMM.App
 
 
             AutoMapperConfig.RegisterMappings(
-                typeof(ErrorViewModel).Assembly);
+                typeof(ErrorViewModel).Assembly,
+                typeof(EmployeeLoginDto).Assembly,
+                typeof(DepartmentViewComponentViewModel).Assembly);
 
             services.AddDbContext<OmmDbContext>(options =>
                 options.UseSqlServer(
@@ -77,6 +83,15 @@ namespace OMM.App
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            Account cloudinaryCredentials = new Account(
+                this.Configuration["Cloudinary:CloudName"],
+                this.Configuration["Cloudinary:ApiKey"],
+                this.Configuration["Cloudinary:ApiSecret"]);
+
+            Cloudinary cloudinaryUtility = new Cloudinary(cloudinaryCredentials);
+
+            services.AddSingleton(cloudinaryUtility);
+
             services.AddSingleton<IAuthorizationPolicyProvider, MinimumAccessLevelPolicyProvider>();
             services.AddSingleton<IAuthorizationHandler, MinimumAccessLevelAuthorizationHandler>();
 
@@ -87,6 +102,11 @@ namespace OMM.App
             services.AddScoped<ProjectPositionSeeder>();
             services.AddScoped<StatusSeeder>();
             services.AddScoped<RolesSeeder>();
+
+            //OMM Data services
+            services.AddTransient<IEmployeesService, EmployeesService>();
+            services.AddTransient<IDepartmentsService, DepartmentsService>();
+            services.AddTransient<ICloudinaryService, CloudinaryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

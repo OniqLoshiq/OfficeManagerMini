@@ -1,20 +1,20 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OMM.App.Common;
 using OMM.App.Models.InputModels;
-using OMM.Domain;
+using OMM.Services.Data;
+using OMM.Services.Data.DTOs.Employees;
 
 namespace OMM.App.Controllers
 {
     public class EmployeesController : Controller
     {
-        private readonly SignInManager<Employee> signInManager;
+        private readonly IEmployeesService employeesService;
 
-        public EmployeesController(SignInManager<Employee> signInManager)
+        public EmployeesController(IEmployeesService employeesService)
         {
-            this.signInManager = signInManager;
+            this.employeesService = employeesService;
         }
 
         public IActionResult All()
@@ -34,9 +34,9 @@ namespace OMM.App.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await this.signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var loginModel = AutoMapper.Mapper.Map<EmployeeLoginDto>(model);
 
-                if (result.Succeeded)
+                if (await this.employeesService.LoginEmployeeAsync(loginModel))
                 {
                     return RedirectToAction("Index", "Home");
                 }
@@ -49,7 +49,7 @@ namespace OMM.App.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            await this.signInManager.SignOutAsync();
+            await this.employeesService.LogoutEmployee();
 
             return RedirectToAction("Index", "Home");
         }

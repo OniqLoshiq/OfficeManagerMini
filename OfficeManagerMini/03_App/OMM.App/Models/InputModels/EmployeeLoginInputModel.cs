@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using OMM.Services.AutoMapper;
+using OMM.Services.Data.DTOs.Employees;
+using System.ComponentModel.DataAnnotations;
 
 namespace OMM.App.Models.InputModels
 {
-    public class EmployeeLoginInputModel
+    public class EmployeeLoginInputModel : IMapTo<EmployeeLoginDto>
     {
         [Required]
         public string Email { get; set; }

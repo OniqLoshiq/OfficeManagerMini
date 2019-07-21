@@ -6,10 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\01_Data\OMM.Data\OMM.Data.csproj" />
+    <ProjectReference Include="..\..\02_Services\OMM.Services.Data\OMM.Services.Data.csproj" />
   </ItemGroup>
 
 </Project>
