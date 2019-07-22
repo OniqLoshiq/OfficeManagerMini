@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\01_Data\OMM.Data\OMM.Data.csproj" />
     <ProjectReference Include="..\..\02_Services\OMM.Services.Data\OMM.Services.Data.csproj" />
+    <ProjectReference Include="..\..\02_Services\OMM.Services.YWeather\OMM.Services.YWeather.csproj" />
   </ItemGroup>
 
 </Project>

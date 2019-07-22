@@ -15,9 +15,8 @@ namespace OMM.App.Controllers
             this.yWeatherService = yWeatherService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var info = await this.yWeatherService.GetWeatherInfoAsync();
             return View();
         }
 

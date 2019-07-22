@@ -304,9 +304,22 @@ img.card-img-top {
 
 .forecast-today-img {
     width: 35px;
+    height: 35px;
 }
 
 .forecast-today-temp {
+    font-size: 16px;
+}
+
+.forecast-current-temp{
+    font-size: 72px;
+}
+
+.forecast-current-img {
+    width: 80px;
+}
+
+.forecast-current-cond {
     font-size: 16px;
 }
 

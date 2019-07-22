@@ -7,6 +7,6 @@
         public int Low { get; set; }
         public int High { get; set; }
         public string Text { get; set; }
-        public int Code { get; set; }
+        public string Code { get; set; }
     }
 }

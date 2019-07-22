@@ -1,0 +1,53 @@
+﻿@model OMM.App.Infrastructure.ViewComponents.Models.WeatherForecastViewComponentViewModel
+
+<div class="jumbotron forecast-container py-0 px-3 mb-0">
+    <div class="row">
+        <div class="forecast-today py-2 pl-2 pr-1 col-12 col-md-auto forecast-content-color">
+            <div class="d-flex justify-content-between">
+                <div>@Model.CurrentDayOfWeek</div>
+                <div>@Model.CurrentDayOfMonth @Model.CurrentMonth</div>
+            </div>
+            <div class="pt-2 d-flex justify-content-between" style="font-size: 18px">
+                <strong>@Model.LocationCity / @Model.LocationCountry</strong>
+                <div class="d-flex justify-content-end text-center">
+                    <img src="~/images/weather/@{@Model.WeekForecasts[0].Code}.png" class="forecast-today-img" alt="@Model.WeekForecasts[0].Text" title="@Model.WeekForecasts[0].Text" />
+                    <span class="py-1 px-2 forecast-today-temp"><i class="fas fa-long-arrow-alt-up"></i>@Model.WeekForecasts[0].High<span>&#8451;</span></span>
+                    <span class="py-1 px-2 forecast-today-temp"><i class="fas fa-long-arrow-alt-down"></i>@Model.WeekForecasts[0].Low<span>&#8451;</span></span>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="pr-2 forecast-current-temp"><strong>@Model.CurrentTemperature<span>&#8451;</span></strong></div>
+                <div class="pl-3 pt-3"><img src="~/images/weather/@{@Model.CurrentCode}.png" class="forecast-current-img" alt="@Model.CurrentText" title="@Model.CurrentText" /></div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-center text-center">
+                    <span class="py-1 pr-2 forecast-current-cond" title="Wind Speed"><i class="fas fa-wind pr-1"></i>@Model.WindSpeed<span>km/h</span></span>
+                    <span class="py-1 px-2 forecast-current-cond" title="Humidity"><i class="fas fa-tint pr-1"></i>@Model.AtmosphereHumidity<span>%</span></span>
+                    <span class="py-1 px-2 forecast-current-cond" title="Pressure"><i class="fas fa-tachometer-alt pr-1"></i>@Model.AtmospherePressure<span>mbar</span></span>
+                </div>
+                <div class="d-flex justify-content-center text-center">
+                    <span class="py-1 px-2 forecast-current-cond" title="Sunrise"><i class="fas fa-sun pr-1"></i>@Model.AstronomySunrise</span>
+                    <span class="py-1 pl-2 forecast-current-cond" title="Sunset"><i class="fas fa-moon pr-1"></i>@Model.AstronomySunset</span>
+                </div>
+            </div>
+        </div>
+
+        @for (int i = 1; i < 7; i++)
+        {
+            var day = Model.WeekForecasts[i];
+
+            <div class="forecast-week align-content-between text-center col-2 col-md-auto px-0 forecast-content-color">
+                <div class="py-2">@day.DayOfWeek</div>
+                <div class="py-4"><img src="~/images/weather/@{@day.Code}.png" class="forecast-week-img" alt="@day.Text" title="@day.Text" /></div>
+                <div class="d-flex flex-column align-content-start">
+                    <div class="py-1 forecast-week-max-temp">@day.High<span>&#8451;</span></div>
+                    <div class="pt-0 pb-3 forecast-week-min-temp">@day.Low<span>&#8451;</span></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="d-flex justify-content-end mt-1 mb-3">
+    <a href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29" /> </a>
+</div>
+
