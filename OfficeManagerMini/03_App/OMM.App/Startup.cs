@@ -16,11 +16,11 @@ using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
 using OMM.App.Infrastructure.CustomAuthorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using System;
 using OMM.Services.Data;
 using OMM.Services.Data.DTOs.Employees;
 using OMM.App.Infrastructure.ViewComponents.Models;
 using CloudinaryDotNet;
+using OMM.Services.SendGrid;
 
 namespace OMM.App
 {
@@ -107,6 +107,8 @@ namespace OMM.App
             services.AddTransient<IEmployeesService, EmployeesService>();
             services.AddTransient<IDepartmentsService, DepartmentsService>();
             services.AddTransient<ICloudinaryService, CloudinaryService>();
+
+            services.AddTransient<ISendGrid, SendGird>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

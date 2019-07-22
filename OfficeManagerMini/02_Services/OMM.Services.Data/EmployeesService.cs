@@ -4,6 +4,7 @@ using OMM.Data;
 using OMM.Domain;
 using OMM.Services.Data.Common;
 using OMM.Services.Data.DTOs.Employees;
+using OMM.Services.SendGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +25,15 @@ namespace OMM.Services.Data
         private readonly SignInManager<Employee> signInManager;
         private readonly OmmDbContext context;
         private readonly IDepartmentsService departmentsService;
+        private readonly ISendGrid emailSender;
 
-        public EmployeesService(UserManager<Employee> userManger, SignInManager<Employee> signInManager, OmmDbContext context, IDepartmentsService departmentsService)
+        public EmployeesService(UserManager<Employee> userManger, SignInManager<Employee> signInManager, OmmDbContext context, IDepartmentsService departmentsService, ISendGrid emailSender)
         {
             this.userManger = userManger;
             this.signInManager = signInManager;
             this.context = context;
             this.departmentsService = departmentsService;
+            this.emailSender = emailSender;
         }
 
         public async Task<bool> LoginEmployeeAsync(EmployeeLoginDto employeeDto)
@@ -71,6 +74,14 @@ namespace OMM.Services.Data
             string password = this.GenerateEmployeePassword();
 
             var result = await this.userManger.CreateAsync(employee, password);
+
+            var emailResult = await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, password);
+
+            //TODO:
+            //if(!emailResult)
+            //{
+            //    throw new System.Exception("Problem with email");
+            //}
 
             if (result.Succeeded)
             {
