@@ -20,6 +20,12 @@ namespace OMM.App.Infrastructure.AdminSeeder
 
         private const string AdminRole = "Admin";
 
+        private const string AdminFirstName = "Root";
+
+        private const string AdminLastName = "Admin";
+        
+        private const string AdminFullName = "Root App. Admin";
+        
         private const string AdminPicture = "https://res.cloudinary.com/ommini/image/upload/v1563736712/Employees/admin_profile.jpg";
         
         private const int AdminAccessLevel = 10;
@@ -48,6 +54,9 @@ namespace OMM.App.Infrastructure.AdminSeeder
                 {
                     UserName = AdminUsername,
                     Email = AdminEmail,
+                    FirstName = AdminFirstName,
+                    LastName = AdminLastName,
+                    FullName = AdminFullName,
                     AccessLevel = AdminAccessLevel,
                     IsActive = true,
                     ProfilePicture = AdminPicture
