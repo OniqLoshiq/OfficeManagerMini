@@ -61,7 +61,7 @@ namespace OMM.Services.Data
 
             employee.IsActive = true;
 
-            var departmentId = this.departmentsService.GetDepartmentIdByName(employeeRegisterDto.Department).GetAwaiter().GetResult();
+            var departmentId = this.departmentsService.GetDepartmentIdByName(employeeRegisterDto.Department);
 
             //TODO:
             //if(departmentId == 0)

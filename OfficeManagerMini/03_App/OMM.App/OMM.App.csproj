@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\02_Services\OMM.Services.AutoMapper\OMM.Services.AutoMapper.csproj" />
     <ProjectReference Include="..\..\02_Services\OMM.Services.Data\OMM.Services.Data.csproj" />
     <ProjectReference Include="..\..\02_Services\OMM.Services.SendGrid\OMM.Services.SendGrid.csproj" />
+    <ProjectReference Include="..\..\02_Services\OMM.Services.YWeather\OMM.Services.YWeather.csproj" />
     <ProjectReference Include="..\OMM.App.Infrastructure\OMM.App.Infrastructure.csproj" />
   </ItemGroup>
 

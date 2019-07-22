@@ -24,7 +24,7 @@ namespace OMM.Services.Data
             return this.context.Departments.To<DepartmentNameDto>();
         }
 
-        public async Task<int> GetDepartmentIdByName(string name)
+        public int GetDepartmentIdByName(string name)
         {
             var departmentId = this.context.Departments.SingleOrDefault(d => d.Name == name)?.Id;
 

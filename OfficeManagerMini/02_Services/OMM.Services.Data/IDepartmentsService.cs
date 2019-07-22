@@ -8,6 +8,6 @@ namespace OMM.Services.Data
     {
         IQueryable<DepartmentNameDto> GetAllDepartmentNames();
 
-        Task<int> GetDepartmentIdByName(string name);
+        int GetDepartmentIdByName(string name);
     }
 }

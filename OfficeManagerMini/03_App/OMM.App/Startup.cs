@@ -21,6 +21,7 @@ using OMM.Services.Data.DTOs.Employees;
 using OMM.App.Infrastructure.ViewComponents.Models;
 using CloudinaryDotNet;
 using OMM.Services.SendGrid;
+using OMM.Services.YWeather;
 
 namespace OMM.App
 {
@@ -109,6 +110,7 @@ namespace OMM.App
             services.AddTransient<ICloudinaryService, CloudinaryService>();
 
             services.AddTransient<ISendGrid, SendGird>();
+            services.AddTransient<IYWeatherService, YWeatherService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
