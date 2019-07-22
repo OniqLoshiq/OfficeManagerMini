@@ -22,6 +22,5 @@ namespace OMM.App.Infrastructure.ViewComponents
 
             return View(departmentsToList);
         }
-
     }
 }
