@@ -8,12 +8,6 @@ namespace OMM.App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IYWeatherService yWeatherService;
-
-        public HomeController(IYWeatherService yWeatherService)
-        {
-            this.yWeatherService = yWeatherService;
-        }
 
         public IActionResult Index()
         {

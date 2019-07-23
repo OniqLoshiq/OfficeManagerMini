@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OMM.App.Common;
+using OMM.App.Infrastructure.CustomAuthorization;
 
 namespace OMM.App.Areas.Management.Controllers
 {
@@ -13,6 +15,7 @@ namespace OMM.App.Areas.Management.Controllers
             return View();
         }
 
+        [MinimumAccessLevel(AccessLevelValue.Seven)]
         public IActionResult Create()
         {
             return View();

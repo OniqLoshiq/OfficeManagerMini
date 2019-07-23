@@ -27,6 +27,7 @@ namespace OMM.App.Areas.Management.Controllers
             return View();
         }
 
+        [MinimumAccessLevel(AccessLevelValue.Eight)]
         public IActionResult Register()
         {
             return View();
