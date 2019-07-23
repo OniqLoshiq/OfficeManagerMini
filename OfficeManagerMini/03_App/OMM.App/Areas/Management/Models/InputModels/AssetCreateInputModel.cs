@@ -1,9 +1,11 @@
-﻿using System;
+﻿using OMM.Services.AutoMapper;
+using OMM.Services.Data.DTOs.Assets;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace OMM.App.Areas.Management.Models.InputModels
 {
-    public class AssetCreateInputModel
+    public class AssetCreateInputModel : IMapTo<AssetCreateDto>
     {
         [Required]
         [Display(Name = "Inventory number")]
@@ -23,11 +25,11 @@ namespace OMM.App.Areas.Management.Models.InputModels
 
         [Required]
         [Display(Name = "Aquired on")]
-        public DateTime DateOfAquire { get; set; }
+        public string DateOfAquire { get; set; }
 
         [Required]
         [Display(Name = "Asset type")]
-        public string AssetType { get; set; }
+        public int AssetTypeId { get; set; }
 
         [Display(Name = "Employee")]
         public string EmployeeId { get; set; }

@@ -30,5 +30,10 @@ namespace OMM.Services.Data
 
             return departmentId ?? 0;
         }
+
+        public IQueryable<DepartmentEmployeesDto> GetAllWithActiveEmployees()
+        {
+            return this.context.Departments.To<DepartmentEmployeesDto>();
+        }
     }
 }

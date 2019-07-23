@@ -1,6 +1,5 @@
 ﻿using OMM.Services.Data.DTOs.Departments;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OMM.Services.Data
 {
@@ -9,5 +8,7 @@ namespace OMM.Services.Data
         IQueryable<DepartmentNameDto> GetAllDepartmentNames();
 
         int GetDepartmentIdByName(string name);
+
+        IQueryable<DepartmentEmployeesDto> GetAllWithActiveEmployees();
     }
 }

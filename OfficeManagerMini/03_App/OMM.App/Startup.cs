@@ -108,7 +108,9 @@ namespace OMM.App
             services.AddTransient<IEmployeesService, EmployeesService>();
             services.AddTransient<IDepartmentsService, DepartmentsService>();
             services.AddTransient<IAssetsService, AssetsService>();
+            services.AddTransient<IAssetTypesService, AssetTypesService>();
 
+            //Third parties services
             services.AddTransient<ICloudinaryService, CloudinaryService>();
             services.AddTransient<ISendGrid, SendGird>();
             services.AddTransient<IYWeatherService, YWeatherService>();

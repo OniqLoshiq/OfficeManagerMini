@@ -1,0 +1,12 @@
+﻿@model IEnumerable<OMM.App.Infrastructure.ViewComponents.Models.DepartmentEmployeesListViewComponentViewModel>
+
+@foreach (var department in Model)
+{
+    <optgroup label="@department.Name">
+        @foreach (var employee in department.Employees)
+        {
+            <option value="@employee.Id">@employee.FullName</option>
+        }
+    </optgroup>
+}
+

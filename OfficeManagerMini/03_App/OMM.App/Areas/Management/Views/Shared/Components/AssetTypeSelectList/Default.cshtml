@@ -1,0 +1,8 @@
+﻿@model IEnumerable<OMM.App.Infrastructure.ViewComponents.Models.AssetTypeSelectListViewComponentViewModel>
+
+
+@foreach (var type in Model)
+{
+    <option value="@type.Id">@type.Name</option>
+}
+

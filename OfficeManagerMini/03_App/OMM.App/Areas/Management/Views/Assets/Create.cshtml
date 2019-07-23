@@ -1,87 +1,68 @@
-﻿@{
+﻿@model OMM.App.Areas.Management.Models.InputModels.AssetCreateInputModel
+
+@{
     ViewData["Title"] = "Create Asset";
 }
 
 <h4 class="mb-3 text-center">Create Asset</h4>
 <hr class="hr-oom" style="width:300px;" />
 
-<form>
+<form asp-area="Management" asp-controller="Assets" asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="d-flex justify-content-center">
         <div class="form-row w-75 management">
             <div class="col-12">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="inventoryNumber">Inventory number</label>
-                        <input type="text" class="form-control" id="inventoryNumber" placeholder="Inventory number">
+                        <label asp-for="InventoryNumber"></label>
+                        <input class="form-control" asp-for="InventoryNumber" placeholder="Inventory number">
+                        <span asp-validation-for="InventoryNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="assetType">Asset type</label>
-                        <select class="form-control" id="assetType">
+                        <label asp-for="AssetTypeId"></label>
+                        <select class="form-control" asp-for="AssetTypeId">
                             <option selected disabled>--Choose asset's type--</option>
-                            <option>Office equipment</option>
-                            <option>Software</option>
-                            <option>Vehicle</option>
-                            <option>Transport</option>
-                            <option>Communication</option>
-                            <option>Social</option>
+                            <vc:asset-type-select-list></vc:asset-type-select-list>
                         </select>
+                        <span asp-validation-for="AssetTypeId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-lg-4">
-                        <label for="make">Make</label>
-                        <input type="text" class="form-control" id="make" placeholder="Make">
+                        <label asp-for="Make"></label>
+                        <input class="form-control" asp-for="Make" placeholder="Make">
+                        <span asp-validation-for="Make" class="text-danger"></span>
                     </div>
                     <div class="form-group col-lg-4">
-                        <label for="model">Model</label>
-                        <input type="text" class="form-control" id="model" placeholder="Model">
+                        <label asp-for="Model"></label>
+                        <input class="form-control" asp-for="Model" placeholder="Model">
+                        <span asp-validation-for="Model" class="text-danger"></span>
                     </div>
                     <div class="form-group col-lg-4">
-                        <label for="referenceNumber">Reference number</label>
-                        <input type="text" class="form-control" id="referenceNumber" placeholder="Reference number">
+                        <label asp-for="ReferenceNumber"></label>
+                        <input class="form-control" asp-for="ReferenceNumber" placeholder="Reference number">
+                        <span asp-validation-for="ReferenceNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4 flatpickrcontainer">
-                        <label for="dateOfAquire">Aquired on</label>
+                        <label asp-for="DateOfAquire">Aquired on</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="dateOfAquire" name="dateOfAquire" data-input>
+                            <input class="form-control" asp-for="DateOfAquire" data-input>
                             <div class="input-group-prepend">
                                 <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
+                        <span asp-validation-for="DateOfAquire" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-8">
-                        <label for="employee">Employee</label>
+                        <label asp-for="EmployeeId"></label>
                         <div class="input-group">
-                            <select class="form-control selectpicker show-tick" id="employee" name="employee" data-style="btn-white" data-live-search="true" data-width="auto">
+                            <select class="form-control selectpicker show-tick" asp-for="EmployeeId" data-style="btn-white" data-live-search="true" data-width="auto">
                                 <option selected disabled></option>
-                                <optgroup label="Management Board">
-                                    <option>Oniq</option>
-                                    <option>Loshiq</option>
-                                    <option>Toq</option>
-                                </optgroup>
-                                <optgroup label="HR">
-                                    <option>Oniq</option>
-                                    <option>Loshiq</option>
-                                    <option>Toq</option>
-                                </optgroup>
-                                <optgroup label="Accounting">
-                                    <option>Oniq</option>
-                                    <option>Loshiq</option>
-                                    <option>Toq</option>
-                                </optgroup>
-                                <optgroup label="Engineering">
-                                    <option>Oniq</option>
-                                    <option>Loshiq</option>
-                                    <option>Toq</option>
-                                </optgroup>
-                                <optgroup label="Administration">
-                                    <option>Oniq</option>
-                                    <option>Loshiq</option>
-                                    <option>Toq</option>
-                                </optgroup>
+                                <vc:department-employees-list></vc:department-employees-list>
                             </select>
+                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -96,15 +77,16 @@
 </form>
 
 @section Scripts{
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-    flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday default is sunday
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday default is sunday
 
-    document.getElementsByClassName("flatpickrcontainer").flatpickr({
-        wrap: true,
-        weekNumbers: true,
-        dateFormat: "d-m-Y"
-    });
-</script>
+        document.getElementsByClassName("flatpickrcontainer").flatpickr({
+            wrap: true,
+            weekNumbers: true,
+            dateFormat: "d-m-Y"
+        });
+    </script>
 }
