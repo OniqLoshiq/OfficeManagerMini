@@ -1,9 +1,9 @@
 ﻿using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.AssetTypes;
 
-namespace OMM.App.Infrastructure.ViewComponents.Models
+namespace OMM.App.Infrastructure.ViewComponents.Models.AssetTypes
 {
-    public class AssetTypeSelectListViewComponentViewModel : IMapFrom<AssetTypeSelectListDto>
+    public class AssetTypeSelectItemViewModel : IMapFrom<AssetTypeSelectListDto>
     {
         public int Id { get; set; }
 

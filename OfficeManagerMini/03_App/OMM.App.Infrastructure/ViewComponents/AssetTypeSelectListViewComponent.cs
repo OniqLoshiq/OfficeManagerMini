@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OMM.App.Infrastructure.ViewComponents.Models;
+using OMM.App.Infrastructure.ViewComponents.Models.AssetTypes;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
 using System.Threading.Tasks;
@@ -18,11 +20,16 @@ namespace OMM.App.Infrastructure.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(int assetTypeId)
         {
-            var assetTypesToSelectList = await this.assetTypesService.GetAll().To<AssetTypeSelectListViewComponentViewModel>().ToListAsync();
+            var vm = new AssetTypeSelectListViewComponentViewModel
+            {
+                AssetTypeId = assetTypeId
+            };
 
-            this.ViewBag.assetTypeId = assetTypeId;
+            var assetTypesToSelectList = await this.assetTypesService.GetAll().To<AssetTypeSelectItemViewModel>().ToListAsync();
 
-            return View(assetTypesToSelectList);
+            assetTypesToSelectList.ForEach(at => vm.AssetTypes.Add(new SelectListItem { Value = at.Id.ToString(), Text = at.Name }));
+
+            return View(vm);
         }
     }
 }
