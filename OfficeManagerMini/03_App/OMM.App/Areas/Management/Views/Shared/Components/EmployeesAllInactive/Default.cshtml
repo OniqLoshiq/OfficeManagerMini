@@ -1,0 +1,47 @@
+﻿@model IEnumerable<OMM.App.Infrastructure.ViewComponents.Models.Employees.EmployeeInactiveViewComponentViewModel>
+
+<hr class="hr-oom mt-3" style="width:300px;" />
+<h5 class="mb-3 text-center">
+    <button type="button" class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseInactiveEmployees" aria-expanded="false" aria-controls="collapseInactiveEmployees">
+        Inactive
+    </button>
+</h5>
+<hr class="hr-oom" style="width:300px;" />
+
+
+<div class="collapse" id="collapseInactiveEmployees">
+    <table id="myDataTableInactiveEmpl" class="display table-sm table table-striped table-light table-hover" style="width:100%">
+        <thead class="bg-secondary text-white">
+            <tr>
+                <th scope="col" style="width: 4%">Pic.</th>
+                <th scope="col">Employee</th>
+                <th scope="col">Email</th>
+                <th scope="col">Left</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Position</th>
+                <th scope="col">Department</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var empl in Model)
+            {
+                <tr>
+                    <td class="align-middle py-1"><img src="@empl.ProfilePicture" class="empl-list-inactive-img rounded-circle mx-left " alt="pic"></td>
+                    <td class="align-middle">@empl.FullName</td>
+                    <td class="align-middle">@empl.Email</td>
+                    <td class="align-middle">@empl.LeftOn</td>
+                    <td class="align-middle">@empl.LeavingReasonName</td>
+                    <td class="align-middle">@empl.Position</td>
+                    <td class="align-middle">@empl.DepartmentName</td>
+                    <td class="align-middle">
+                        <div class="d-flex justify-content-center">
+                            <a class="btn px-0 py-0" href="#" role="button" style="font-size: 16px;"><i class="fas fa-edit text-success"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

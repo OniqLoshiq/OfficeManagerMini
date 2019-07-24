@@ -1,0 +1,41 @@
+﻿@model IEnumerable<OMM.App.Infrastructure.ViewComponents.Models.Employees.EmployeeActiveViewComponentViewModel>
+
+<h4 class="mb-3 text-center">Employees</h4>
+<hr class="hr-oom" style="width:300px;" />
+<h5 class="mb-3 text-center"><button type="button" class="btn btn-success btn-sm" disabled>Active</button></h5>
+
+<table id="myDataTable" class="display table-sm table table-striped table-light table-hover" style="width:100%">
+    <thead class="bg-warning">
+        <tr>
+            <th scope="col" style="width: 4%">Pic.</th>
+            <th scope="col">Employee</th>
+            <th scope="col">Email</th>
+            <th scope="col">Access</th>
+            <th scope="col">Position</th>
+            <th scope="col">Department</th>
+            <th scope="col">Appointed</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var empl in Model)
+        {
+            <tr>
+                <td class="align-middle py-1"><img src="@empl.ProfilePicture" class="empl-list-img rounded-circle mx-left " alt="pic"></td>
+                <td class="align-middle">@empl.FullName</td>
+                <td class="align-middle">@empl.Email</td>
+                <td class="align-middle">@empl.AccessLevel</td>
+                <td class="align-middle">@empl.Position</td>
+                <td class="align-middle">@empl.DepartmentName</td>
+                <td class="align-middle">@empl.AppointedOn</td>
+                <td class="align-middle">
+                    <div class="d-flex justify-content-center">
+                        <a class="btn px-1 py-0" href="#" role="button" style="font-size: 16px;"><i class="fas fa-edit text-success"></i></a>
+                        <a class="btn px-1 py-0" href="#" role="button" style="font-size: 16px;"><i class="far fa-trash-alt text-danger"></i></a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
