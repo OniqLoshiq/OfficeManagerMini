@@ -6,6 +6,6 @@
         public Atmosphere Atmosphere { get; set; }
         public Astronomy Astronomy { get; set; }
         public Condition Condition { get; set; }
-        public int PubDate { get; set; }
+        public long PubDate { get; set; }
     }
 }
