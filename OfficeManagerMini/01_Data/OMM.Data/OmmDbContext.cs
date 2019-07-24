@@ -38,6 +38,8 @@ namespace OMM.Data
             builder.Entity<EmployeesProjectsPositions>()
                 .HasKey(epr => new { epr.ProjectId, epr.EmployeeId, epr.ProjectPositionId});
 
+            builder.Entity<Asset>().HasIndex(a => a.InventoryNumber).IsUnique();
+
             base.OnModelCreating(builder);
         }
 
