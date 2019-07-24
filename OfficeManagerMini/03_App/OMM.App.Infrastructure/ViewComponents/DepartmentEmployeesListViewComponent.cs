@@ -15,9 +15,11 @@ namespace OMM.App.Infrastructure.ViewComponents
             this.departmentsService = departmentsService;
         }
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string employeeId)
         {
             var departmentsEmployeesList =  this.departmentsService.GetAllWithActiveEmployees().To<DepartmentEmployeesListViewComponentViewModel>().ToList();
+
+            this.ViewData["Id"] = employeeId;
 
             return View(departmentsEmployeesList);
         }

@@ -1,13 +1,13 @@
-﻿@model OMM.App.Areas.Management.Models.InputModels.AssetCreateInputModel
+﻿@model OMM.App.Areas.Management.Models.InputModels.AssetEditInputModel
 
 @{
-    ViewData["Title"] = "Create Asset";
+    ViewData["Title"] = "Edit Asset";
 }
 
-<h4 class="mb-3 text-center">Create Asset</h4>
+<h4 class="mb-3 text-center">Edit Asset</h4>
 <hr class="hr-oom" style="width:300px;" />
 
-<form asp-area="Management" asp-controller="Assets" asp-action="Create" method="post">
+<form asp-area="Management" asp-controller="Assets" asp-action="Edit" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="d-flex justify-content-center">
         <div class="form-row w-75 management">
@@ -15,29 +15,29 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label asp-for="InventoryNumber"></label>
-                        <input class="form-control" asp-for="InventoryNumber" placeholder="Inventory number">
+                        <input class="form-control" asp-for="InventoryNumber">
                         <span asp-validation-for="InventoryNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
                         <label asp-for="AssetTypeId"></label>
-                        <vc:asset-type-select-list asset-type-id="0"></vc:asset-type-select-list>
+                        <vc:asset-type-select-list asset-type-id="@Model.AssetTypeId"></vc:asset-type-select-list>
                         <span asp-validation-for="AssetTypeId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-lg-4">
                         <label asp-for="Make"></label>
-                        <input class="form-control" asp-for="Make" placeholder="Make">
+                        <input class="form-control" asp-for="Make">
                         <span asp-validation-for="Make" class="text-danger"></span>
                     </div>
                     <div class="form-group col-lg-4">
                         <label asp-for="Model"></label>
-                        <input class="form-control" asp-for="Model" placeholder="Model">
+                        <input class="form-control" asp-for="Model">
                         <span asp-validation-for="Model" class="text-danger"></span>
                     </div>
                     <div class="form-group col-lg-4">
                         <label asp-for="ReferenceNumber"></label>
-                        <input class="form-control" asp-for="ReferenceNumber" placeholder="Reference number">
+                        <input class="form-control" asp-for="ReferenceNumber">
                         <span asp-validation-for="ReferenceNumber" class="text-danger"></span>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                     <div class="form-group col-md-8">
                         <label asp-for="EmployeeId"></label>
                         <div class="input-group">
-                            <vc:department-employees-list employee-id=""></vc:department-employees-list>
+                                <vc:department-employees-list employee-id="@Model.EmployeeId"></vc:department-employees-list>
                             <span asp-validation-for="EmployeeId" class="text-danger"></span>
                         </div>
                     </div>
@@ -65,7 +65,8 @@
     </div>
     <hr class="hr-oom w-25" />
     <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-outline-warning">Create</button>
+        <a class="btn btn-outline-danger" asp-area="Management" asp-controller="Assets" asp-action="All">Cancel</a>
+        <button type="submit" class="btn btn-outline-success ml-4">Edit</button>
     </div>
     <hr class="hr-oom w-25" />
 </form>
@@ -84,3 +85,4 @@
         });
     </script>
 }
+

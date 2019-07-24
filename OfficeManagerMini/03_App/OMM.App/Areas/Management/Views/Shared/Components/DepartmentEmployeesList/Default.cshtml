@@ -1,12 +1,31 @@
 ﻿@model IEnumerable<OMM.App.Infrastructure.ViewComponents.Models.DepartmentEmployeesListViewComponentViewModel>
 
-@foreach (var department in Model)
-{
-    <optgroup label="@department.Name">
-        @foreach (var employee in department.Employees)
-        {
-            <option value="@employee.Id">@employee.FullName</option>
-        }
-    </optgroup>
-}
+@{string selectedId = ViewData["Id"].ToString(); }
 
+<select class="form-control selectpicker show-tick" id="EmployeeId" name="EmployeeId" data-style="btn-white" data-live-search="true" data-width="auto">
+    @if (selectedId == "")
+    {
+        <option selected></option>
+    }
+    else
+    {
+        <option></option>
+    }
+
+    @foreach (var department in Model)
+    {
+        <optgroup label="@department.Name">
+            @foreach (var employee in department.Employees)
+            {
+                @if (selectedId == employee.Id)
+                {
+                    <option value="@employee.Id" selected>@employee.FullName</option>
+                }
+                else
+                {
+                    <option value="@employee.Id">@employee.FullName</option>
+                }
+            }
+        </optgroup>
+    }
+</select>

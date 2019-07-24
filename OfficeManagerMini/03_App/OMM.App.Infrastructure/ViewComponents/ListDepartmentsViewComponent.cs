@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using OMM.App.Infrastructure.ViewComponents.Models;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OMM.App.Infrastructure.ViewComponents

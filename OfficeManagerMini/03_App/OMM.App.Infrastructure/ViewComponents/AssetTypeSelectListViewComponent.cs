@@ -16,9 +16,11 @@ namespace OMM.App.Infrastructure.ViewComponents
             this.assetTypesService = assetTypesService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(int assetTypeId)
         {
             var assetTypesToSelectList = await this.assetTypesService.GetAll().To<AssetTypeSelectListViewComponentViewModel>().ToListAsync();
+
+            this.ViewBag.assetTypeId = assetTypeId;
 
             return View(assetTypesToSelectList);
         }

@@ -1,8 +1,27 @@
 ﻿@model IEnumerable<OMM.App.Infrastructure.ViewComponents.Models.AssetTypeSelectListViewComponentViewModel>
 
+@{int assetTypeId = (int)ViewBag.assetTypeId;}
 
-@foreach (var type in Model)
-{
-    <option value="@type.Id">@type.Name</option>
-}
+
+<select class="form-control" id="AssetTypeId" name="AssetTypeId">
+    @if (assetTypeId == 0)
+    {
+        <option selected disabled>--Choose asset's type--</option>
+    }
+
+    @foreach (var type in Model)
+    {
+        @if (assetTypeId == type.Id)
+        {
+            <option value="@type.Id" selected>@type.Name</option>
+        }
+        else
+        {
+            <option value="@type.Id">@type.Name</option>
+        }
+    }
+</select>
+
+
+
 

@@ -25,7 +25,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Areas\Management\Models\ViewModels\" />
     <Folder Include="Models\ViewModels\" />
   </ItemGroup>
 
