@@ -66,14 +66,14 @@ namespace OMM.App.Areas.Management.Controllers
 
         [HttpPost]
         [MinimumAccessLevel(AccessLevelValue.Seven)]
-        public async Task<IActionResult> Edit(AssetEditInputModel input)
+        public async Task<IActionResult> Edit(AssetEditViewModel viewModel)
         {
             if(!ModelState.IsValid)
             {
                 return this.View();
             }
 
-            var assetToEdit = AutoMapper.Mapper.Map<AssetEditDto>(input);
+            var assetToEdit = AutoMapper.Mapper.Map<AssetEditDto>(viewModel);
 
             await this.assetsService.EditAsync(assetToEdit);
 
