@@ -20,8 +20,7 @@ namespace OMM.Services.Data
         private const int PASSWORD_MIN_LENGTH = 6;
         private const int PASSWORD_MAX_LENGTH = 14;
         private const int PASSWORD_ALLOWED_CHARS_START_INDEX = 0;
-
-
+        
         private readonly UserManager<Employee> userManger;
         private readonly SignInManager<Employee> signInManager;
         private readonly OmmDbContext context;
@@ -90,6 +89,20 @@ namespace OMM.Services.Data
         public IQueryable<ActiveEmployeeDepartmentDto> GetActiveEmployeesWithDepartment()
         {
             return this.context.Users.Where(u => u.IsActive && u.DepartmentId != null).To<ActiveEmployeeDepartmentDto>();
+        }
+
+        public IQueryable<EmployeeActiveDto> GetAllActiveEmployees()
+        {
+            var activeEmployees = this.context.Users.Where(u => u.IsActive && u.DepartmentId != null).To<EmployeeActiveDto>();
+
+            return activeEmployees;
+        }
+
+        public IQueryable<EmployeeInactiveDto> GetAllInactiveEmployees()
+        {
+            var inactiveEmployees = this.context.Users.Where(u => !u.IsActive && u.DepartmentId != null).To<EmployeeInactiveDto>();
+
+            return inactiveEmployees;
         }
 
         private bool IsEmployeeActive(string email)

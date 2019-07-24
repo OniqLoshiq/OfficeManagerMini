@@ -13,5 +13,9 @@ namespace OMM.Services.Data
         Task<bool> RegisterEmployeeAsync(EmployeeRegisterDto employeeRegisterDto);
 
         IQueryable<ActiveEmployeeDepartmentDto> GetActiveEmployeesWithDepartment();
+
+        IQueryable<EmployeeActiveDto> GetAllActiveEmployees();
+
+        IQueryable<EmployeeInactiveDto> GetAllInactiveEmployees();
     }
 }
