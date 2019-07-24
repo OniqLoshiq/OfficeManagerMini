@@ -17,7 +17,7 @@ namespace OMM.App.Controllers
             this.employeesService = employeesService;
         }
 
-        public IActionResult All()
+        public IActionResult AllColleagues()
         {
             return View();
         }
