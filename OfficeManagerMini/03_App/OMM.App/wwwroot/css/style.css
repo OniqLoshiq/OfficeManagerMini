@@ -95,6 +95,7 @@ small {
 
     #sidebar img {
         width: 95px;
+        height: 95px;
     }
 
 .sidenav-header {
@@ -106,10 +107,12 @@ small {
 
 img.card-img-top {
     width: 120px;
+    height: 120px;
 }
 
 .proj-participant-img {
     width: 35px;
+    height: 35px;
 }
 
 .btn.dropdown-toggle {
@@ -135,6 +138,7 @@ img.card-img-top {
 @media (max-width: 767px) {
     #sidebar img {
         width: 35px;
+        height: 35px;
     }
 
     .sidenav-header {
@@ -211,10 +215,12 @@ img.card-img-top {
 
 .empl-list-img {
     width: 31px;
+    height: 31px;
 }
 
 .empl-list-inactive-img {
     width: 31px;
+    height: 31px;
     -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
 }
@@ -234,6 +240,7 @@ img.card-img-top {
 
 .empl-rel img {
     width: 90px;
+    height: 90px;
 }
 
 .empl-rel .form-control:disabled, .empl-rel .form-control[readonly] {
@@ -304,7 +311,6 @@ img.card-img-top {
 
 .forecast-today-img {
     width: 35px;
-    height: 35px;
 }
 
 .forecast-today-temp {

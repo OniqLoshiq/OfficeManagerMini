@@ -41,11 +41,11 @@ namespace OMM.App.Infrastructure.ViewComponents.Models.YWeather
             configuration
                .CreateMap<YWeatherInfo, WeatherForecastViewComponentViewModel>()
                .ForMember(destination => destination.CurrentDayOfMonth,
-                           opts => opts.MapFrom(origin => DateTimeOffset.FromUnixTimeSeconds(origin.Current_Observation.PubDate).Day))
+                           opts => opts.MapFrom(origin => DateTimeOffset.FromUnixTimeSeconds(origin.Current_Observation.PubDate).ToLocalTime().Day))
                .ForMember(destination => destination.CurrentDayOfWeek,
-                           opts => opts.MapFrom(origin => DateTimeOffset.FromUnixTimeSeconds(origin.Current_Observation.PubDate).DayOfWeek))
+                           opts => opts.MapFrom(origin => DateTimeOffset.FromUnixTimeSeconds(origin.Current_Observation.PubDate).ToLocalTime().DayOfWeek))
                .ForMember(destination => destination.CurrentMonth,
-                           opts => opts.MapFrom(origin => DateTimeOffset.FromUnixTimeSeconds(origin.Current_Observation.PubDate).ToString("MMM")))
+                           opts => opts.MapFrom(origin => DateTimeOffset.FromUnixTimeSeconds(origin.Current_Observation.PubDate).ToLocalTime().ToString("MMM")))
                .ForMember(destination => destination.WeekForecasts,
                            opts => opts.MapFrom(origin => origin.Forecasts))
                .ForMember(destination => destination.WindSpeed,
