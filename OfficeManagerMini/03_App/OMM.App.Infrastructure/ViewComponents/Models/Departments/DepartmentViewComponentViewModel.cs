@@ -1,10 +1,11 @@
-﻿using OMM.Services.AutoMapper;
-using OMM.Services.Data.DTOs.Departments;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace OMM.App.Infrastructure.ViewComponents.Models.Departments
 {
-    public class DepartmentViewComponentViewModel : IMapFrom<DepartmentNameDto>
+    public class DepartmentViewComponentViewModel
     {
-        public string Name { get; set; }
+        public int DepartmentId { get; set; }
+
+        public SelectList Departments { get; set; } 
     }
 }

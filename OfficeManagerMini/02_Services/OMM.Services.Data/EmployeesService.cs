@@ -62,16 +62,6 @@ namespace OMM.Services.Data
 
             employee.IsActive = true;
 
-            var departmentId = this.departmentsService.GetDepartmentIdByName(employeeRegisterDto.Department);
-
-            //TODO:
-            //if(departmentId == 0)
-            //{
-            //    throw new System.Exception("Invalid Department Name");
-            //}
-
-            employee.DepartmentId = departmentId;
-
             string password = this.GenerateEmployeePassword();
 
             var result = await this.userManger.CreateAsync(employee, password);
@@ -86,7 +76,7 @@ namespace OMM.Services.Data
 
             if (result.Succeeded)
             {
-                if (await this.SignRolesToEmployee(employee))
+                if (await this.SignRolesToEmployee(employee, employeeRegisterDto.DepartmentId))
                 {
                     await this.userManger.AddClaimAsync(employee, new Claim(Constants.ACCESS_LEVEL_CLAIM, employee.AccessLevel.ToString()));
 
@@ -123,16 +113,18 @@ namespace OMM.Services.Data
             return new string(chars);
         }
 
-        private async Task<bool> SignRolesToEmployee(Employee employee)
+        private async Task<bool> SignRolesToEmployee(Employee employee, int departmentId)
         {
             var roles = new List<string>();
             roles.Add(Constants.DEFAULT_ROLE);
 
-            if(employee.Department.Name == Constants.MANAGEMENT_DEPARTMENT)
+            var departmentName = this.departmentsService.GetDepartmentNameById(departmentId);
+
+            if(departmentName == Constants.MANAGEMENT_DEPARTMENT)
             {
                 roles.Add(Constants.MANAGEMENT_ROLE);
             }
-            else if(employee.Department.Name == Constants.HR_DEPARTMENT)
+            else if(departmentName == Constants.HR_DEPARTMENT)
             {
                 roles.Add(Constants.HR_ROLE);
             }

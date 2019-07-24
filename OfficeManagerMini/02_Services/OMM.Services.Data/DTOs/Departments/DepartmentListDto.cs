@@ -3,8 +3,10 @@ using OMM.Services.AutoMapper;
 
 namespace OMM.Services.Data.DTOs.Departments
 {
-    public class DepartmentNameDto : IMapFrom<Department>
+    public class DepartmentListDto : IMapFrom<Department>
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
     }
 }

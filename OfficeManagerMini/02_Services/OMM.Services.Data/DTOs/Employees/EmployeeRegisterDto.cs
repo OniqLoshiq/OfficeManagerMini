@@ -29,7 +29,7 @@ namespace OMM.Services.Data.DTOs.Employees
 
         public int AccessLevel { get; set; }
 
-        public string Department { get; set; }
+        public int DepartmentId { get; set; }
 
         public string Position { get; set; }
 
@@ -44,8 +44,7 @@ namespace OMM.Services.Data.DTOs.Employees
                 .ForMember(destination => destination.DateOfBirth,
                             opts => opts.MapFrom(origin => DateTime.ParseExact(origin.DateOfBirth, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture)))
                 .ForMember(destination => destination.AppointedOn,
-                            opts => opts.MapFrom(origin => DateTime.ParseExact(origin.AppointedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture)))
-                .ForMember(destination => destination.Department, opt => opt.Ignore());
+                            opts => opts.MapFrom(origin => DateTime.ParseExact(origin.AppointedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture)));
         }
     }
 }

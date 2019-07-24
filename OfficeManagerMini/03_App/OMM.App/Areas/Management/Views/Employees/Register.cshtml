@@ -63,12 +63,9 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-lg-6">
-                    <label asp-for="Department"></label>
-                    <select class="form-control" asp-for="Department">
-                        <option selected disabled>--Choose department--</option>
-                        <vc:list-departments></vc:list-departments>
-                    </select>
-                    <span asp-validation-for="Department" class="text-danger"></span>
+                    <label asp-for="DepartmentId"></label>
+                        <vc:departments-list department-id="0"></vc:departments-list>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
                 </div>
                 <div class="form-group col-lg-6">
                     <label asp-for="Position"></label>

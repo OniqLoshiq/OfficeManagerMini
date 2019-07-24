@@ -48,7 +48,7 @@ namespace OMM.App.Areas.Management.Models.InputModels
 
         [Required]
         [Display(Name = "Department")]
-        public string Department { get; set; }
+        public int DepartmentId { get; set; }
 
         [Required]
         [Display(Name = "Position")]

@@ -18,16 +18,22 @@ namespace OMM.Services.Data
             this.context = context;
         }
 
-        public IQueryable<DepartmentNameDto> GetAllDepartmentNames()
+        public IQueryable<DepartmentListDto> GetAllDepartmentsList()
         {
-            return this.context.Departments.To<DepartmentNameDto>();
+            return this.context.Departments.To<DepartmentListDto>();
         }
 
-        public int GetDepartmentIdByName(string name)
+        public string GetDepartmentNameById(int departmentId)
         {
-            var departmentId = this.context.Departments.SingleOrDefault(d => d.Name == name)?.Id;
+            var name = this.context.Departments.SingleOrDefault(d => d.Id == departmentId)?.Name;
 
-            return departmentId ?? 0;
+            //TODO:
+            //if(name == null)
+            //{
+
+            //}
+
+            return name;
         }
     }
 }
