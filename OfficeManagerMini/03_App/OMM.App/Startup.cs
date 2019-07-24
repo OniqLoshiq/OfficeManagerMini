@@ -22,6 +22,7 @@ using OMM.App.Infrastructure.ViewComponents.Models;
 using CloudinaryDotNet;
 using OMM.Services.SendGrid;
 using OMM.Services.YWeather;
+using OMM.App.Infrastructure.ViewComponents.Models.Departments;
 
 namespace OMM.App
 {

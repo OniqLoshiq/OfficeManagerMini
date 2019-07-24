@@ -3,7 +3,7 @@ using OMM.Services.AutoMapper;
 using OMM.Services.YWeather.YWeather;
 using System;
 
-namespace OMM.App.Infrastructure.ViewComponents.Models
+namespace OMM.App.Infrastructure.ViewComponents.Models.YWeather
 {
     public class ForecastViewComponentViewModel : IMapFrom<Forecast>, IHaveCustomMappings
     {

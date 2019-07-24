@@ -18,7 +18,6 @@ namespace OMM.Services.Data
             this.context = context;
         }
 
-
         public IQueryable<DepartmentNameDto> GetAllDepartmentNames()
         {
             return this.context.Departments.To<DepartmentNameDto>();
@@ -29,11 +28,6 @@ namespace OMM.Services.Data
             var departmentId = this.context.Departments.SingleOrDefault(d => d.Name == name)?.Id;
 
             return departmentId ?? 0;
-        }
-
-        public IQueryable<DepartmentEmployeesDto> GetAllWithActiveEmployees()
-        {
-            return this.context.Departments.To<DepartmentEmployeesDto>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using OMM.Services.Data.DTOs.Employees;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OMM.Services.Data
@@ -10,5 +11,7 @@ namespace OMM.Services.Data
         Task LogoutEmployee();
 
         Task<bool> RegisterEmployeeAsync(EmployeeRegisterDto employeeRegisterDto);
+
+        IQueryable<ActiveEmployeeDepartmentDto> GetActiveEmployeesWithDepartment();
     }
 }

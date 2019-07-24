@@ -10,11 +10,14 @@ namespace OMM.Services.Data.DTOs.Employees
 
         public string FullName { get; set; }
 
+        public string DepartmentName { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration
                 .CreateMap<Employee, ActiveEmployeeDepartmentDto>()
-                .ForAllMembers(m => m.Condition(e => e.IsActive == true));
+                .ForMember(destination => destination.DepartmentName,
+                options => options.MapFrom(origin => origin.Department.Name));
         }
     }
 }

@@ -8,7 +8,5 @@ namespace OMM.Services.Data
         IQueryable<DepartmentNameDto> GetAllDepartmentNames();
 
         int GetDepartmentIdByName(string name);
-
-        IQueryable<DepartmentEmployeesDto> GetAllWithActiveEmployees();
     }
 }

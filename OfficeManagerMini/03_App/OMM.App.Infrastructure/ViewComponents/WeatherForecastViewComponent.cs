@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using OMM.App.Infrastructure.ViewComponents.Models;
+using OMM.App.Infrastructure.ViewComponents.Models.YWeather;
 using OMM.Services.YWeather;
 using System.Threading.Tasks;
 

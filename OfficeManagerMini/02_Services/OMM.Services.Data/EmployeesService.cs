@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using OMM.Data;
 using OMM.Domain;
+using OMM.Services.AutoMapper;
 using OMM.Services.Data.Common;
 using OMM.Services.Data.DTOs.Employees;
 using OMM.Services.SendGrid;
@@ -94,6 +95,11 @@ namespace OMM.Services.Data
             }
 
             return false;
+        }
+
+        public IQueryable<ActiveEmployeeDepartmentDto> GetActiveEmployeesWithDepartment()
+        {
+            return this.context.Users.Where(u => u.IsActive && u.DepartmentId != null).To<ActiveEmployeeDepartmentDto>();
         }
 
         private bool IsEmployeeActive(string email)

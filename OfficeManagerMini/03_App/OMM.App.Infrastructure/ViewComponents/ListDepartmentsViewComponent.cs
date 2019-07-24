@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OMM.App.Infrastructure.ViewComponents.Models;
+using OMM.App.Infrastructure.ViewComponents.Models.Departments;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
 using System.Threading.Tasks;

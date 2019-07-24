@@ -4,7 +4,7 @@ using OMM.Services.YWeather.YWeather;
 using System;
 using System.Collections.Generic;
 
-namespace OMM.App.Infrastructure.ViewComponents.Models
+namespace OMM.App.Infrastructure.ViewComponents.Models.YWeather
 {
     public class WeatherForecastViewComponentViewModel : IMapFrom<YWeatherInfo>, IHaveCustomMappings
     {
