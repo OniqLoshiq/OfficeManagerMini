@@ -17,5 +17,9 @@ namespace OMM.Services.Data
         IQueryable<EmployeeActiveDto> GetAllActiveEmployees();
 
         IQueryable<EmployeeInactiveDto> GetAllInactiveEmployees();
+
+        IQueryable<EmployeeEditDto> GetEmployeeEditByIdAsync(string id);
+
+        Task<bool> EditAsync(EmployeeEditDto employeeToEdit);
     }
 }

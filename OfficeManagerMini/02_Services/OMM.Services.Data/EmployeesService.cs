@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OMM.Data;
 using OMM.Domain;
 using OMM.Services.AutoMapper;
@@ -8,6 +9,7 @@ using OMM.Services.Data.DTOs.Employees;
 using OMM.Services.SendGrid;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -68,10 +70,10 @@ namespace OMM.Services.Data
             var emailResult = await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, password);
 
             //TODO:
-            //if(!emailResult)
-            //{
+            if(!emailResult)
+            {
             //    throw new System.Exception("Problem with email");
-            //}
+            }
 
             if (result.Succeeded)
             {
@@ -105,6 +107,50 @@ namespace OMM.Services.Data
             return inactiveEmployees;
         }
 
+        public IQueryable<EmployeeEditDto> GetEmployeeEditByIdAsync(string id)
+        {
+            var employeeToEdit = this.context.Users.Where(u => u.Id == id).To<EmployeeEditDto>();
+
+            return employeeToEdit;
+        }
+
+        public async Task<bool> EditAsync(EmployeeEditDto employeeToEdit)
+        {
+            var employee = await this.context.Users.FirstOrDefaultAsync(a => a.Id == employeeToEdit.Id);
+
+            //TODO:
+            //if(employee == null)
+            //{
+            //    throw new System.Exception();
+            //}
+
+            employee.UserName = employeeToEdit.Username;
+            employee.Email = employeeToEdit.Email;
+            employee.FirstName = employeeToEdit.FirstName;
+            employee.MiddleName = employeeToEdit.MiddleName;
+            employee.LastName = employeeToEdit.LastName;
+            employee.FullName = employeeToEdit.FullName;
+            employee.DateOfBirth = DateTime.ParseExact(employeeToEdit.DateOfBirth, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            employee.PersonalPhoneNumber = employeeToEdit.PersonalPhoneNumber;
+
+            if(employeeToEdit.ProfilePicture != null)
+            {
+                employee.ProfilePicture = employeeToEdit.ProfilePicture;
+            }
+           
+            employee.Position = employeeToEdit.Position;
+            employee.DepartmentId = employeeToEdit.DepartmentId;
+            employee.PhoneNumber = employeeToEdit.PhoneNumber;
+            employee.AppointedOn = DateTime.ParseExact(employeeToEdit.AppointedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            employee.AccessLevel = employeeToEdit.AccessLevel;
+
+            this.context.Users.Update(employee);
+
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
         private bool IsEmployeeActive(string email)
         {
             return this.context.Users.Any(u => u.Email == email && u.IsActive == true);
@@ -129,9 +175,16 @@ namespace OMM.Services.Data
         private async Task<bool> SignRolesToEmployee(Employee employee, int departmentId)
         {
             var roles = new List<string>();
+
             roles.Add(Constants.DEFAULT_ROLE);
 
             var departmentName = this.departmentsService.GetDepartmentNameById(departmentId);
+
+            //TODO:
+            //if(departmentName == null)
+            //{
+
+            //}
 
             if(departmentName == Constants.MANAGEMENT_DEPARTMENT)
             {

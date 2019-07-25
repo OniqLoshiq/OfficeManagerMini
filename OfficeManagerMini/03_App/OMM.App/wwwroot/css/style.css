@@ -251,6 +251,10 @@ img.card-img-top {
     border-bottom: 2px double #17a2b8;
 }
 
+.emp-rel-color {
+    background-color: #17a2b8 !important;
+}
+
 /*
     purple: #6f42c1
     teal:   #20c997
