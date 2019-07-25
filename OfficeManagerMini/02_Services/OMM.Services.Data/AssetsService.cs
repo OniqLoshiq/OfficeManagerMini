@@ -57,13 +57,7 @@ namespace OMM.Services.Data
         public async Task<AssetEditDto> GetAssetByIdAsync(string id)
         {
             var asset = await this.context.Assets.Where(a => a.Id == id).To<AssetEditDto>().FirstOrDefaultAsync();
-
-            //TODO:
-            //if(asset == null)
-            //{
-            //    throw new System.Exception();
-            //}
-
+            
             return asset;
         }
 
