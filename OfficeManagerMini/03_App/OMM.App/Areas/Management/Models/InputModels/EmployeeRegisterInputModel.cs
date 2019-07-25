@@ -38,6 +38,7 @@ namespace OMM.App.Areas.Management.Models.InputModels
         [Display(Name = "Pers. phone number")]
         public string PersonalPhoneNumber { get; set; }
 
+        [Required]
         [Display(Name = "Profile picture")]
         public IFormFile ProfilePicture { get; set; }
 

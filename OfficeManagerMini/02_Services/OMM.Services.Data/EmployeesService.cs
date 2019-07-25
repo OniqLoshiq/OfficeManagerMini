@@ -70,10 +70,10 @@ namespace OMM.Services.Data
             var emailResult = await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, password);
 
             //TODO:
-            if(!emailResult)
-            {
+            //if(!emailResult)
+            //{
             //    throw new System.Exception("Problem with email");
-            }
+            //}
 
             if (result.Succeeded)
             {
@@ -139,16 +139,56 @@ namespace OMM.Services.Data
             }
            
             employee.Position = employeeToEdit.Position;
-            employee.DepartmentId = employeeToEdit.DepartmentId;
+
+            if(employee.DepartmentId != employeeToEdit.DepartmentId)
+            {
+                await this.ChangeRoles(employee, employeeToEdit.DepartmentId);
+
+                employee.DepartmentId = employeeToEdit.DepartmentId;
+            }
+
             employee.PhoneNumber = employeeToEdit.PhoneNumber;
             employee.AppointedOn = DateTime.ParseExact(employeeToEdit.AppointedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
-            employee.AccessLevel = employeeToEdit.AccessLevel;
+
+            if(employee.AccessLevel != employeeToEdit.AccessLevel)
+            {
+                var claim = this.userManger.GetClaimsAsync(employee).GetAwaiter().GetResult().Single(c => c.Type == Constants.ACCESS_LEVEL_CLAIM);
+                    
+                await this.userManger.ReplaceClaimAsync(employee, claim, new Claim(Constants.ACCESS_LEVEL_CLAIM, employeeToEdit.AccessLevel.ToString()));
+
+                employee.AccessLevel = employeeToEdit.AccessLevel;
+            }
 
             this.context.Users.Update(employee);
 
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
+        }
+
+        private async Task ChangeRoles(Employee employee, int departmentId)
+        {
+            var departmentName = this.departmentsService.GetDepartmentNameById(departmentId);
+
+            var rolesCount = this.userManger.GetRolesAsync(employee).GetAwaiter().GetResult().Count;
+
+            if (rolesCount > 1)
+            {
+                var isInManagerRole = this.userManger.IsInRoleAsync(employee, Constants.MANAGEMENT_ROLE).GetAwaiter().GetResult();
+
+                var result = isInManagerRole ?
+                                        await this.userManger.RemoveFromRoleAsync(employee, Constants.MANAGEMENT_ROLE) :
+                                        await this.userManger.RemoveFromRoleAsync(employee, Constants.HR_ROLE);
+            }
+
+            if(departmentName == Constants.MANAGEMENT_DEPARTMENT)
+            {
+                await this.userManger.AddToRoleAsync(employee, Constants.MANAGEMENT_ROLE);
+            }
+            else if(departmentName == Constants.HR_DEPARTMENT)
+            {
+                await this.userManger.AddToRoleAsync(employee, Constants.HR_ROLE);
+            }
         }
 
         private bool IsEmployeeActive(string email)
