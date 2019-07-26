@@ -142,7 +142,7 @@ namespace OMM.Services.Data
 
             if(employee.DepartmentId != employeeToEdit.DepartmentId)
             {
-                await this.ChangeRoles(employee, employeeToEdit.DepartmentId);
+                await this.ChangeRolesAsync(employee, employeeToEdit.DepartmentId);
 
                 employee.DepartmentId = employeeToEdit.DepartmentId;
             }
@@ -152,11 +152,7 @@ namespace OMM.Services.Data
 
             if(employee.AccessLevel != employeeToEdit.AccessLevel)
             {
-                var claim = this.userManger.GetClaimsAsync(employee).GetAwaiter().GetResult().Single(c => c.Type == Constants.ACCESS_LEVEL_CLAIM);
-                    
-                await this.userManger.ReplaceClaimAsync(employee, claim, new Claim(Constants.ACCESS_LEVEL_CLAIM, employeeToEdit.AccessLevel.ToString()));
-
-                employee.AccessLevel = employeeToEdit.AccessLevel;
+                await this.ChangeAccessLevelClaimAsync(employee, employeeToEdit.AccessLevel);
             }
 
             this.context.Users.Update(employee);
@@ -166,7 +162,46 @@ namespace OMM.Services.Data
             return result > 0;
         }
 
-        private async Task ChangeRoles(Employee employee, int departmentId)
+        public async Task<bool> ReleaseAsync(EmployeeReleaseDto employeeToRelease)
+        {
+            var employee = await this.context.Users.Where(u => u.Id == employeeToRelease.Id).SingleOrDefaultAsync();
+
+            employee.IsActive = false;
+            employee.LeavingReasonId = employeeToRelease.LeavingReasonId;
+            employee.LeftOn = DateTime.ParseExact(employeeToRelease.LeftOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            employee.PhoneNumber = null;
+            employee.PersonalPhoneNumber = null;
+
+            employee.Items.Clear();
+            await this.ChangeAccessLevelClaimAsync(employee, 0);
+            var employeeRoles = await this.userManger.GetRolesAsync(employee);
+            await this.userManger.RemoveFromRolesAsync(employee, employeeRoles);
+
+            this.ChangePictureToInactive(employee);
+
+            this.context.Update(employee);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        private void ChangePictureToInactive(Employee employee)
+        {
+            int prefixIndex = employee.ProfilePicture.IndexOf(Constants.PICTURE_SEARCH_PREFIX);
+
+            employee.ProfilePicture = employee.ProfilePicture.Insert(prefixIndex + Constants.PICTURE_PREFIX_LENGHT, Constants.PICTURE_INACTIVE_ADDON);
+        }
+
+        private async Task ChangeAccessLevelClaimAsync(Employee employee, int accessLevel)
+        {
+            var claim = this.userManger.GetClaimsAsync(employee).GetAwaiter().GetResult().Single(c => c.Type == Constants.ACCESS_LEVEL_CLAIM);
+
+            await this.userManger.ReplaceClaimAsync(employee, claim, new Claim(Constants.ACCESS_LEVEL_CLAIM, accessLevel.ToString()));
+
+            employee.AccessLevel = accessLevel;
+        }
+
+        private async Task ChangeRolesAsync(Employee employee, int departmentId)
         {
             var departmentName = this.departmentsService.GetDepartmentNameById(departmentId);
 
@@ -175,8 +210,7 @@ namespace OMM.Services.Data
             if (rolesCount > 1)
             {
                 var isInManagerRole = this.userManger.IsInRoleAsync(employee, Constants.MANAGEMENT_ROLE).GetAwaiter().GetResult();
-
-                var result = isInManagerRole ?
+                _ = isInManagerRole ?
                                         await this.userManger.RemoveFromRoleAsync(employee, Constants.MANAGEMENT_ROLE) :
                                         await this.userManger.RemoveFromRoleAsync(employee, Constants.HR_ROLE);
             }
@@ -239,5 +273,7 @@ namespace OMM.Services.Data
 
             return roleResult.Succeeded;
         }
+
+        
     }
 }

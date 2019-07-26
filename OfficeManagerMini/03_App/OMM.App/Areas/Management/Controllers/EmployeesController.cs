@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OMM.App.Areas.Management.Models.InputModels;
@@ -47,9 +43,11 @@ namespace OMM.App.Areas.Management.Controllers
                 return this.View();
             }
 
+            string pictureName = string.Join("_",model.FirstName, model.MiddleName[0], model.LastName);
+
             string pictureUrl = await this.cloudinaryService.UploadPictureAsync(
                 model.ProfilePicture,
-                model.FullName);
+                pictureName);
 
             var employeeRegisterDto = AutoMapper.Mapper.Map<EmployeeRegisterDto>(model);
 
@@ -57,7 +55,7 @@ namespace OMM.App.Areas.Management.Controllers
 
             await this.employeesService.RegisterEmployeeAsync(employeeRegisterDto);
 
-            return this.Redirect("/");
+            return this.RedirectToAction("All", "Employees", new { area = "Management"});
         }
 
         [MinimumAccessLevel(AccessLevelValue.Seven)]
@@ -79,9 +77,11 @@ namespace OMM.App.Areas.Management.Controllers
 
             if (input.ProfilePictureNew != null)
             {
+                string pictureName = string.Join("_", input.FirstName, input.MiddleName[0], input.LastName);
+
                 string pictureUrl = await this.cloudinaryService.UploadPictureAsync(
                 input.ProfilePictureNew,
-                input.FullName);
+                pictureName);
 
                 input.ProfilePicture = pictureUrl;
             }
@@ -106,7 +106,16 @@ namespace OMM.App.Areas.Management.Controllers
         [MinimumAccessLevel(AccessLevelValue.Eight)]
         public async Task<IActionResult> Release(EmployeeReleaseViewModel input)
         {
-            return this.View();
+            if (!ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var employeeToRelease = AutoMapper.Mapper.Map<EmployeeReleaseDto>(input);
+
+            await this.employeesService.ReleaseAsync(employeeToRelease);
+
+            return this.RedirectToAction(nameof(All));
         }
     }
 }

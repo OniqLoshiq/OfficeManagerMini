@@ -15,5 +15,7 @@ namespace OMM.Services.Data
         Task<AssetEditDto> GetAssetByIdAsync(string id);
 
         Task<bool> EditAsync(AssetEditDto assetToEdit);
+
+        IQueryable<AssetEmployeeDto> GetAssetsByEmployeeId(string employeeId);
     }
 }

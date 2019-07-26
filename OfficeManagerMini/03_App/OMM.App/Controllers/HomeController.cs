@@ -1,14 +1,11 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OMM.App.Models;
-using OMM.Services.YWeather;
 
 namespace OMM.App.Controllers
 {
     public class HomeController : Controller
     {
-
         public IActionResult Index()
         {
             return View();

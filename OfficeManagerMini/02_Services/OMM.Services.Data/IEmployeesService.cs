@@ -21,5 +21,7 @@ namespace OMM.Services.Data
         IQueryable<T> GetEmployeeDtoByIdAsync<T>(string id);
 
         Task<bool> EditAsync(EmployeeEditDto employeeToEdit);
+
+        Task<bool> ReleaseAsync(EmployeeReleaseDto employeeToRelease);
     }
 }

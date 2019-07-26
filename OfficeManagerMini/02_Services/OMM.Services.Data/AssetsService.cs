@@ -86,5 +86,11 @@ namespace OMM.Services.Data
             return result > 0;
         }
 
+        public IQueryable<AssetEmployeeDto> GetAssetsByEmployeeId(string employeeId)
+        {
+            var assets = this.context.Assets.Where(a => a.EmployeeId == employeeId).To<AssetEmployeeDto>();
+
+            return assets;
+        }
     }
 }

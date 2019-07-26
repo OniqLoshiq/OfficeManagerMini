@@ -22,7 +22,7 @@ namespace OMM.Services.Data.DTOs.Employees
 
         public string Position { get; set; }
 
-        public string LeavingReasonName { get; set; }
+        public string LeavingReasonReason { get; set; }
 
         public string LeftOn { get; set; }
 

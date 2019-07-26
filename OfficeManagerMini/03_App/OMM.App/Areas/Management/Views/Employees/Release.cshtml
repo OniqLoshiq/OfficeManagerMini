@@ -79,7 +79,7 @@
                 <div class="form-group col-lg-6 flatpickrcontainer">
                     <label asp-for="LeftOn"></label>
                     <div class="input-group">
-                        <input type="text" class="form-control" asp-for="LeftOn" data-input>
+                        <input type="text" class="form-control" id="empl-rel-border" asp-for="LeftOn" data-input>
                         <div class="input-group-prepend">
                             <div class="input-group-text emp-rel-color"><i class="fa fa-calendar text-white"></i></div>
                         </div>
@@ -129,138 +129,12 @@
 </h5>
 <hr class="hr-oom" style="width:300px;" />
 
-<div class="collapse" id="collapseReleasedItems">
-    <table id="myDataTableReleasedItems" class="display table-sm table table-striped table-light table-hover table-bordered" style="width:100%">
-        <thead>
-            <tr>
-                <th scope="col">Inv. number</th>
-                <th scope="col">Type</th>
-                <th scope="col">Make</th>
-                <th scope="col">Model</th>
-                <th scope="col">Ref. number</th>
-                <th scope="col">Aquired On</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-            <tr>
-                <td>1907-F-OMM-123</td>
-                <td>Software</td>
-                <td>Microsoft</td>
-                <td>Microsoft Office</td>
-                <td>BSLAFDULWR18891SD</td>
-                <td>17-07-2019</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<vc:employee-assets employee-id="@Model.Id"></vc:employee-assets>
 
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/change-realse-dropboreder.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/run-dataTable.js"></script>
