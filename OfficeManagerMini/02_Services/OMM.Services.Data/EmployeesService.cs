@@ -107,9 +107,9 @@ namespace OMM.Services.Data
             return inactiveEmployees;
         }
 
-        public IQueryable<EmployeeEditDto> GetEmployeeEditByIdAsync(string id)
+        public IQueryable<T> GetEmployeeDtoByIdAsync<T>(string id)
         {
-            var employeeToEdit = this.context.Users.Where(u => u.Id == id).To<EmployeeEditDto>();
+            var employeeToEdit = this.context.Users.Where(u => u.Id == id).To<T>();
 
             return employeeToEdit;
         }

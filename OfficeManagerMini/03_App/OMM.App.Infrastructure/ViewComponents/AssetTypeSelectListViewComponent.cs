@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using OMM.App.Infrastructure.ViewComponents.Models;
 using OMM.App.Infrastructure.ViewComponents.Models.AssetTypes;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;

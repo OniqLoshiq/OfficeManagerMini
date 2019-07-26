@@ -42,7 +42,7 @@ namespace OMM.App.Areas.Management.Controllers
         [MinimumAccessLevel(AccessLevelValue.Eight)]
         public async Task<IActionResult> Register(EmployeeRegisterInputModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return this.View();
             }
@@ -63,7 +63,7 @@ namespace OMM.App.Areas.Management.Controllers
         [MinimumAccessLevel(AccessLevelValue.Seven)]
         public async Task<IActionResult> Edit(string id)
         {
-            var employeeViewModel = await this.employeesService.GetEmployeeEditByIdAsync(id).To<EmployeeEditViewModel>().FirstOrDefaultAsync();
+            var employeeViewModel = await this.employeesService.GetEmployeeDtoByIdAsync<EmployeeEditDto>(id).To<EmployeeEditViewModel>().FirstOrDefaultAsync();
 
             return this.View(employeeViewModel);
         }
@@ -72,12 +72,12 @@ namespace OMM.App.Areas.Management.Controllers
         [MinimumAccessLevel(AccessLevelValue.Seven)]
         public async Task<IActionResult> Edit(EmployeeEditViewModel input)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return this.View();
             }
 
-            if(input.ProfilePictureNew != null)
+            if (input.ProfilePictureNew != null)
             {
                 string pictureUrl = await this.cloudinaryService.UploadPictureAsync(
                 input.ProfilePictureNew,
@@ -93,9 +93,20 @@ namespace OMM.App.Areas.Management.Controllers
             return this.RedirectToAction(nameof(All));
         }
 
-        public IActionResult Release()
+        
+        [MinimumAccessLevel(AccessLevelValue.Eight)]
+        public async Task<IActionResult> Release(string id)
         {
-            return View();
+            var employeeViewModel = await this.employeesService.GetEmployeeDtoByIdAsync<EmployeeReleaseDto>(id).To<EmployeeReleaseViewModel>().FirstOrDefaultAsync();
+
+            return View(employeeViewModel);
+        }
+
+        [HttpPost]
+        [MinimumAccessLevel(AccessLevelValue.Eight)]
+        public async Task<IActionResult> Release(EmployeeReleaseViewModel input)
+        {
+            return this.View();
         }
     }
 }

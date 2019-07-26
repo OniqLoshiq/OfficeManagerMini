@@ -1,4 +1,5 @@
-﻿
+﻿@model OMM.App.Areas.Management.Models.ViewModels.EmployeeReleaseViewModel
+
 @{
     ViewData["Title"] = "Release Employee";
 }
@@ -7,93 +8,89 @@
 <hr class="hr-oom" style="width:300px;" />
 
 <div class="d-flex justify-content-center empl-rel mb-3">
-    <img src="~/images/avatar.jpg" alt="avatar" class="rounded img-thumbnail">
+    <img src="@Model.ProfilePicture" alt="avatar" class="rounded img-thumbnail">
 </div>
 
-<form>
+<form asp-area="Management" asp-controller="Employees" asp-action="Release" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-row management empl-rel">
         <div class="form-group col-md-6 personal-data px-3">
             <div class="form-row">
                 <div class="form-group col-lg-4">
-                    <label for="firstName">First name</label>
-                    <input type="text" class="form-control" id="firstName" value="Oniq" disabled>
+                    <label asp-for="FirstName"></label>
+                    <input type="text" class="form-control" asp-for="FirstName" disabled>
                 </div>
                 <div class="form-group col-lg-4">
-                    <label for="middleName">Middle name</label>
-                    <input type="text" class="form-control" id="middleName" value="Dokka" disabled>
+                    <label asp-for="MiddleName">Middle name</label>
+                    <input type="text" class="form-control" asp-for="MiddleName" disabled>
                 </div>
                 <div class="form-group col-lg-4">
-                    <label for="lastName">Last name</label>
-                    <input type="text" class="form-control" id="lastName" value="Loshiq" disabled>
+                    <label asp-for="LastName">Last name</label>
+                    <input type="text" class="form-control" asp-for="LastName" disabled>
                 </div>
             </div>
             <div class="form-group">
-                <label for="fullName">Full name</label>
-                <input type="text" class="form-control" id="fullName" value="Oniq D. Loshiq" disabled>
+                <label asp-for="FullName">Full name</label>
+                <input type="text" class="form-control" asp-for="FullName" disabled>
             </div>
             <div class="form-row">
                 <div class="form-group col-lg-6">
-                    <label for="dateOfBirth">Date of birth</label>
-                    <input type="text" class="form-control" id="dateOfBirth" name="dateOfBirth" value="01-12-1999" disabled>
+                    <label asp-for="DateOfBirth"></label>
+                    <input type="text" class="form-control" asp-for="DateOfBirth" disabled>
                 </div>
                 <div class="form-group col-lg-6">
-                    <label for="personalPhoneNumber">Pers. phone number</label>
-                    <input type="tel" class="form-control" id="personalPhoneNumber" value="8888888888" disabled>
+                    <label asp-for="PersonalPhoneNumber"></label>
+                    <input type="tel" class="form-control" asp-for="PersonalPhoneNumber" disabled>
                 </div>
             </div>
         </div>
         <div class="form-group col-md-6 company-data px-3">
             <div class="form-row">
                 <div class="form-group col-lg-10">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" value="oniqloshiq@ludnica.com" disabled>
+                    <label asp-for="Email"></label>
+                    <input type="email" class="form-control" asp-for="Email" disabled>
                 </div>
                 <div class="form-group col-lg-2">
-                    <label for="accessLevel">Access</label>
-                    <input type="text" class="form-control" id="accessLevel" value="10" disabled>
+                    <label asp-for="AccessLevel"></label>
+                    <input type="text" class="form-control" asp-for="AccessLevel" disabled>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-lg-6">
-                    <label for="department">Department</label>
-                    <input type="text" class="form-control" id="department" value="Management board" disabled>
+                    <label asp-for="DepartmentName"></label>
+                    <input type="text" class="form-control" asp-for="DepartmentName" disabled>
                 </div>
                 <div class="form-group col-lg-6">
-                    <label for="position">Position</label>
-                    <input type="text" class="form-control" id="position" value="Web Dev" disabled>
+                    <label asp-for="Position"></label>
+                    <input type="text" class="form-control" asp-for="Position" disabled>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-lg-6">
-                    <label for="appointedOn">Appointed on</label>
-                    <input type="text" class="form-control" id="appointedOn" name="appointedOn" value="18-07-2019" disabled>
+                    <label asp-for="AppointedOn"></label>
+                    <input type="text" class="form-control" asp-for="AppointedOn" disabled>
                 </div>
                 <div class="form-group col-lg-6">
-                    <label for="phoneNumber">Phone number</label>
-                    <input type="tel" class="form-control" id="phoneNumber" value="9999999999" disabled>
+                    <label asp-for="PhoneNumber"></label>
+                    <input type="tel" class="form-control" asp-for="PhoneNumber" disabled>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-lg-6 flatpickrcontainer">
-                    <label for="LeftOn">Left on</label>
+                    <label asp-for="LeftOn"></label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="LeftOn" name="LeftOn" data-input>
+                        <input type="text" class="form-control" asp-for="LeftOn" data-input>
                         <div class="input-group-prepend">
                             <div class="input-group-text emp-rel-color"><i class="fa fa-calendar text-white"></i></div>
                         </div>
                     </div>
+                    <span asp-validation-for="LeftOn" class="text-danger"></span>
                 </div>
                 <div class="form-group col-lg-6">
-                    <label for="LeavingReason">Leaving Reason</label>
-                    <select class="form-control" id="LeavingReason" name="LeavingReason">
-                        <option selected disabled>--Choose leaving reason--</option>
-                        <option>ASdasd</option>
-                        <option>ASdasd</option>
-                        <option>ASdasd</option>
-                        <option>ASdasd</option>
-                        <option>ASdasd</option>
-                    </select>
+                    <label asp-for="LeavingReasonId"></label>
+                    <vc:leaving-reasons-list leaving-reason-id="0"></vc:leaving-reasons-list>
                 </div>
+                <span asp-validation-for="LeavingReasonId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <div class="d-flex justify-content-end mt-2">
@@ -263,9 +260,21 @@
 
 
 @section Scripts{
+    <partial name="_ValidationScriptsPartial" />
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/run-dataTable.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday default is sunday
+
+        document.getElementsByClassName("flatpickrcontainer").flatpickr({
+            wrap: true,
+            weekNumbers: true,
+            dateFormat: "d-m-Y"
+        });
+    </script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>

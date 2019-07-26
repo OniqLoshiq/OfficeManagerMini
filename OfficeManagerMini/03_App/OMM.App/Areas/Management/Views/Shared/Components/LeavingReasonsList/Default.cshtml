@@ -1,0 +1,6 @@
+﻿@model OMM.App.Infrastructure.ViewComponents.Models.LeavingReasons.LeavingReasonViewComponentViewModel
+
+<select class="form-control" asp-for="LeavingReasonId" asp-items="@Model.LeavingReasons">
+    <option selected disabled>--Choose a leaving reason--</option>
+</select>
+
