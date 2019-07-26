@@ -16,5 +16,11 @@
 
         public const string ACCESS_LEVEL_CLAIM = "AccessLevel";
 
+        public const string PICTURE_SEARCH_PREFIX = "upload/";
+
+        public const int PICTURE_PREFIX_LENGHT = 7;
+
+        public const string PICTURE_INACTIVE_ADDON = "e_grayscale,o_60/";
+
     }
 }

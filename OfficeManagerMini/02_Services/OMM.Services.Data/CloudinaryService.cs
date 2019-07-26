@@ -35,7 +35,9 @@ namespace OMM.Services.Data
                 ImageUploadParams uploadParams = new ImageUploadParams
                 {
                     Folder = "Employees",
-                    File = new FileDescription(@fileName, ms)
+                    File = new FileDescription(@fileName, ms),
+                    UseFilename = true,
+                    UniqueFilename = false,
                 };
 
                 uploadResult = this.cloudinaryUtility.Upload(uploadParams);
