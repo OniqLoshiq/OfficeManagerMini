@@ -2,6 +2,8 @@
 using OMM.Domain;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data.Common;
+using OMM.Services.Data.DTOs.Assets;
+using System.Collections.Generic;
 
 namespace OMM.Services.Data.DTOs.Employees
 {
@@ -38,6 +40,8 @@ namespace OMM.Services.Data.DTOs.Employees
         public string LeftOn { get; set; }
 
         public int LeavingReasonId { get; set; }
+
+        public List<AssetEmployeeDto> Items { get; set; } = new List<AssetEmployeeDto>();
 
         public void CreateMappings(IProfileExpression configuration)
         {

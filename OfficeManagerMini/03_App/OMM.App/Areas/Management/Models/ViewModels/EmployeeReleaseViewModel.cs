@@ -1,5 +1,6 @@
 ﻿using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.Employees;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OMM.App.Areas.Management.Models.ViewModels
@@ -53,5 +54,7 @@ namespace OMM.App.Areas.Management.Models.ViewModels
 
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
+
+        public List<AssetEmployeeViewModel> Items { get; set; } = new List<AssetEmployeeViewModel>();
     }
 }

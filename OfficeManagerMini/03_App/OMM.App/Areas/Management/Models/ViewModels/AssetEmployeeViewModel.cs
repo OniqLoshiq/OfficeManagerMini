@@ -1,9 +1,9 @@
 ﻿using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.Assets;
 
-namespace OMM.App.Infrastructure.ViewComponents.Models.Assets
+namespace OMM.App.Areas.Management.Models.ViewModels
 {
-    public class EmployeeAssetViewComponentViewModel : IMapFrom<AssetEmployeeDto>
+    public class AssetEmployeeViewModel : IMapFrom<AssetEmployeeDto>
     {
         public string InventoryNumber { get; set; }
 

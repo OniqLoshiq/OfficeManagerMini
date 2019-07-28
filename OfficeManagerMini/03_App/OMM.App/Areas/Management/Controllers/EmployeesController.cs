@@ -97,7 +97,7 @@ namespace OMM.App.Areas.Management.Controllers
         [MinimumAccessLevel(AccessLevelValue.Eight)]
         public async Task<IActionResult> Release(string id)
         {
-            var employeeViewModel = await this.employeesService.GetEmployeeDtoByIdAsync<EmployeeReleaseDto>(id).To<EmployeeReleaseViewModel>().FirstOrDefaultAsync();
+            var employeeViewModel = (await this.employeesService.GetEmployeeDtoByIdAsync<EmployeeReleaseDto>(id).SingleOrDefaultAsync()).To<EmployeeReleaseViewModel>();
 
             return View(employeeViewModel);
         }
