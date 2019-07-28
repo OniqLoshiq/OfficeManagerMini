@@ -111,9 +111,44 @@ namespace OMM.App.Areas.Management.Controllers
                 return this.View();
             }
 
-            var employeeToRelease = AutoMapper.Mapper.Map<EmployeeReleaseDto>(input);
+            var employeeToRelease = input.To<EmployeeReleaseDto>();
 
             await this.employeesService.ReleaseAsync(employeeToRelease);
+
+            return this.RedirectToAction(nameof(All));
+        }
+
+        [MinimumAccessLevel(AccessLevelValue.Eight)]
+        public async Task<IActionResult> HireBack(string id)
+        {
+            var employeeViewModel = await this.employeesService.GetEmployeeDtoByIdAsync<EmployeeHireBackDto>(id).To<EmployeeHireBackViewModel>().FirstOrDefaultAsync();
+
+            return this.View(employeeViewModel);
+        }
+
+        [HttpPost]
+        [MinimumAccessLevel(AccessLevelValue.Eight)]
+        public async Task<IActionResult> HireBack(EmployeeHireBackViewModel input)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            if (input.ProfilePictureNew != null)
+            {
+                string pictureName = string.Join("_", input.FirstName, input.MiddleName[0], input.LastName);
+
+                string pictureUrl = await this.cloudinaryService.UploadPictureAsync(
+                input.ProfilePictureNew,
+                pictureName);
+
+                input.ProfilePicture = pictureUrl;
+            }
+
+            var employeeToHireBack = input.To<EmployeeHireBackDto>();
+
+            await this.employeesService.HireBackAsync(employeeToHireBack);
 
             return this.RedirectToAction(nameof(All));
         }

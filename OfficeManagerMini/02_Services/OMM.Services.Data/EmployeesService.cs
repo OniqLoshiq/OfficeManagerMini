@@ -22,7 +22,7 @@ namespace OMM.Services.Data
         private const int PASSWORD_MIN_LENGTH = 6;
         private const int PASSWORD_MAX_LENGTH = 14;
         private const int PASSWORD_ALLOWED_CHARS_START_INDEX = 0;
-        
+
         private readonly UserManager<Employee> userManger;
         private readonly SignInManager<Employee> signInManager;
         private readonly OmmDbContext context;
@@ -133,14 +133,14 @@ namespace OMM.Services.Data
             employee.DateOfBirth = DateTime.ParseExact(employeeToEdit.DateOfBirth, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             employee.PersonalPhoneNumber = employeeToEdit.PersonalPhoneNumber;
 
-            if(employeeToEdit.ProfilePicture != null)
+            if (employeeToEdit.ProfilePicture != null)
             {
                 employee.ProfilePicture = employeeToEdit.ProfilePicture;
             }
-           
+
             employee.Position = employeeToEdit.Position;
 
-            if(employee.DepartmentId != employeeToEdit.DepartmentId)
+            if (employee.DepartmentId != employeeToEdit.DepartmentId)
             {
                 await this.ChangeRolesAsync(employee, employeeToEdit.DepartmentId);
 
@@ -150,7 +150,7 @@ namespace OMM.Services.Data
             employee.PhoneNumber = employeeToEdit.PhoneNumber;
             employee.AppointedOn = DateTime.ParseExact(employeeToEdit.AppointedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
 
-            if(employee.AccessLevel != employeeToEdit.AccessLevel)
+            if (employee.AccessLevel != employeeToEdit.AccessLevel)
             {
                 await this.ChangeAccessLevelClaimAsync(employee, employeeToEdit.AccessLevel);
             }
@@ -185,11 +185,65 @@ namespace OMM.Services.Data
             return result > 0;
         }
 
+        public async Task<bool> HireBackAsync(EmployeeHireBackDto employeeToHireBack)
+        {
+            var employee = await this.context.Users.Where(u => u.Id == employeeToHireBack.Id).SingleOrDefaultAsync();
+
+            employee.IsActive = true;
+            employee.LeavingReasonId = null;
+            employee.LeftOn = null;
+
+            employee.Email = employeeToHireBack.Email;
+            employee.UserName = employeeToHireBack.Username;
+            employee.FirstName = employeeToHireBack.FirstName;
+            employee.MiddleName = employeeToHireBack.MiddleName;
+            employee.LastName = employeeToHireBack.LastName;
+            employee.FullName = employeeToHireBack.FullName;
+            employee.ProfilePicture = employeeToHireBack.ProfilePicture;
+            employee.PersonalPhoneNumber = employeeToHireBack.PersonalPhoneNumber;
+            employee.PhoneNumber = employeeToHireBack.PhoneNumber;
+            employee.DepartmentId = employeeToHireBack.DepartmentId;
+            employee.Position = employeeToHireBack.Position;
+            employee.DateOfBirth = DateTime.ParseExact(employeeToHireBack.DateOfBirth, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            employee.AppointedOn = DateTime.ParseExact(employeeToHireBack.AppointedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+
+            this.ChangePictureToActive(employee);
+
+            await this.SignRolesToEmployee(employee, employeeToHireBack.DepartmentId);
+            await this.ChangeAccessLevelClaimAsync(employee, employeeToHireBack.AccessLevel);
+
+            string newPassword = this.GenerateEmployeePassword();
+
+            await this.ChangeEmployeePassword(employee, newPassword);
+
+            var emailResult = await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, newPassword);
+
+            this.context.Users.Update(employee);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        private async Task ChangeEmployeePassword(Employee employee, string newPassword)
+        {
+            await this.userManger.RemovePasswordAsync(employee);
+
+            await this.userManger.AddPasswordAsync(employee, newPassword);
+        }
+
         private void ChangePictureToInactive(Employee employee)
         {
             int prefixIndex = employee.ProfilePicture.IndexOf(Constants.PICTURE_SEARCH_PREFIX);
 
             employee.ProfilePicture = employee.ProfilePicture.Insert(prefixIndex + Constants.PICTURE_PREFIX_LENGHT, Constants.PICTURE_INACTIVE_ADDON);
+        }
+
+        private void ChangePictureToActive(Employee employee)
+        {
+            if (employee.ProfilePicture.Contains(Constants.PICTURE_INACTIVE_ADDON))
+            {
+                employee.ProfilePicture = employee.ProfilePicture.Replace(Constants.PICTURE_INACTIVE_ADDON, string.Empty);
+            }
         }
 
         private async Task ChangeAccessLevelClaimAsync(Employee employee, int accessLevel)
@@ -215,11 +269,11 @@ namespace OMM.Services.Data
                                         await this.userManger.RemoveFromRoleAsync(employee, Constants.HR_ROLE);
             }
 
-            if(departmentName == Constants.MANAGEMENT_DEPARTMENT)
+            if (departmentName == Constants.MANAGEMENT_DEPARTMENT)
             {
                 await this.userManger.AddToRoleAsync(employee, Constants.MANAGEMENT_ROLE);
             }
-            else if(departmentName == Constants.HR_DEPARTMENT)
+            else if (departmentName == Constants.HR_DEPARTMENT)
             {
                 await this.userManger.AddToRoleAsync(employee, Constants.HR_ROLE);
             }
@@ -260,11 +314,11 @@ namespace OMM.Services.Data
 
             //}
 
-            if(departmentName == Constants.MANAGEMENT_DEPARTMENT)
+            if (departmentName == Constants.MANAGEMENT_DEPARTMENT)
             {
                 roles.Add(Constants.MANAGEMENT_ROLE);
             }
-            else if(departmentName == Constants.HR_DEPARTMENT)
+            else if (departmentName == Constants.HR_DEPARTMENT)
             {
                 roles.Add(Constants.HR_ROLE);
             }
@@ -273,7 +327,5 @@ namespace OMM.Services.Data
 
             return roleResult.Succeeded;
         }
-
-        
     }
 }

@@ -23,5 +23,7 @@ namespace OMM.Services.Data
         Task<bool> EditAsync(EmployeeEditDto employeeToEdit);
 
         Task<bool> ReleaseAsync(EmployeeReleaseDto employeeToRelease);
+
+        Task<bool> HireBackAsync(EmployeeHireBackDto employeeToHireBack);
     }
 }
