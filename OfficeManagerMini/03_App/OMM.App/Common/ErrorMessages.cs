@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OMM.App.Common
+﻿namespace OMM.App.Common
 {
     public static class ErrorMessages
     {
-        public const string InvalidLogin = "XA-XA-XA Invalid login.";
+        public const string INVALID_LOGIN = "XA-XA-XA Invalid login.";
+
+        public const string INVALID_PASSWORD = "Your current password does not match";
     }
 }

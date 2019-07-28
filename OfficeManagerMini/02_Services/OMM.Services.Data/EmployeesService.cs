@@ -109,9 +109,9 @@ namespace OMM.Services.Data
 
         public IQueryable<T> GetEmployeeDtoByIdAsync<T>(string id)
         {
-            var employeeToEdit = this.context.Users.Where(u => u.Id == id).To<T>();
+            var employee = this.context.Users.Where(u => u.Id == id).To<T>();
 
-            return employeeToEdit;
+            return employee;
         }
 
         public async Task<bool> EditAsync(EmployeeEditDto employeeToEdit)
@@ -214,7 +214,7 @@ namespace OMM.Services.Data
 
             string newPassword = this.GenerateEmployeePassword();
 
-            await this.ChangeEmployeePassword(employee, newPassword);
+            await this.SetNewPassword(employee, newPassword);
 
             var emailResult = await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, newPassword);
 
@@ -224,7 +224,25 @@ namespace OMM.Services.Data
             return result > 0;
         }
 
-        private async Task ChangeEmployeePassword(Employee employee, string newPassword)
+        public async Task<bool> ValidateCurrentPasswordAsync(string employeeId, string currentPassword)
+        {
+            var employee = await this.context.Users.SingleOrDefaultAsync(u => u.Id == employeeId);
+
+            return await this.userManger.CheckPasswordAsync(employee, currentPassword);
+        }
+
+        public async Task<bool> ChangePasswordAsync(string employeeId, EmployeeChangePasswordDto changePasswordDto)
+        {
+            var employee = await this.context.Users.SingleOrDefaultAsync(u => u.Id == employeeId);
+
+            var result = await this.userManger.ChangePasswordAsync(employee, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
+
+            return result.Succeeded;
+        }
+
+        //Helper methods
+
+        private async Task SetNewPassword(Employee employee, string newPassword)
         {
             await this.userManger.RemovePasswordAsync(employee);
 

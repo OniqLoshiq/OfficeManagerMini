@@ -18,7 +18,6 @@ using OMM.App.Infrastructure.CustomAuthorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using OMM.Services.Data;
 using OMM.Services.Data.DTOs.Employees;
-using OMM.App.Infrastructure.ViewComponents.Models;
 using CloudinaryDotNet;
 using OMM.Services.SendGrid;
 using OMM.Services.YWeather;

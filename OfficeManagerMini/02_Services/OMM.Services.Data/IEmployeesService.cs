@@ -1,5 +1,6 @@
 ﻿using OMM.Services.Data.DTOs.Employees;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OMM.Services.Data
@@ -25,5 +26,9 @@ namespace OMM.Services.Data
         Task<bool> ReleaseAsync(EmployeeReleaseDto employeeToRelease);
 
         Task<bool> HireBackAsync(EmployeeHireBackDto employeeToHireBack);
+
+        Task<bool> ValidateCurrentPasswordAsync(string employeeIdl, string currentPassword);
+
+        Task<bool> ChangePasswordAsync(string employeeId, EmployeeChangePasswordDto changePasswordDto);
     }
 }

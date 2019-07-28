@@ -1,8 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OMM.App.Common;
+using OMM.App.Infrastructure.ViewComponents.Models.Employees;
 using OMM.App.Models.InputModels;
+using OMM.App.Models.ViewModels;
+using OMM.Services.AutoMapper;
 using OMM.Services.Data;
 using OMM.Services.Data.DTOs.Employees;
 
@@ -42,7 +47,7 @@ namespace OMM.App.Controllers
                 }
             }
 
-            ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLogin);
+            ModelState.AddModelError(string.Empty, ErrorMessages.INVALID_LOGIN);
 
             return this.View();
         }
@@ -59,9 +64,41 @@ namespace OMM.App.Controllers
             return View();
         }
 
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            return this.View();
+            var employeeId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var employeeProfile = (await this.employeesService
+                .GetEmployeeDtoByIdAsync<EmployeeProfileDto>(employeeId)
+                .SingleOrDefaultAsync())
+                .To<EmployeeProfileViewModel>();
+
+            return this.View(employeeProfile);
+        }
+
+        public async Task<IActionResult> ChangePassword(EmployeeChangePasswordViewComponentViewModel input)
+        {
+            if(!ModelState.IsValid)
+            {
+                return RedirectToAction("Profile", new { t = "nav-authentication" });
+            }
+
+            var employeeId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var isValidCurrentPassowrd = await this.employeesService.ValidateCurrentPasswordAsync(employeeId, input.CurrentPassword);
+
+            if (!isValidCurrentPassowrd)
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessages.INVALID_PASSWORD);
+
+                return RedirectToAction("Profile", new { t = "nav-authentication" });
+            }
+
+            var employeeDto = input.To<EmployeeChangePasswordDto>();
+
+            await this.employeesService.ChangePasswordAsync(employeeId, employeeDto);
+
+            return this.RedirectToAction("Logout");
         }
     }
 }
