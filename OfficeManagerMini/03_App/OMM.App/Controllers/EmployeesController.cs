@@ -76,14 +76,20 @@ namespace OMM.App.Controllers
             return this.View(employeeProfile);
         }
 
+        [HttpPost]
         public async Task<IActionResult> ChangePassword(EmployeeChangePasswordViewComponentViewModel input)
         {
-            if(!ModelState.IsValid)
-            {
-                return RedirectToAction("Profile", new { t = "nav-authentication" });
-            }
-
             var employeeId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!ModelState.IsValid)
+            {
+                var employeeProfile = (await this.employeesService
+                    .GetEmployeeDtoByIdAsync<EmployeeProfileDto>(employeeId)
+                    .SingleOrDefaultAsync())
+                    .To<EmployeeProfileViewModel>();
+
+                return this.View("Profile", employeeProfile);
+            }
 
             var isValidCurrentPassowrd = await this.employeesService.ValidateCurrentPasswordAsync(employeeId, input.CurrentPassword);
 
@@ -91,7 +97,12 @@ namespace OMM.App.Controllers
             {
                 ModelState.AddModelError(string.Empty, ErrorMessages.INVALID_PASSWORD);
 
-                return RedirectToAction("Profile", new { t = "nav-authentication" });
+                var employeeProfile = (await this.employeesService
+                    .GetEmployeeDtoByIdAsync<EmployeeProfileDto>(employeeId)
+                    .SingleOrDefaultAsync())
+                    .To<EmployeeProfileViewModel>();
+
+                return this.View("Profile", employeeProfile);
             }
 
             var employeeDto = input.To<EmployeeChangePasswordDto>();
