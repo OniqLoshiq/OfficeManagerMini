@@ -10,8 +10,8 @@ namespace OMM.Domain
         public Employee()
         {
             this.Items = new HashSet<Asset>();
-            this.AssignedTasks = new HashSet<Assignment>();
-            this.ExecutionTasks = new HashSet<Assignment>();
+            this.AssignedAssignments = new HashSet<Assignment>();
+            this.ExecutionAssignments = new HashSet<Assignment>();
             this.AssistantToAssignments = new HashSet<AssignmentsEmployees>();
             this.Comments = new HashSet<Comment>();
             this.Activities = new HashSet<Activity>();
@@ -54,10 +54,10 @@ namespace OMM.Domain
         public virtual ICollection<Asset> Items { get; set; }
 
         [InverseProperty("Assignor")]
-        public virtual ICollection<Assignment> AssignedTasks { get; set; } 
+        public virtual ICollection<Assignment> AssignedAssignments { get; set; } 
 
         [InverseProperty("Executor")]
-        public virtual ICollection<Assignment> ExecutionTasks { get; set; } 
+        public virtual ICollection<Assignment> ExecutionAssignments { get; set; } 
 
         public virtual ICollection<AssignmentsEmployees> AssistantToAssignments { get; set; }
 
