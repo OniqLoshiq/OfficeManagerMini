@@ -1,227 +1,49 @@
-﻿<div class="d-flex justify-content-end mb-3">
+﻿@model IList<OMM.App.Models.ViewModels.DepartmentEmployeesViewModel>
+
+<div class="d-flex justify-content-end mb-3">
     <a class="btn btn-warning text-dark" href="#" role="button"><i class="fas fa-plus-square pr-2"></i>Create assignment</a>
 </div>
-<div>
-    <button id="empl-collapse" class="btn btn-primary btn-block py-0 mb-2" type="button" data-toggle="collapse" data-target=".multi-collapse-1" aria-expanded="false" aria-controls="multiCollapse-1">
-        Management board
-    </button>
-    <div class="row mx-1 mb-2 d-flex justify-content-between empl-row-collapse">
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-1" id="multiCollapse-1">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Management board</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
+
+
+@for (int i = 0; i < Model.Count(); i++)
+{
+    <div>
+        <button id="empl-collapse" class="btn btn-primary btn-block py-0 mb-2" type="button" data-toggle="collapse" data-target=".multi-collapse-@(i + 1)" aria-expanded="false" aria-controls="multiCollapse-@(i + 1)">
+            @if (Model[i].Name == "HR")
+            {
+                <span>Human Resources</span>
+            }
+            else
+            {
+                <span>@Model[i].Name</span>
+            }
+        </button>
+        @foreach (var empl in Model[i].Employees)
+        {
+            <div class="row mx-1 mb-2 d-flex justify-content-between empl-row-collapse">
+                <div class="col-auto mb-2 px-2 d-flex justify-content-center">
+                    <div class="collapse show multi-collapse-@(i + 1)" id="multiCollapse-@(i + 1)">
+                        <div class="card pt-3" style="width: 18rem;">
+                            <img src="@empl.ProfilePicture" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="avatar">
+                            <div class="card-body py-3">
+                                <h5 class="card-title text-center font-weight-bolder">@empl.FullName</h5>
+                                <div class="card-text text-center font-italic">@empl.Position</div>
+                                <div class="card-text text-center font-italic mb-2">@empl.DepartmentName</div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>@empl.AccessLevel</li>
+                                    <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress as exec.: <span class="badge badge-info">@empl.InProgressExecuterAssignments</span></li>
+                                    <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress as assist.: <span class="badge badge-info">@empl.InProgressAssistantAssignments</span></li>
+                                    <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:@(empl.Email)" class="text-muted">@empl.Email</a></li>
+                                    <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>@empl.PhoneNumber</li>
+                                </ul>
+                                <div class="card-body pb-0 pt-3 d-flex justify-content-center">
+                                    <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-1" id="multiCollapse-1">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Management board</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-1" id="multiCollapse-1">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Management board</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-1" id="multiCollapse-1">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Management board</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-1" id="multiCollapse-1">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Management board</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        }
     </div>
-</div>
-<div>
-    <button id="empl-collapse" class="btn btn-primary btn-block py-0 mb-2" type="button" data-toggle="collapse" data-target=".multi-collapse-2" aria-expanded="false" aria-controls="multiCollapse-2">
-        Human Resources
-    </button>
-    <div class="row mx-1 mb-2 d-flex justify-content-between empl-row-collapse">
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-2" id="multiCollapse-2">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Human Resources</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div>
-    <button id="empl-collapse" class="btn btn-primary btn-block py-0 mb-2" type="button" data-toggle="collapse" data-target=".multi-collapse-3" aria-expanded="false" aria-controls="multiCollapse-3">
-        Accounting
-    </button>
-    <div class="row mx-1 mb-2 d-flex justify-content-between empl-row-collapse">
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-3" id="multiCollapse-3">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Accounting</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div>
-    <button id="empl-collapse" class="btn btn-primary btn-block py-0 mb-2" type="button" data-toggle="collapse" data-target=".multi-collapse-4" aria-expanded="false" aria-controls="multiCollapse-4">
-        Engineering
-    </button>
-    <div class="row mx-1 mb-2 d-flex justify-content-between empl-row-collapse">
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-4" id="multiCollapse-4">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Engineering</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div>
-    <button id="empl-collapse" class="btn btn-primary btn-block py-0 mb-2" type="button" data-toggle="collapse" data-target=".multi-collapse-5" aria-expanded="false" aria-controls="multiCollapse-5">
-        Administration
-    </button>
-    <div class="row mx-1 mb-2 d-flex justify-content-between empl-row-collapse">
-        <div class="col-auto mb-3 px-2 d-flex justify-content-center">
-            <div class="collapse show multi-collapse-5" id="multiCollapse-5">
-                <div class="card pt-3" style="width: 18rem;">
-                    <img src="~/images/avatar.jpg" class="card-img-top rounded-lg img-thumbnail mx-auto d-block" alt="...">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-center font-weight-bolder">Johny Bravo</h5>
-                        <div class="card-text text-center font-italic">CEO</div>
-                        <div class="card-text text-center font-italic mb-2">Administration</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted"><i class="fas fa-key pr-2" title="Access level"></i>10</li>
-                            <li class="list-group-item text-muted"><i class="fas fa-tasks pr-2" title="Assignments"></i>In-progress: <span class="badge badge-info">3</span></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-envelope pr-2" title="Email"></i><a href="mailto:johnyboy@omm.com" class="text-muted">johnyboy@omm.com</a></li>
-                            <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>+359 888 888888</li>
-                        </ul>
-                        <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                            <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+}

@@ -114,6 +114,14 @@ namespace OMM.Services.Data
             return employee;
         }
 
+        public IQueryable<T> GetEmployeeDtoByUsernameAsync<T>(string username)
+        {
+            var employee = this.context.Users.Where(u => u.UserName == username).To<T>();
+
+            return employee;
+        }
+
+
         public async Task<bool> EditAsync(EmployeeEditDto employeeToEdit)
         {
             var employee = await this.context.Users.FirstOrDefaultAsync(a => a.Id == employeeToEdit.Id);
@@ -238,6 +246,28 @@ namespace OMM.Services.Data
             var result = await this.userManger.ChangePasswordAsync(employee, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
 
             return result.Succeeded;
+        }
+
+        public async Task<bool> RetrievePasswordAsync(string email)
+        {
+            var newPassword = this.GenerateEmployeePassword();
+
+            var employee = await this.context.Users.SingleOrDefaultAsync(u => u.Email == email);
+
+            await this.userManger.RemovePasswordAsync(employee);
+
+            var result = await this.userManger.AddPasswordAsync(employee, newPassword);
+
+            await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, newPassword);
+
+            return result.Succeeded;
+        }
+
+        public bool IsEmailValid (string email)
+        {
+            var isMailValid = this.IsEmployeeActive(email);
+
+            return isMailValid;
         }
 
         //Helper methods

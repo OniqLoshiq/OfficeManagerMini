@@ -18,9 +18,9 @@ namespace OMM.Services.Data
             this.context = context;
         }
 
-        public IQueryable<DepartmentListDto> GetAllDepartmentsList()
+        public IQueryable<T> GetAllDepartmentsByDto<T>()
         {
-            return this.context.Departments.To<DepartmentListDto>();
+            return this.context.Departments.To<T>();
         }
 
         public string GetDepartmentNameById(int departmentId)

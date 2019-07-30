@@ -22,5 +22,7 @@
 
         public const string PICTURE_INACTIVE_ADDON = "e_grayscale,o_60/";
 
+        public const string STATUS_INPROGRESS = "In Progress";
+
     }
 }

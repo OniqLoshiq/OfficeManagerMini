@@ -22,10 +22,10 @@ namespace OMM.Data.Seeding
             var departments = new Department[]
             {
                 new Department{ Name = "Management board"},
-                new Department{ Name = "Administration"},
+                new Department{ Name = "HR"},
                 new Department{ Name = "Accounting"},
                 new Department{ Name = "Engineering"},
-                new Department{ Name = "HR"},
+                new Department{ Name = "Administration"},
             };
 
             foreach (var department in departments)

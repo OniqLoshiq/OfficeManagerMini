@@ -5,5 +5,7 @@
         public const string INVALID_LOGIN = "XA-XA-XA Invalid login.";
 
         public const string INVALID_PASSWORD = "Your current password does not match";
+
+        public const string INVALID_EMAIL = "This is an invalid email address";
     }
 }

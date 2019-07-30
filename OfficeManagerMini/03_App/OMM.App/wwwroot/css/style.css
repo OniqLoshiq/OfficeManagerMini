@@ -105,6 +105,10 @@ small {
     background: red;
 }
 
+.profile-picture{
+    background: transparent !important
+}
+
 img.card-img-top {
     width: 120px;
     height: 120px;

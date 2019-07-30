@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OMM.App.Infrastructure.ViewComponents.Models.Departments;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
+using OMM.Services.Data.DTOs.Departments;
 using System.Linq;
 
 namespace OMM.App.Infrastructure.ViewComponents
@@ -23,7 +24,7 @@ namespace OMM.App.Infrastructure.ViewComponents
                 DepartmentId = departmentId
             };
 
-            vm.Departments = new SelectList(this.departmentsService.GetAllDepartmentsList().To<DepartmentListViewModel>().ToList(), "Id", "Name");
+            vm.Departments = new SelectList(this.departmentsService.GetAllDepartmentsByDto<DepartmentListDto>().To<DepartmentListViewModel>().ToList(), "Id", "Name");
 
             return View(vm);
         }

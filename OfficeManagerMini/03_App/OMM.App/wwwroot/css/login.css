@@ -59,3 +59,8 @@ input:focus {
 .links a {
     margin-left: 4px;
 }
+
+.modal-login {
+    background-color: rgba(0,0,0,0.5) !important;
+    color: white;
+}

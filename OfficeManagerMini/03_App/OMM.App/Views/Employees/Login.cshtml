@@ -35,15 +35,26 @@
                     </div>
                 </form>
             </div>
-            <div class="card-footer">
-                <div class="d-flex justify-content-center">
-                    <a href="#">Forgot your password?</a>
-                </div>
-            </div>
+
+            <partial name="_ForgotPasswordPartial" />
+
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
+
+<script>
+    $('.forgot-password').click(function () {
+        let email = $('#EmailToRetrieve').val();
+
+        $.post({
+            url: `/Employees/ForgotPassword/${email}`,
+            success: function () {
+                    alert("Invalid email address!")
+            }
+        });
+    });
+</script>
 }

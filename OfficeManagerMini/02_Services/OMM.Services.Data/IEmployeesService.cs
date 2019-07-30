@@ -21,6 +21,8 @@ namespace OMM.Services.Data
 
         IQueryable<T> GetEmployeeDtoByIdAsync<T>(string id);
 
+        IQueryable<T> GetEmployeeDtoByUsernameAsync<T>(string username);
+
         Task<bool> EditAsync(EmployeeEditDto employeeToEdit);
 
         Task<bool> ReleaseAsync(EmployeeReleaseDto employeeToRelease);
@@ -30,5 +32,9 @@ namespace OMM.Services.Data
         Task<bool> ValidateCurrentPasswordAsync(string employeeIdl, string currentPassword);
 
         Task<bool> ChangePasswordAsync(string employeeId, EmployeeChangePasswordDto changePasswordDto);
+
+        bool IsEmailValid(string email);
+
+        Task<bool> RetrievePasswordAsync(string email);
     }
 }

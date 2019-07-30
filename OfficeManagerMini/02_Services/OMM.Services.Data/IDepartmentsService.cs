@@ -5,7 +5,7 @@ namespace OMM.Services.Data
 {
     public interface IDepartmentsService
     {
-        IQueryable<DepartmentListDto> GetAllDepartmentsList();
+        IQueryable<T> GetAllDepartmentsByDto<T>();
 
         string GetDepartmentNameById(int departmentId);
     }

@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using OMM.App.Models.InputModels;
 using OMM.App.Models.ViewModels;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
+using OMM.Services.Data.DTOs.Departments;
 using OMM.Services.Data.DTOs.Employees;
 
 namespace OMM.App.Controllers
@@ -16,15 +18,19 @@ namespace OMM.App.Controllers
     public class EmployeesController : Controller
     {
         private readonly IEmployeesService employeesService;
+        private readonly IDepartmentsService departmentsService;
 
-        public EmployeesController(IEmployeesService employeesService)
+        public EmployeesController(IEmployeesService employeesService, IDepartmentsService departmentsService)
         {
             this.employeesService = employeesService;
+            this.departmentsService = departmentsService;
         }
 
-        public IActionResult AllColleagues()
+        public async Task<IActionResult> AllColleagues()
         {
-            return View();
+            var departments = (await this.departmentsService.GetAllDepartmentsByDto<DepartmentEmployeesDto>().ToListAsync()).Select(d => d.To<DepartmentEmployeesViewModel>()).ToList();
+
+            return View(departments);
         }
 
         [AllowAnonymous]
@@ -62,6 +68,24 @@ namespace OMM.App.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(string EmailToRetrieve)
+        {
+            bool validEmail = this.employeesService.IsEmailValid(EmailToRetrieve);
+
+            if(validEmail)
+            {
+                await this.employeesService.RetrievePasswordAsync(EmailToRetrieve);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessages.INVALID_EMAIL);
+            }
+
+            return this.RedirectToAction("Login");
         }
 
         public async Task<IActionResult> Profile()

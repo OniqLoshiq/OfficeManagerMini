@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@model OMM.App.Infrastructure.ViewComponents.Models.Employees.EmployeeSideBarViewComponentViewModel
+
+@using Microsoft.AspNetCore.Identity
 @using OMM.Domain
 @using OMM.App.Common
 
@@ -12,9 +14,11 @@
                 <li class="sidenav-header d-flex align-items-start justify-content-center w-100 ">
                     <ul class="sidenav-header-inner text-center">
                         <li>
-                            <img src="~/images/avatar.jpg" alt="avatar" class="rounded-circle">
-                            <h5 class="d-none d-md-block">OniqLoshiq</h5>
-                            <span class="d-none d-md-block">Junior Web Developer</span>
+                            <a asp-controller="Employees" asp-action="Profile" class="profile-picture">
+                                <img src="@Model.ProfilePicture" alt="avatar" class="rounded-circle">
+                            </a>
+                            <h5 class="d-none d-md-block">@Model.EmployeeName</h5>
+                            <span class="d-none d-md-block">@Model.Position</span>
                         </li>
                     </ul>
                 </li>
