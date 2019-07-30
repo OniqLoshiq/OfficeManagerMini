@@ -24,6 +24,8 @@ namespace OMM.Services.Data.DTOs.Employees
 
         public string DepartmentName { get; set; }
 
+        public bool IsActive { get; set; }
+
         public int InProgressAssistantAssignments { get; set; }
 
         public int InProgressExecuterAssignments { get; set; }
