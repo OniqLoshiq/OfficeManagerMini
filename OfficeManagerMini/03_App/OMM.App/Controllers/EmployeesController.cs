@@ -28,7 +28,11 @@ namespace OMM.App.Controllers
 
         public async Task<IActionResult> AllColleagues()
         {
-            var departments = (await this.departmentsService.GetAllDepartmentsByDto<DepartmentEmployeesDto>().ToListAsync()).Select(d => d.To<DepartmentEmployeesViewModel>()).ToList();
+            var departments = (await this.departmentsService
+                .GetAllDepartmentsByDto<DepartmentEmployeesDto>()
+                .ToListAsync())
+                .Select(d => d.To<DepartmentEmployeesViewModel>())
+                .ToList();
 
             return View(departments);
         }
