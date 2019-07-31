@@ -1,9 +1,8 @@
 ﻿@model IList<OMM.App.Models.ViewModels.DepartmentEmployeesViewModel>
 
 <div class="d-flex justify-content-end mb-3">
-    <a class="btn btn-warning text-dark" href="#" role="button"><i class="fas fa-plus-square pr-2"></i>Create assignment</a>
+    <a class="btn btn-warning text-dark" asp-controller="Assignments" asp-action="Create" role="button"><i class="fas fa-plus-square pr-2"></i>Create assignment</a>
 </div>
-
 
 @for (int i = 0; i < Model.Count(); i++)
 {
@@ -37,7 +36,7 @@
                                     <li class="list-group-item text-muted"><i class="fas fa-phone-square-alt pr-2" title="Phone"></i>@empl.PhoneNumber</li>
                                 </ul>
                                 <div class="card-body pb-0 pt-3 d-flex justify-content-center">
-                                    <a class="btn btn-outline-warning" href="#" role="button">Create assignment</a>
+                                    <a class="btn btn-outline-warning" asp-controller="Assignments" asp-action="Create" asp-route-executorId="@empl.Id" role="button">Create assignment</a>
                                 </div>
                             </div>
                         </div>

@@ -36,5 +36,7 @@ namespace OMM.Services.Data
         bool IsEmailValid(string email);
 
         Task<bool> RetrievePasswordAsync(string email);
+
+        Task<string> GetEmployeeFullNameByIdAsync(string currentEmployeeId);
     }
 }

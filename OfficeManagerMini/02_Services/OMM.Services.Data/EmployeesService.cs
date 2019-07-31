@@ -120,8 +120,7 @@ namespace OMM.Services.Data
 
             return employee;
         }
-
-
+        
         public async Task<bool> EditAsync(EmployeeEditDto employeeToEdit)
         {
             var employee = await this.context.Users.FirstOrDefaultAsync(a => a.Id == employeeToEdit.Id);
@@ -268,6 +267,13 @@ namespace OMM.Services.Data
             var isMailValid = this.IsEmployeeActive(email);
 
             return isMailValid;
+        }
+
+        public async Task<string> GetEmployeeFullNameByIdAsync(string currentEmployeeId)
+        {
+            var fullName = (await this.context.Users.SingleOrDefaultAsync(u => u.Id == currentEmployeeId)).FullName;
+
+            return fullName;
         }
 
         //Helper methods

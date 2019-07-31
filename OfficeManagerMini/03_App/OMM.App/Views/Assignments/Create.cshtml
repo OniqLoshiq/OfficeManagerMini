@@ -1,10 +1,17 @@
-﻿@{
+﻿@model OMM.App.Models.InputModels.AssignmentCreateInputModel
+
+@{
     ViewData["Title"] = "Create Assignment";
+
+    var executorId = ViewData["ExecutorId"];
+    var assignorId = ViewData["AssignorId"];
+    var assignorName = ViewData["AssignorName"];
 }
 
 <h4 class="mb-3 text-center">Create Assignment</h4>
 <hr class="hr-oom" style="width:300px;" />
-<form>
+<form asp-controller="Assingments" asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-row">
         <div class="form-group col-md-6 mb-0">
             <label class="sr-only" for="Assignor">Assignor</label>
@@ -12,100 +19,48 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning text-secondary"><strong>Assignor</strong></div>
                 </div>
-                <input type="text" class="form-control" id="Assignor" value="OniqLoshiq" disabled>
+                <input type="text" class="form-control" value="@assignorName" disabled>
+                <input type="hidden" asp-for="AssignorId" value="@assignorId">
             </div>
         </div>
         <div class="form-group col-md-6 mb-0">
-            <label class="sr-only" for="executor">Executor</label>
+            <label class="sr-only" asp-for="EmployeeId"></label>
             <div class="input-group mb-2">
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning text-secondary"><strong>Executor</strong></div>
                 </div>
-                <select class="form-control selectpicker show-tick" id="executor" name="executor" data-style="btn-white" data-live-search="true" data-width="auto">
-                    <option selected disabled>To:</option>
-                    <optgroup label="Management Board">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                    <optgroup label="HR">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                    <optgroup label="Accounting">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                    <optgroup label="Engineering">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                    <optgroup label="Administration">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                </select>
+                <vc:employees-department-list employee-id="@executorId"></vc:employees-department-list>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col mb-0">
-            <label class="sr-only" for="assistants">Assistants</label>
+            <label class="sr-only" asp-for="AssistantsIds">Assistants</label>
             <div class="input-group mb-1">
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning text-secondary"><strong>Assistants</strong></div>
                 </div>
-                <select class="form-control selectpicker show-tick" id="assistants" name="assistants" data-style="btn-white" data-live-search="true" multiple data-actions-box="true" data-width="auto">
-                    <optgroup label="Management Board">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                    <optgroup label="HR">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                    <optgroup label="Accounting">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                    <optgroup label="Engineering">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                    <optgroup label="Administration">
-                        <option>Oniq</option>
-                        <option>Loshiq</option>
-                        <option>Toq</option>
-                    </optgroup>
-                </select>
+                <vc:assistants-assignment></vc:assistants-assignment>
             </div>
         </div>
     </div>
     <hr class="hr-oom" />
     <div class="form-row">
         <div class="form-group col-md-2 mb-0">
-            <label for="status">Status</label>
-            <select class="form-control" id="status">
-                <option selected>In Process</option>
-                <option>Frozen</option>
-                <option>Waiting</option>
-                <option>Delayed</option>
-                <option>Completed</option>
-            </select>
+            <div>
+                <label asp-for="StatusId"></label>
+            </div>
+            <vc:statuses-list></vc:statuses-list>
+            <div>
+                <span asp-validation-for="StatusId" class="text-danger"></span>
+            </div>
         </div>
         <div class="form-group form-check col-md-2 mb-0 text-center">
-            <label class="form-check-label ">Is Project Related</label>
+            <label class="form-check-label" asp-for="IsProjectRelated"></label>
             <div class="custom-control custom-switch pt-3 d-flex justify-content-center">
-                <input type="checkbox" class="custom-control-input" id="isProjectRelated" onclick="myProjects()">
-                <label class="custom-control-label" for="isProjectRelated">No / Yes</label>
+                <input type="checkbox" class="custom-control-input" asp-for="IsProjectRelated" onclick="myProjects()">
+                <label class="custom-control-label" asp-for="IsProjectRelated">No / Yes</label>
             </div>
         </div>
         <div class="form-group col-md-8 mb-0">
@@ -125,53 +80,61 @@
     <hr class="hr-oom" />
     <div class="form-row">
         <div class="form-group col mb-0">
-            <label for="progressInput">Assignment progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">0</output>%</span></label>
-            <input type="range" class="custom-range" id="progressInput" name="progress" value="0" min="0" max="100" oninput="progressOutput.value = progressInput.value">
+            <label asp-for="Progress">Assignment progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">0</output>%</span></label>
+            <input type="range" class="custom-range" asp-for="Progress" value="0" min="0" max="100" oninput="progressOutput.value = Progress.value">
         </div>
     </div>
     <hr class="hr-oom" />
     <div class="form-row">
         <div class="form-group col-md-3 mb-0">
-            <label for="type">Type</label>
-            <input type="text" class="form-control" id="type" name="type">
+            <label asp-for="Type"></label>
+            <input type="text" class="form-control" asp-for="Type">
+            <span asp-validation-for="Type" class="text-danger"></span>
+
         </div>
         <div class="form-group col-md-4 flatpickrcontainer mb-0">
-            <label for="startingDate">Starting Date</label>
+            <label asp-for="StartingDate"></label>
             <div class="input-group">
-                <input type="text" class="form-control" id="startingDate" name="startingDate" data-input>
+                <input type="text" class="form-control" asp-for="StartingDate" data-input>
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
+            <span asp-validation-for="StartingDate" class="text-danger"></span>
+
         </div>
         <div class="form-group col-md-4 flatpickrcontainer mb-0">
-            <label for="deadline">Deadline</label>
+            <label asp-for="Deadline"></label>
             <div class="input-group">
-                <input type="text" class="form-control" id="deadline" name="deadline" data-input>
+                <input type="text" class="form-control" asp-for="Deadline" data-input>
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
         </div>
         <div class="form-group col-md-1 mb-0">
-            <label for="priority">Priority</label>
-            <select class="form-control" id="priority" name="priority">
+            <label asp-for="Priority"></label>
+            <select class="form-control" asp-for="Priority">
                 <option selected disabled>0</option>
                 @for (int i = 1; i <= 10; i++)
                 {
-                <option>@i</option>
+                    <option value="@i">@i</option>
                 }
             </select>
+            <span asp-validation-for="Priority" class="text-danger"></span>
         </div>
     </div>
     <hr class="hr-oom" />
     <div class="form-group">
-        <label for="name">Title</label>
-        <input type="text" class="form-control" id="name" placeholder="Title of your assignment">
+        <label asp-for="Name">Title</label>
+        <input type="text" class="form-control" asp-for="Name" placeholder="Title of your assignment">
+        <span asp-validation-for="Name" class="text-danger"></span>
+
     </div>
     <div class="form-group">
         <label for="mytextarea">Description</label>
-        <textarea id="mytextarea"></textarea>
+        <textarea id="mytextarea" asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <hr class="hr-oom w-25" />
     <div class="d-flex justify-content-center">

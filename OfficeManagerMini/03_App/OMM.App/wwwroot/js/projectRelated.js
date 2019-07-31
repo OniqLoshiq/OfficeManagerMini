@@ -1,6 +1,6 @@
 ﻿//Toggling projects in create assignment
 function myProjects() {
-    var checkBox = document.getElementById("isProjectRelated");
+    var checkBox = document.getElementById("IsProjectRelated");
     var projectsList = document.getElementById("toggle-checkbox");
     if (checkBox.checked == false) {
         $("#project").prop("disabled", true);
