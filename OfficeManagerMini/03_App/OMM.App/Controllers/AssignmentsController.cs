@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OMM.App.Models.InputModels;
 using OMM.App.Models.ViewModels;
+using OMM.Services.AutoMapper;
 using OMM.Services.Data;
+using OMM.Services.Data.DTOs.Assignments;
 
 namespace OMM.App.Controllers
 {
     public class AssignmentsController : Controller
     {
         private readonly IEmployeesService employeesService;
+        private readonly IAssignmentsService assignmentsService;
 
-        public AssignmentsController(IEmployeesService employeesService)
+        public AssignmentsController(IEmployeesService employeesService, IAssignmentsService assignmentsService)
         {
             this.employeesService = employeesService;
+            this.assignmentsService = assignmentsService;
         }
 
         public async Task<IActionResult> Create(string executorId)
@@ -42,7 +46,11 @@ namespace OMM.App.Controllers
                 return View();
             }
 
-            return View();
+            var inputDto = input.To<AssignmentCreateDto>();
+
+            await this.assignmentsService.CreateAssignmentAsync(inputDto);
+
+            return Redirect("/");
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using OMM.Services.Data.DTOs.Assignments;
+using System.Threading.Tasks;
 
 namespace OMM.Services.Data
 {
     public interface IAssignmentsService
     {
-        Task<bool> CreateAssignment(string executorId);
+        Task<bool> CreateAssignmentAsync(AssignmentCreateDto input);
     }
 }

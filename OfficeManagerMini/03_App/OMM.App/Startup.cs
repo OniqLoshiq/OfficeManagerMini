@@ -111,6 +111,7 @@ namespace OMM.App
             services.AddTransient<IAssetTypesService, AssetTypesService>();
             services.AddTransient<ILeavingReasonsService, LeavingReasonsService>();
             services.AddTransient<IStatusesService, StatusesService>();
+            services.AddTransient<IAssignmentsService, AssignmentsService>();
 
             //Third parties services
             services.AddTransient<ICloudinaryService, CloudinaryService>();

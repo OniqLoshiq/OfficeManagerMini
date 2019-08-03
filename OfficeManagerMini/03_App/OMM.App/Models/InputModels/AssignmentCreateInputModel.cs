@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
+using OMM.App.Common;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.Assignments;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OMM.App.Models.InputModels
 {
-    public class AssignmentCreateInputModel : IMapTo<AssignmentCreateDto>, IHaveCustomMappings
+    public class AssignmentCreateInputModel : IValidatableObject, IMapTo<AssignmentCreateDto>, IHaveCustomMappings
     {
         [Required]
         [Display(Name = "Title")]
@@ -63,6 +65,14 @@ namespace OMM.App.Models.InputModels
             configuration.CreateMap<AssignmentCreateInputModel, AssignmentCreateDto>()
                 .ForMember(destination => destination.ExecutorId,
                 opts => opts.MapFrom(origin => origin.EmployeeId));
+        }
+
+        public IEnumerable<ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
+        {
+            if (this.AssistantsIds.Contains(this.EmployeeId))
+            {
+                yield return new ValidationResult(ErrorMessages.INVALID_ASSISTANT, new List<string> { "AssistantsIds" });
+            }
         }
     }
 }
