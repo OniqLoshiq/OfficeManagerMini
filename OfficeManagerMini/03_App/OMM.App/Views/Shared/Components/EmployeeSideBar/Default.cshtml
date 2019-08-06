@@ -39,17 +39,26 @@
                         <a class="nav-link pl-3 dropdown-toggle" href="#assignmentsSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-tasks mr-2"></i> <span class="d-none d-sm-inline">Assignments</span></a>
                         <ul class="collapse list-unstyled" id="assignmentsSubmenu">
                             <li>
-                                <a class="pl-5" href="#">All</a>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="MyAssignments">My Assignments <span class="badge badge-info">@Model.MyAssignments</span></a>
                             </li>
                             <li>
-                                <a class="pl-5" href="#">Project related</a>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="FromMe">From Me <span class="badge badge-info">@Model.AssignmentsFromMe</span></a>
                             </li>
                             <li>
-                                <a class="pl-5" href="#">Personal</a>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="ForMe">For Me <span class="badge badge-info">@Model.AssignmentsForMe</span></a>
                             </li>
                             <li>
-                                <a class="pl-5" href="#">Create</a>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="AsAssistant">As Assistant <span class="badge badge-info">@Model.AssignmentsAsAssistant</span></a>
                             </li>
+                            <li>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="Create">Create</a>
+                            </li>
+                            @if (this.User.IsInRole(Constants.ADMIN_ROLE) || this.User.IsInRole(Constants.MANAGEMENT_ROLE))
+                            {
+                                <li>
+                                    <a class="pl-5" asp-area="Management" asp-controller="Assignments" asp-action="All">All</a>
+                                </li>
+                            }
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -92,13 +101,19 @@
                         <a class="nav-link pl-3 dropdown-toggle" href="#assignmentsSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-tasks mr-2"></i> <span class="d-none d-sm-inline">Assignments</span></a>
                         <ul class="collapse list-unstyled" id="assignmentsSubmenu">
                             <li>
-                                <a class="pl-5" href="#">All</a>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="MyAssignments">My Assignments <span class="badge badge-info">@Model.MyAssignments</span></a>
                             </li>
                             <li>
-                                <a class="pl-5" href="#">Project related</a>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="FromMe">From Me <span class="badge badge-info">@Model.AssignmentsFromMe</span></a>
                             </li>
                             <li>
-                                <a class="pl-5" href="#">Personal</a>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="ForMe">For Me <span class="badge badge-info">@Model.AssignmentsForMe</span></a>
+                            </li>
+                            <li>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="AsAssistant">As Assistant <span class="badge badge-info">@Model.AssignmentsAsAssistant</span></a>
+                            </li>
+                            <li>
+                                <a class="pl-5" asp-controller="Assignments" asp-action="Create">Create</a>
                             </li>
                         </ul>
                     </li>

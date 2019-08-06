@@ -203,6 +203,9 @@ img.card-img-top {
         color: #007bff;
     }
 
+tfoot input {
+    width: 100%;
+}
 
 /*Options to config table behaviour*/
 /*#myDataTable th, #myDataTable td {

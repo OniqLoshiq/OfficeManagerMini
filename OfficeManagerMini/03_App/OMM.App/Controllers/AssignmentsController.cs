@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OMM.App.Models.InputModels;
-using OMM.App.Models.ViewModels;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
 using OMM.Services.Data.DTOs.Assignments;
