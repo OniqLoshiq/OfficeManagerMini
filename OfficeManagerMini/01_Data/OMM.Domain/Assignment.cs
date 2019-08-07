@@ -26,6 +26,8 @@ namespace OMM.Domain
 
         public DateTime StartingDate { get; set; }
 
+        public DateTime? EndDate { get; set; }
+        
         public DateTime? Deadline { get; set; }
 
         public double Progress { get; set; }
