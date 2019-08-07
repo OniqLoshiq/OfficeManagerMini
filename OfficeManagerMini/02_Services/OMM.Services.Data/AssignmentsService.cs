@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using OMM.Data;
 using OMM.Domain;
 using OMM.Services.AutoMapper;
@@ -32,6 +33,11 @@ namespace OMM.Services.Data
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
+        }
+
+        public IQueryable<AssignmentListDto> GetAllAssignments()
+        {
+            return this.context.Assignments.To<AssignmentListDto>();
         }
     }
 }
