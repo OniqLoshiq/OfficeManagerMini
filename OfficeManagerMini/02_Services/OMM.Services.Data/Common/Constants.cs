@@ -24,5 +24,8 @@
 
         public const string STATUS_INPROGRESS = "In Progress";
 
+        public const string STATUS_COMPLETED = "Completed";
+
+
     }
 }

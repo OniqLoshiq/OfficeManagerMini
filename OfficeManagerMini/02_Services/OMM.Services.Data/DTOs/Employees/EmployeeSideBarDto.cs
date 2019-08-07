@@ -30,11 +30,11 @@ namespace OMM.Services.Data.DTOs.Employees
                 .ForMember(destination => destination.EmployeeName,
                 opts => opts.MapFrom(origin => origin.FirstName + " " + origin.LastName))
                 .ForMember(destination => destination.AssignmentsFromMe,
-                opts => opts.MapFrom(origin => origin.AssignedAssignments.Where(a => a.Status.Name != Constants.STATUS_INPROGRESS).Count()))
+                opts => opts.MapFrom(origin => origin.AssignedAssignments.Where(a => a.Status.Name != Constants.STATUS_COMPLETED).Count()))
                 .ForMember(destination => destination.AssignmentsForMe,
-                opts => opts.MapFrom(origin => origin.ExecutionAssignments.Where(a => a.Status.Name != Constants.STATUS_INPROGRESS).Count()))
+                opts => opts.MapFrom(origin => origin.ExecutionAssignments.Where(a => a.Status.Name != Constants.STATUS_COMPLETED).Count()))
                 .ForMember(destination => destination.AssignmentsAsAssistant,
-                opts => opts.MapFrom(origin => origin.AssistantToAssignments.Where(a => a.Assignment.Status.Name != Constants.STATUS_INPROGRESS).Count()));
+                opts => opts.MapFrom(origin => origin.AssistantToAssignments.Where(a => a.Assignment.Status.Name != Constants.STATUS_COMPLETED).Count()));
                 
         }
     }

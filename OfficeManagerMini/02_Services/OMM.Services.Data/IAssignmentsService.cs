@@ -9,5 +9,13 @@ namespace OMM.Services.Data
         Task<bool> CreateAssignmentAsync(AssignmentCreateDto input);
 
         IQueryable<AssignmentListDto> GetAllAssignments();
+
+        IQueryable<AssignmentListDto> GetAllMyAssignments(string employeeId);
+
+        IQueryable<AssignmentListDto> GetAllAssignmentsForMe(string executorId);
+
+        IQueryable<AssignmentListDto> GetAllAssignmentsFromMe(string assignorId);
+
+        IQueryable<AssignmentListDto> GetAllAssignmentsAsAssistant(string assistantId);
     }
 }

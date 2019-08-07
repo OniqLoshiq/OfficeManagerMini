@@ -74,7 +74,7 @@ namespace OMM.Services.Data
             //{
             //    throw new System.Exception("Problem with email");
             //}
-
+            
             if (result.Succeeded)
             {
                 if (await this.SignRolesToEmployee(employee, employeeRegisterDto.DepartmentId))
