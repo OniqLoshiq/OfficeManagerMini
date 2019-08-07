@@ -19,29 +19,33 @@
         <tbody>
             @foreach (var assignment in Model)
             {
-                <tr>
-                    <td class="align-middle py-1"><span class="badge badge-info px-2 py-1">@assignment.Priority</span></td>
-                    <td class="align-middle" title="@assignment.Type">@assignment.Type</td>
-                    <td class="align-middle" title="@assignment.Name">@assignment.Name</td>
-                    <td class="align-middle">
-                        @if (assignment.IsProjectRelated)
-                        {
-                            <span>Yes</span>
-                        }
-                        else
-                        {
-                            <span>No</span>
-                        }
-                    </td>
-                    <td class="align-middle">
-                        <span class="badge badge-secondary">@assignment.StatusName</span>
-                    </td>
-                    <td class="align-middle" title="@assignment.EndDate">@assignment.EndDate</td>
-                    <td class="align-middle" title="@assignment.AssignorName">@assignment.AssignorName</td>
-                    <td class="align-middle" title="@assignment.ExecutorName">@assignment.ExecutorName</td>
-                    <td class="align-middle" title="@assignment.StartingDate">@assignment.StartingDate</td>
-                    <td class="align-middle" title="@assignment.Deadline">@assignment.Deadline</td>
-                </tr>
+            <tr>
+                <td class="align-middle py-1"><span class="badge badge-info px-2 py-1">@assignment.Priority</span></td>
+                <td class="align-middle" title="@assignment.Type">@assignment.Type</td>
+                <td class="align-middle" title="@assignment.Name">
+                    <a asp-controller="Assignments" asp-action="Details" asp-route-id="@assignment.Id" class="text-dark" style="text-decoration: underline;">
+                        @assignment.Name
+                    </a>
+                </td>
+                <td class="align-middle">
+                    @if (assignment.IsProjectRelated)
+                    {
+                        <span>Yes</span>
+                    }
+                    else
+                    {
+                        <span>No</span>
+                    }
+                </td>
+                <td class="align-middle">
+                    <span class="badge badge-secondary">@assignment.StatusName</span>
+                </td>
+                <td class="align-middle" title="@assignment.EndDate">@assignment.EndDate</td>
+                <td class="align-middle" title="@assignment.AssignorName">@assignment.AssignorName</td>
+                <td class="align-middle" title="@assignment.ExecutorName">@assignment.ExecutorName</td>
+                <td class="align-middle" title="@assignment.StartingDate">@assignment.StartingDate</td>
+                <td class="align-middle" title="@assignment.Deadline">@assignment.Deadline</td>
+            </tr>
             }
         </tbody>
         <tfoot>
