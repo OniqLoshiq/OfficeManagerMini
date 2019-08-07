@@ -1,60 +1,10 @@
-﻿
+﻿@model OMM.App.Areas.Management.Models.ViewModels.AssignmentsAllListViewModel
+
 <h4 class="mb-3 text-center">All Assignments</h4>
 <hr class="hr-oom" style="width:300px;" />
 <h5 class="mb-3 text-center"><button type="button" class="btn btn-success btn-sm" disabled>On going</button></h5>
 
-<div id="ongoingAssignments">
-    <table id="myDataTableAssignments" class="display table table-sm table-hover" style="width: 100%">
-        <thead class="bg-dark text-white">
-            <tr>
-                <th scope="col" style="width: 20px" title="Priority">Pr.</th>
-                <th scope="col" style="width: 130px">Type</th>
-                <th scope="col" style="width: 200px">Title</th>
-                <th scope="col" style="width: 50px">Project</th>
-                <th scope="col" style="width: 85px">Status</th>
-                <th scope="col" style="width: 85px">Progress</th>
-                <th scope="col" style="width: 180px">From</th>
-                <th scope="col" style="width: 180px">To</th>
-                <th scope="col" style="width: 75px">Start Date</th>
-                <th scope="col" style="width: 75px">Deadline</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="align-middle py-1"><span class="badge badge-info px-2 py-1">7</span></td>
-                <td class="align-middle" title="Administrative pro">Administrative pro</td>
-                <td class="align-middle" title="190817-OL-Info Start Somehting long here">190817-OL-Info Start Somehting long here</td>
-                <td class="align-middle">No</td>
-                <td class="align-middle">
-                    <span class="badge badge-success">In Progress</span>
-                </td>
-                <td class="align-middle">
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-                    </div>
-                </td>
-                <td class="align-middle" title="Admin Root Joooooooooon">Admin Root Joooooooooon</td>
-                <td class="align-middle" title="Alexander Sh. Stolipinov">Alexander Sh. Stolipinov</td>
-                <td class="align-middle" title="07-08-2019">07-08-2019</td>
-                <td class="align-middle" title="19-10-2019">19-10-2019</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Pr.</th>
-                <th>Type</th>
-                <th>Title</th>
-                <th>Project</th>
-                <th>Status</th>
-                <th>Progress</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Start Date</th>
-                <th>Deadline</th>
-            </tr>
-        </tfoot>
-    </table>
-</div>
+<partial name="_AssignmentsOngoingPartial" model="@Model.OngoingAssignments" />
 
 <hr class="hr-oom mt-3" style="width:300px;" />
 <h5 class="mb-3 text-center">
@@ -64,6 +14,7 @@
 </h5>
 <hr class="hr-oom" style="width:300px;" />
 
+<partial name="_AssignmentsCompletedPartial" model="@Model.CompletedAssignments" />
 
 @section Scripts{
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>

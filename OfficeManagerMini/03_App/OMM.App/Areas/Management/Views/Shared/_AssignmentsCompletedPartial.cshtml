@@ -1,0 +1,63 @@
+﻿@model IEnumerable<OMM.App.Areas.Management.Models.ViewModels.AssignmentCompletedListViewModel>
+
+<div id="collapseCompletedAssignments" class="collapse">
+    <table id="myCompletedAssignments" class="display table table-sm table-hover" style="width: 100%">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col" style="width: 20px" title="Priority">Pr.</th>
+                <th scope="col" style="width: 130px">Type</th>
+                <th scope="col" style="width: 200px">Title</th>
+                <th scope="col" style="width: 50px">Project</th>
+                <th scope="col" style="width: 85px">Status</th>
+                <th scope="col" style="width: 75px">End Date</th>
+                <th scope="col" style="width: 180px">From</th>
+                <th scope="col" style="width: 180px">To</th>
+                <th scope="col" style="width: 75px">Start Date</th>
+                <th scope="col" style="width: 75px">Deadline</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var assignment in Model)
+            {
+                <tr>
+                    <td class="align-middle py-1"><span class="badge badge-info px-2 py-1">@assignment.Priority</span></td>
+                    <td class="align-middle" title="@assignment.Type">@assignment.Type</td>
+                    <td class="align-middle" title="@assignment.Name">@assignment.Name</td>
+                    <td class="align-middle">
+                        @if (assignment.IsProjectRelated)
+                        {
+                            <span>Yes</span>
+                        }
+                        else
+                        {
+                            <span>No</span>
+                        }
+                    </td>
+                    <td class="align-middle">
+                        <span class="badge badge-secondary">@assignment.StatusName</span>
+                    </td>
+                    <td class="align-middle" title="@assignment.EndDate">@assignment.EndDate</td>
+                    <td class="align-middle" title="@assignment.AssignorName">@assignment.AssignorName</td>
+                    <td class="align-middle" title="@assignment.ExecutorName">@assignment.ExecutorName</td>
+                    <td class="align-middle" title="@assignment.StartingDate">@assignment.StartingDate</td>
+                    <td class="align-middle" title="@assignment.Deadline">@assignment.Deadline</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Pr.</th>
+                <th>Type</th>
+                <th>Title</th>
+                <th>Project</th>
+                <th>Status</th>
+                <th>End Date</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Start Date</th>
+                <th>Deadline</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+

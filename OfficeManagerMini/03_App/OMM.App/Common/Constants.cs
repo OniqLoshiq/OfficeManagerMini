@@ -12,5 +12,14 @@
 
         public const string ADMIN_ROLE = "Admin";
 
+        public const string STATUS_INPROGRESS = "In Progress";
+
+        public const string STATUS_COMPLETED = "Completed";
+
+        public const string STATUS_FROZEN = "Frozen";
+
+        public const string STATUS_WAITING = "Waiting";
+
+        public const string STATUS_DELAYED = "Delayed";
     }
 }

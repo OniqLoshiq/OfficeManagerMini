@@ -52,9 +52,9 @@
             .appendTo('#myDataTableReleasedItems_wrapper .col-md-6:eq(0)');
     }
 
-    var id3 = document.getElementById("myDataTableAssignments");
+    var id3 = document.getElementById("myOngoingAssignments");
     if (id3) {
-        var table4 = $('#myDataTableAssignments').DataTable({
+        var table4 = $('#myOngoingAssignments').DataTable({
             buttons: ['copy', 'excel', 'pdf',
                 {
                     extend: 'print',
@@ -66,15 +66,49 @@
                 'colvis']
         });
         table4.buttons().container()
-            .appendTo('#myDataTableAssignments_wrapper .col-md-6:eq(0)');
+            .appendTo('#myOngoingAssignments_wrapper .col-md-6:eq(0)');
 
-        $('#myDataTableAssignments tfoot th').each(function () {
+        $('#myOngoingAssignments tfoot th').each(function () {
             var title = $(this).text();
             $(this).html('<input type="text" placeholder="' + title + '" />');
         });
 
         // DataTable
-        var table = $('#myDataTableAssignments').DataTable();
+        var table = $('#myOngoingAssignments').DataTable();
+
+        // Apply the search
+        table.columns().eq(0).each(function (colIdx) {
+            $('input', table.column(colIdx).footer()).on('keyup change', function () {
+                table.column(colIdx)
+                    .search(this.value.replace(/;/g, "|"), true, false)
+                    .draw();
+            });
+        });
+    }
+
+    var id4 = document.getElementById("myCompletedAssignments");
+    if (id4) {
+        var table5 = $('#myCompletedAssignments').DataTable({
+            buttons: ['copy', 'excel', 'pdf',
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        stripHtml: false,
+                    }
+                },
+
+                'colvis']
+        });
+        table5.buttons().container()
+            .appendTo('#myCompletedAssignments_wrapper .col-md-6:eq(0)');
+
+        $('#myCompletedAssignments tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="' + title + '" />');
+        });
+
+        // DataTable
+        var table = $('#myCompletedAssignments').DataTable();
 
         // Apply the search
         table.columns().eq(0).each(function (colIdx) {

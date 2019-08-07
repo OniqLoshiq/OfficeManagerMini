@@ -320,6 +320,27 @@ tfoot input {
     max-width: 20px;
 }
 
+#collapseCompletedAssignments .dataTables_paginate .page-link {
+    color: #212529;
+}
+
+    #collapseCompletedAssignments .dataTables_paginate .page-link:hover {
+        color: #ffc107;
+    }
+
+#collapseCompletedAssignments .dataTables_paginate .page-item.active .page-link {
+    background-color: #A7A8AA;
+    border-color: #A7A8AA;
+}
+
+#collapseCompletedAssignments td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    max-width: 20px;
+}
+
 
 .forecast-container {
     color: #d5d6dc;
