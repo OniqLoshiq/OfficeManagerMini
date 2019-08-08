@@ -61,7 +61,7 @@ namespace OMM.App.Controllers
 
             assignments.OngoingAssignments = await this.assignmentsService.GetAllMyAssignments(employeeId)
                .Where(a => a.StatusName != Constants.STATUS_COMPLETED)
-               .OrderBy(a => a.StatusName == Constants.STATUS_INPROGRESS)
+               .OrderByDescending(a => a.StatusName == Constants.STATUS_INPROGRESS)
                .ThenByDescending(a => a.Priority)
                .To<AssignmentOngoingListViewModel>()
                .ToListAsync();
@@ -84,7 +84,7 @@ namespace OMM.App.Controllers
 
             assignments.OngoingAssignments = await this.assignmentsService.GetAllAssignmentsFromMe(assignorId)
                .Where(a => a.StatusName != Constants.STATUS_COMPLETED)
-               .OrderBy(a => a.StatusName == Constants.STATUS_INPROGRESS)
+               .OrderByDescending(a => a.StatusName == Constants.STATUS_INPROGRESS)
                .ThenByDescending(a => a.Priority)
                .To<AssignmentOngoingListViewModel>()
                .ToListAsync();
@@ -107,7 +107,7 @@ namespace OMM.App.Controllers
 
             assignments.OngoingAssignments = await this.assignmentsService.GetAllAssignmentsForMe(executorId)
                .Where(a => a.StatusName != Constants.STATUS_COMPLETED)
-               .OrderBy(a => a.StatusName == Constants.STATUS_INPROGRESS)
+               .OrderByDescending(a => a.StatusName == Constants.STATUS_INPROGRESS)
                .ThenByDescending(a => a.Priority)
                .To<AssignmentOngoingListViewModel>()
                .ToListAsync();
@@ -130,7 +130,7 @@ namespace OMM.App.Controllers
 
             assignments.OngoingAssignments = await this.assignmentsService.GetAllAssignmentsAsAssistant(assistantId)
                .Where(a => a.StatusName != Constants.STATUS_COMPLETED)
-               .OrderBy(a => a.StatusName == Constants.STATUS_INPROGRESS)
+               .OrderByDescending(a => a.StatusName == Constants.STATUS_INPROGRESS)
                .ThenByDescending(a => a.Priority)
                .To<AssignmentOngoingListViewModel>()
                .ToListAsync();
