@@ -144,5 +144,10 @@ namespace OMM.App.Controllers
 
             return this.View(assignments);
         }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            return this.View();
+        }
     }
 }
