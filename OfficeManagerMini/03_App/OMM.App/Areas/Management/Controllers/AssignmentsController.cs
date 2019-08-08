@@ -28,7 +28,7 @@ namespace OMM.App.Areas.Management.Controllers
 
             allAssignments.OngoingAssignments = await this.assignmentsService.GetAllAssignments()
                 .Where(a => a.StatusName != Constants.STATUS_COMPLETED)
-                .OrderBy(a => a.StatusName == Constants.STATUS_INPROGRESS)
+                .OrderByDescending(a => a.StatusName == Constants.STATUS_INPROGRESS)
                 .ThenByDescending(a => a.Priority)
                 .To<AssignmentOngoingListViewModel>()
                 .ToListAsync();

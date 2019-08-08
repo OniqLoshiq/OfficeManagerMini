@@ -63,7 +63,8 @@
                     }
                 },
 
-                'colvis']
+                'colvis'],
+            "aaSorting": []
         });
         table4.buttons().container()
             .appendTo('#myOngoingAssignments_wrapper .col-md-6:eq(0)');
@@ -97,7 +98,8 @@
                     }
                 },
 
-                'colvis']
+                'colvis'],
+            "aaSorting": []
         });
         table5.buttons().container()
             .appendTo('#myCompletedAssignments_wrapper .col-md-6:eq(0)');
