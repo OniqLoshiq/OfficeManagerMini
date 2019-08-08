@@ -75,12 +75,12 @@
         });
 
         // DataTable
-        var table = $('#myOngoingAssignments').DataTable();
+        var tableSearch4 = $('#myOngoingAssignments').DataTable();
 
         // Apply the search
-        table.columns().eq(0).each(function (colIdx) {
-            $('input', table.column(colIdx).footer()).on('keyup change', function () {
-                table.column(colIdx)
+        tableSearch4.columns().eq(0).each(function (colIdx) {
+            $('input', tableSearch4.column(colIdx).footer()).on('keyup change', function () {
+                tableSearch4.column(colIdx)
                     .search(this.value.replace(/;/g, "|"), true, false)
                     .draw();
             });
@@ -110,12 +110,12 @@
         });
 
         // DataTable
-        var table = $('#myCompletedAssignments').DataTable();
+        var tableSearch5 = $('#myCompletedAssignments').DataTable();
 
         // Apply the search
-        table.columns().eq(0).each(function (colIdx) {
-            $('input', table.column(colIdx).footer()).on('keyup change', function () {
-                table.column(colIdx)
+        tableSearch5.columns().eq(0).each(function (colIdx) {
+            $('input', tableSearch5.column(colIdx).footer()).on('keyup change', function () {
+                tableSearch5.column(colIdx)
                     .search(this.value.replace(/;/g, "|"), true, false)
                     .draw();
             });
