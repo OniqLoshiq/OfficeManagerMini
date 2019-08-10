@@ -405,6 +405,25 @@ tfoot input {
 }
 
 #assignmentDetails img {
-    width: 150px;
+    width: 140px;
 }
 
+#assignmentAssistants img{
+    width: 40px;
+    height: 40px;
+}
+
+.comment-header {
+    height: 25px;
+    font-size: 13px;
+    font-weight: bold;
+    background-color: #ffd740;
+    border-radius:8px 8px 0 0;
+}
+
+.comment-body {
+    width: 100%;
+    background-color: #fff9c4;
+    border-radius: 0 0 8px 8px;
+    border:0px;
+}

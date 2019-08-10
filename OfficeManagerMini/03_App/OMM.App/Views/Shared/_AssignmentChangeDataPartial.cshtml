@@ -1,0 +1,58 @@
+﻿ <!-- Button trigger modal -->
+<button type="button" class="btn btn-outline-warning p-1" data-toggle="modal" data-target="#assignmentChangeData">
+    Change
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="assignmentChangeData" tabindex="-1" role="dialog" aria-labelledby="assignmentChangeDataScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignmentChangeDataScrollableTitle">Update Assignment Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Assignmnets" asp-action="ChangeData" method="post">
+                    <div class="form-group flatpickrcontainer">
+                        <label for="Deadline"></label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" for="Deadline" data-input>
+                            <div class="input-group-prepend">
+                                <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group flatpickrcontainer">
+                        <label for="EndDate"></label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" for="EndDate" data-input>
+                            <div class="input-group-prepend">
+                                <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label for="StatusId"></label>
+                        </div>
+                        <vc:statuses-list></vc:statuses-list>
+                    </div>
+                    <div class="form-group">
+                        <label for="Progress">Assignment progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">0</output>%</span></label>
+                        <input type="range" class="custom-range" for="Progress" value="0" min="0" max="100" oninput="progressOutput.value = Progress.value">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success forgot-password">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
