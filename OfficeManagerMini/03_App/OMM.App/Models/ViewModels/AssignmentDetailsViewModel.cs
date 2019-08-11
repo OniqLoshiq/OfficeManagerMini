@@ -22,6 +22,8 @@ namespace OMM.App.Models.ViewModels
 
         public string AssignorFullName { get; set; }
 
+        public string AssignorEmail { get; set; }
+
         public string ExecutorFullName { get; set; }
 
         public string ExecutorProfilePicture { get; set; }
@@ -33,5 +35,7 @@ namespace OMM.App.Models.ViewModels
         public AssignmentDetailsChangeViewModel ChangeData { get; set; }
 
         public List<AssignmentDetailsAssistantViewModel> Assistants { get; set; } = new List<AssignmentDetailsAssistantViewModel>();
+
+        public List<AssignmentDetailsCommentViewModel> Comments { get; set; } = new List<AssignmentDetailsCommentViewModel>();
     }
 }

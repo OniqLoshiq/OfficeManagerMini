@@ -1,0 +1,42 @@
+﻿<div class="d-flex justify-content-between">
+    <div class="h5">Comments</div>
+    <div id="comments-search-bar-holder" class="form-group m-0 py-0">
+        <input type="text" class="form-control form-control-sm" id="comments-search-bar" name="search" placeholder="Search..." />
+    </div>
+    <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#createComment">
+        <i class="fas fa-plus pr-2"></i>Add Comment
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="createComment" tabindex="-1" role="dialog" aria-labelledby="createCommentScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCommentScrollableTitle">Add comment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form asp-controller="Comments" asp-action="Create" method="post">
+                        <div class="validation-summary-valid" data-valmsg-summary="true">
+                            <ul><li style="display:none"></li></ul>
+                        </div>
+                        <div class="form-group">
+                            <label for="Description" class="col-form-label">Description</label>
+                            <textarea type="text" class="form-control" rows="3" id="Description" name="Description"
+                                      data-val-required="The Description field is required."
+                                      data-val="true"></textarea>
+                            <input type="hidden" value="@ViewBag.AssignmentId" name="AssignmentId" />
+                            <input type="hidden" value="@ViewBag.CommentatorId" name="CommentatorId" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success forgot-password">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

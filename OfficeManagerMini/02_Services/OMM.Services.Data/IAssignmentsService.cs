@@ -17,5 +17,9 @@ namespace OMM.Services.Data
         IQueryable<AssignmentListDto> GetAllAssignmentsFromMe(string assignorId);
 
         IQueryable<AssignmentListDto> GetAllAssignmentsAsAssistant(string assistantId);
+
+        IQueryable<AssignmentDetailsDto> GetAssignmentDetails(string id);
+
+        Task<bool> ChangeData(AssignmentDetailsChangeDto input);
     }
 }

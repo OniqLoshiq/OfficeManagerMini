@@ -427,3 +427,7 @@ tfoot input {
     border-radius: 0 0 8px 8px;
     border:0px;
 }
+
+#comments .validation-summary-errors, #createComment .validation-summary-errors {
+    color: red
+}

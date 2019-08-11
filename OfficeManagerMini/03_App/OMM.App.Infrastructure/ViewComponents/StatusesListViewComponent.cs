@@ -15,9 +15,11 @@ namespace OMM.App.Infrastructure.ViewComponents
             this.statusesService = statusesService;
         }
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(int statusId)
         {
             var vm = new StatusesListViewComponentViewModel();
+
+            vm.StatusId = statusId;
 
             vm.Statuses = new SelectList(this.statusesService.GetAllStatuses().To<StatusListViewModel>(), "Id", "Name");
 

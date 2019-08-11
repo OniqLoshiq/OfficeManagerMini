@@ -6,6 +6,8 @@ namespace OMM.App.Models.ViewModels
 {
     public class AssignmentDetailsChangeViewModel : IMapFrom<AssignmentDetailsChangeDto>, IMapTo<AssignmentDetailsChangeDto>
     {
+        public string Id { get; set; }
+
         public string EndDate { get; set; }
 
         public string Deadline { get; set; }
@@ -14,7 +16,8 @@ namespace OMM.App.Models.ViewModels
         public double Progress { get; set; }
 
         [Required]
-        public string StatusId { get; set; }
+        [Display(Name = "Status")]
+        public int StatusId { get; set; }
         
         public string StatusName { get; set; }
     }

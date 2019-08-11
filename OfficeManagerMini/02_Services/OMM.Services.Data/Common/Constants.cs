@@ -4,6 +4,8 @@
     {
         public const string DATETIME_FORMAT = "dd-MM-yyyy";
 
+        public const string DATETIME_COMMENT_FORMAT = "yyyy-MM-dd HH:mm:ss";
+        
         public const string DEFAULT_ROLE = "Employee";
 
         public const string MANAGEMENT_ROLE = "Management";

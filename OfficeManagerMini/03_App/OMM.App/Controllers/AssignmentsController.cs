@@ -147,7 +147,26 @@ namespace OMM.App.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            return this.View();
+            var assignment = (await this.assignmentsService.GetAssignmentDetails(id).SingleOrDefaultAsync()).To<AssignmentDetailsViewModel>();
+
+            assignment.Comments = assignment.Comments.OrderByDescending(c => c.CreatedOn).ToList();
+
+            return this.View(assignment);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeData(AssignmentDetailsChangeViewModel input)
+        {
+            if(!ModelState.IsValid)
+            {
+                return RedirectToAction("Details", new { id = input.Id });
+            }
+
+            var assignmentDataToChange = input.To<AssignmentDetailsChangeDto>();
+
+            await this.assignmentsService.ChangeData(assignmentDataToChange);
+
+            return RedirectToAction("Details", new { id = input.Id });
         }
     }
 }

@@ -24,6 +24,8 @@ namespace OMM.Services.Data.DTOs.Assignments
 
         public string AssignorFullName { get; set; }
 
+        public string AssignorEmail { get; set; }
+
         public string ExecutorFullName { get; set; }
 
         public string ExecutorProfilePicture { get; set; }
@@ -36,6 +38,8 @@ namespace OMM.Services.Data.DTOs.Assignments
 
         public List<AssignmentDetailsAssistantDto> Assistants { get; set; } = new List<AssignmentDetailsAssistantDto>();
 
+        public List<AssignmentDetailsCommentDto> Comments { get; set; } = new List<AssignmentDetailsCommentDto>();
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Assignment, AssignmentDetailsDto>()
@@ -45,6 +49,8 @@ namespace OMM.Services.Data.DTOs.Assignments
                 opts => opts.MapFrom(origin => origin.StartingDate.ToString(Constants.DATETIME_FORMAT)))
                 .ForMember(destination => destination.AssignorFullName,
                 opts => opts.MapFrom(origin => origin.Assignor.FullName))
+                .ForMember(destination => destination.AssignorEmail,
+                opts => opts.MapFrom(origin => origin.Assignor.Email))
                 .ForMember(destination => destination.ExecutorFullName,
                 opts => opts.MapFrom(origin => origin.Executor.FullName))
                 .ForMember(destination => destination.ExecutorProfilePicture,
@@ -52,7 +58,11 @@ namespace OMM.Services.Data.DTOs.Assignments
                 .ForMember(destination => destination.ExecutorEmail,
                 opts => opts.MapFrom(origin => origin.Executor.Email))
                 .ForMember(destination => destination.ExecutorPhone,
-                opts => opts.MapFrom(origin => origin.Executor.PhoneNumber ?? origin.Executor.PersonalPhoneNumber));
+                opts => opts.MapFrom(origin => origin.Executor.PhoneNumber ?? origin.Executor.PersonalPhoneNumber))
+                .ForMember(destination => destination.Assistants,
+                opts => opts.MapFrom(origin => origin.AssignmentsAssistants))
+                .ForMember(destination => destination.ChangeData,
+                opts => opts.MapFrom(origin => origin));
         }
     }
 }

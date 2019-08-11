@@ -112,6 +112,7 @@ namespace OMM.App
             services.AddTransient<ILeavingReasonsService, LeavingReasonsService>();
             services.AddTransient<IStatusesService, StatusesService>();
             services.AddTransient<IAssignmentsService, AssignmentsService>();
+            services.AddTransient<ICommentsService, CommentsService>();
 
             //Third parties services
             services.AddTransient<ICloudinaryService, CloudinaryService>();

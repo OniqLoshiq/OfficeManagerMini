@@ -1,14 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OMM.Data;
 using OMM.Domain;
 using OMM.Services.AutoMapper;
+using OMM.Services.Data.Common;
 using OMM.Services.Data.DTOs.Assignments;
 
 namespace OMM.Services.Data
 {
     public class AssignmentsService : IAssignmentsService
     {
+        private const int PROGRESS_MAX_VALUE = 100;
+
         private readonly OmmDbContext context;
 
         public AssignmentsService(OmmDbContext context)
@@ -79,6 +85,41 @@ namespace OMM.Services.Data
                 .Where(a => a.AssistantId == assistantId)
                 .Select(a => a.Assignment)
                 .To<AssignmentListDto>();
+        }
+
+        public IQueryable<AssignmentDetailsDto> GetAssignmentDetails(string id)
+        {
+            return this.context.Assignments
+                .Where(a => a.Id == id)
+                .To<AssignmentDetailsDto>();
+        }
+
+        public async Task<bool> ChangeData(AssignmentDetailsChangeDto input)
+        {
+            var assignment = await this.context.Assignments.FirstOrDefaultAsync(a => a.Id == input.Id);
+
+            if(input.Deadline != "-")
+            {
+                assignment.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            }
+           
+            if(input.EndDate != "-")
+            {
+                assignment.Progress = PROGRESS_MAX_VALUE;
+                assignment.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                assignment.Progress = input.Progress;
+            }
+
+           assignment.StatusId = input.StatusId;
+
+            this.context.Assignments.Update(assignment);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+           
         }
     }
 }
