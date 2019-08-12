@@ -50,7 +50,7 @@ namespace OMM.App.Controllers
 
             await this.assignmentsService.CreateAssignmentAsync(inputDto);
 
-            return Redirect("/");
+            return RedirectToAction("FromMe");
         }
 
         public async Task<IActionResult> MyAssignments()
