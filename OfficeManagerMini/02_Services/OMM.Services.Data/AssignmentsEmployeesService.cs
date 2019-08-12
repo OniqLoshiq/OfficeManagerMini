@@ -31,13 +31,10 @@ namespace OMM.Services.Data
 
         public async Task<bool> RemoveAssistantsAsync(List<string> assistantsToRemove, string assignmentId)
         {
-            var assistants = assistantsToRemove
-                .Select(assistantId => new AssignmentsEmployees
-                {
-                    AssistantId = assistantId,
-                    AssignmentId = assignmentId,
-                });
-
+            var assistants = this.context.AssignmentsEmployees
+                .Where(ae => ae.AssignmentId == assignmentId)
+                .Where(ae => assistantsToRemove.Contains(ae.AssistantId));
+                
             this.context.AssignmentsEmployees.RemoveRange(assistants);
             var result = await this.context.SaveChangesAsync();
 

@@ -193,7 +193,7 @@ namespace OMM.App.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return this.View();
+                return this.View(input);
             }
 
             var assignmentToEdit = input.To<AssignmentEditDto>();

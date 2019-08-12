@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OMM.App.Models.ViewModels
 {
-    public class AssignmentEditViewModel : IMapFrom<AssignmentEditDto>, IMapTo<AssignmentEditDto>, IHaveCustomMappings
+    public class AssignmentEditViewModel : IValidatableObject, IMapFrom<AssignmentEditDto>, IMapTo<AssignmentEditDto>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
