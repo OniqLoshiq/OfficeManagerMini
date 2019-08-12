@@ -29,6 +29,13 @@ namespace OMM.Services.Data
             return result > 0;
         }
 
+        public IEnumerable<AssignmentsEmployees> CreateWithAssistantsIds(List<string> assistantsIds)
+        {
+            var assignmentEmployees = assistantsIds.Select(id => new AssignmentsEmployees { AssistantId = id });
+
+            return assignmentEmployees;
+        }
+
         public async Task<bool> RemoveAssistantsAsync(List<string> assistantsToRemove, string assignmentId)
         {
             var assistants = this.context.AssignmentsEmployees

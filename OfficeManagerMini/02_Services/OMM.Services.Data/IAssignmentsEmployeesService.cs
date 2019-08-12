@@ -1,6 +1,5 @@
-﻿using System;
+﻿using OMM.Domain;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OMM.Services.Data
@@ -11,5 +10,6 @@ namespace OMM.Services.Data
 
         Task<bool> AddAssistantsAsync(List<string> assistantsToAdd, string assignmentId);
 
+        IEnumerable<AssignmentsEmployees> CreateWithAssistantsIds(List<string> assistantsIds);
     }
 }

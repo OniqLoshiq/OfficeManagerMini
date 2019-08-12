@@ -30,13 +30,7 @@ namespace OMM.Services.Data
         {
             var assignment = input.To<Assignment>();
 
-            foreach (var assistantId in input.AssistantsIds)
-            {
-                assignment.AssignmentsAssistants.Add(new AssignmentsEmployees
-                {
-                    AssistantId = assistantId,
-                });
-            }
+            assignment.AssignmentsAssistants = this.assignmentsEmployeesService.CreateWithAssistantsIds(input.AssistantsIds).ToList();
 
             await this.context.Assignments.AddAsync(assignment);
 
@@ -113,7 +107,7 @@ namespace OMM.Services.Data
                 assignment.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
                 assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
             }
-            else if(input.StatusName == Constants.STATUS_COMPLETED)
+            else if((await this.statusesService.GetStatusNameByIdAsync(input.StatusId)) == Constants.STATUS_COMPLETED)
             {
                 assignment.EndDate = DateTime.UtcNow;
                 assignment.StatusId = input.StatusId;
