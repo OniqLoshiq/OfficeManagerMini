@@ -65,15 +65,10 @@
             </div>
         </div>
         <div class="form-group col-md-8 mb-0">
-            <label for="project">Project</label>
+            <label asp-for="ProjectId"></label>
             <fieldset id="toggle-checkbox" disabled>
                 <div class="input-group mb-1">
-                    <select class="form-control selectpicker" id="project" name="project" data-style="btn-white" data-live-search="true" data-width="auto">
-                        <option value="0" selected disabled>Project</option>
-                        <option value="1">Project number 1</option>
-                        <option value="2">Project number 2</option>
-                        <option value="3">Project number 3</option>
-                    </select>
+                    <vc:projects-list project-id=""></vc:projects-list>
                 </div>
             </fieldset>
         </div>
