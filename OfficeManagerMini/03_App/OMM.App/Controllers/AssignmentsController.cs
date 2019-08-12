@@ -180,5 +180,27 @@ namespace OMM.App.Controllers
 
             return RedirectToAction("MyAssignments");
         }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var assignmentToEdit = (await this.assignmentsService.GetAssignmentToEditAsync(id)).To<AssignmentEditViewModel>();
+
+            return this.View(assignmentToEdit);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(AssignmentEditViewModel input)
+        {
+            if(!ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var assignmentToEdit = input.To<AssignmentEditDto>();
+
+            await this.assignmentsService.EditAsync(assignmentToEdit);
+
+            return RedirectToAction("Details", new { id = input.Id });
+        }
     }
 }

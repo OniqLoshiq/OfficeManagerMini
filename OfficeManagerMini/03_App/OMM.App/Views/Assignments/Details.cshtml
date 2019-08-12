@@ -109,6 +109,10 @@
                     {
                         <span class="badge badge-warning">@Model.ChangeData.StatusName</span>
                     }
+                    else if (Model.ChangeData.StatusName == Constants.STATUS_COMPLETED)
+                    {
+                        <span class="badge badge-secondary">@Model.ChangeData.StatusName</span>
+                    }
                 </div>
                 <div class="col-3 h6 text-center">
                     <div> Progress:</div>

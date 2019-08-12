@@ -23,5 +23,9 @@ namespace OMM.Services.Data
         Task<bool> ChangeDataAsync(AssignmentDetailsChangeDto input);
 
         Task<bool> DeleteAsync(string id);
+
+        Task<bool> EditAsync(AssignmentEditDto input);
+
+        Task<AssignmentEditDto> GetAssignmentToEditAsync(string id);
     }
 }

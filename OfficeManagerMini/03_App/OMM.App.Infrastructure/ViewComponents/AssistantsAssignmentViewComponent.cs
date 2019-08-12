@@ -19,9 +19,11 @@ namespace OMM.App.Infrastructure.ViewComponents
             this.employeesService = employeesService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(List<string> assistantsIds)
         {
             var vm = new AssistantAssignmentViewComponentViewModel();
+
+            vm.AssistantsIds = assistantsIds;
 
             var employeeSelectListInfo = await this.employeesService.GetActiveEmployeesWithDepartment().To<ActiveEmployeeDepartmentViewModel>().ToListAsync();
 

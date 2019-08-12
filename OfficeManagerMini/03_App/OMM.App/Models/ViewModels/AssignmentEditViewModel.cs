@@ -2,14 +2,15 @@
 using OMM.App.Common;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.Assignments;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace OMM.App.Models.InputModels
+namespace OMM.App.Models.ViewModels
 {
-    public class AssignmentCreateInputModel : IValidatableObject, IMapTo<AssignmentCreateDto>, IHaveCustomMappings
+    public class AssignmentEditViewModel : IMapFrom<AssignmentEditDto>, IMapTo<AssignmentEditDto>, IHaveCustomMappings
     {
+        public string Id { get; set; }
+
         [Required]
         [Display(Name = "Title")]
         public string Name { get; set; }
@@ -46,9 +47,8 @@ namespace OMM.App.Models.InputModels
         [Display(Name = "Status")]
         public int StatusId { get; set; }
 
-        [Required]
         [Display(Name = "Assignor")]
-        public string AssignorId { get; set; }
+        public string AssignorName { get; set; }
 
         [Required]
         [Display(Name = "Executor")]
@@ -62,9 +62,13 @@ namespace OMM.App.Models.InputModels
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<AssignmentCreateInputModel, AssignmentCreateDto>()
+            configuration.CreateMap<AssignmentEditViewModel, AssignmentEditDto>()
                 .ForMember(destination => destination.ExecutorId,
                 opts => opts.MapFrom(origin => origin.EmployeeId));
+
+            configuration.CreateMap<AssignmentEditDto, AssignmentEditViewModel>()
+                .ForMember(destination => destination.EmployeeId,
+                opts => opts.MapFrom(origin => origin.ExecutorId));
         }
 
         public IEnumerable<ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)

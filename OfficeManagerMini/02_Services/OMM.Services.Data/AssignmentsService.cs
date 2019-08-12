@@ -16,10 +16,14 @@ namespace OMM.Services.Data
         private const int PROGRESS_MAX_VALUE = 100;
 
         private readonly OmmDbContext context;
+        private readonly IStatusesService statusesService;
+        private readonly IAssignmentsEmployeesService assignmentsEmployeesService;
 
-        public AssignmentsService(OmmDbContext context)
+        public AssignmentsService(OmmDbContext context, IStatusesService statusesService, IAssignmentsEmployeesService assignmentsEmployeesService)
         {
             this.context = context;
+            this.statusesService = statusesService;
+            this.assignmentsEmployeesService = assignmentsEmployeesService;
         }
 
         public async Task<bool> CreateAssignmentAsync(AssignmentCreateDto input)
@@ -107,7 +111,7 @@ namespace OMM.Services.Data
             {
                 assignment.Progress = PROGRESS_MAX_VALUE;
                 assignment.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
-                assignment.StatusId = await this.context.Statuses.Where(s => s.Name == Constants.STATUS_COMPLETED).Select(s => s.Id).SingleOrDefaultAsync();
+                assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
             }
             else if(input.StatusName == Constants.STATUS_COMPLETED)
             {
@@ -133,6 +137,83 @@ namespace OMM.Services.Data
             var assignment = await this.context.Assignments.SingleOrDefaultAsync(a => a.Id == id);
 
             this.context.Assignments.Remove(assignment);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<AssignmentEditDto> GetAssignmentToEditAsync(string id)
+        {
+            return await this.context.Assignments
+                .Where(a => a.Id == id)
+                .To<AssignmentEditDto>().FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> EditAsync(AssignmentEditDto input)
+        {
+            var assignment = await this.context.Assignments.SingleOrDefaultAsync(a => a.Id == input.Id);
+
+            assignment.ExecutorId = input.ExecutorId;
+
+            assignment.StartingDate = DateTime.ParseExact(input.StartingDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            if(input.Deadline != "")
+            {
+                assignment.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            }
+
+            assignment.Priority = input.Priority;
+            assignment.Type = input.Type;
+            assignment.Name = input.Name;
+            assignment.Description = input.Description;
+
+            assignment.IsProjectRelated = input.IsProjectRelated;
+            if(input.IsProjectRelated)
+            {
+                assignment.ProjectId = input.ProjectId;
+            }
+            else
+            {
+                assignment.ProjectId = null;
+            }
+
+            #region ChangeStatusLogic 
+            if (assignment.Status.Name == Constants.STATUS_COMPLETED && assignment.StatusId != input.StatusId)
+            {
+                assignment.EndDate = null;
+                assignment.StatusId = input.StatusId;
+                assignment.Progress = input.Progress;
+            }
+            else if((await this.statusesService.GetStatusNameByIdAsync(input.StatusId)) == Constants.STATUS_COMPLETED && assignment.StatusId != input.StatusId)
+            {
+                assignment.EndDate = DateTime.UtcNow;
+                assignment.StatusId = input.StatusId;
+                assignment.Progress = PROGRESS_MAX_VALUE;
+            }
+            else
+            {
+                assignment.StatusId = input.StatusId;
+                assignment.Progress = input.Progress;
+            }
+            #endregion  
+
+            var assignmentAssistantsIds = assignment.AssignmentsAssistants.Select(aa => aa.AssistantId).ToList();
+             
+            var assistantsToRemove = assignmentAssistantsIds.Except(input.AssistantsIds).ToList();
+
+            var assistantsToAdd = input.AssistantsIds.Except(assignmentAssistantsIds).ToList();
+
+            if(assistantsToRemove.Count() > 0)
+            {
+                 await this.assignmentsEmployeesService.RemoveAssistantsAsync(assistantsToRemove, assignment.Id);
+            }
+
+            if(assistantsToAdd.Count() > 0)
+            {
+                await this.assignmentsEmployeesService.AddAssistantsAsync(assistantsToAdd, assignment.Id);
+            }
+
+            this.context.Assignments.Update(assignment);
+
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
