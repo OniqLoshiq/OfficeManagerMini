@@ -107,13 +107,19 @@ namespace OMM.Services.Data
             {
                 assignment.Progress = PROGRESS_MAX_VALUE;
                 assignment.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+                assignment.StatusId = await this.context.Statuses.Where(s => s.Name == Constants.STATUS_COMPLETED).Select(s => s.Id).SingleOrDefaultAsync();
+            }
+            else if(input.StatusName == Constants.STATUS_COMPLETED)
+            {
+                assignment.EndDate = DateTime.UtcNow;
+                assignment.StatusId = input.StatusId;
+                assignment.Progress = PROGRESS_MAX_VALUE;
             }
             else
             {
                 assignment.Progress = input.Progress;
+                assignment.StatusId = input.StatusId;
             }
-
-           assignment.StatusId = input.StatusId;
 
             this.context.Assignments.Update(assignment);
             var result = await this.context.SaveChangesAsync();
