@@ -1,83 +1,89 @@
-﻿@{
+﻿@model OMM.App.Areas.Management.Models.InputModels.ProjectCreateInputModel
+
+@{
     ViewData["Title"] = "Create Project";
 }
-
 
 <h4 class="mb-3 text-center">Create Project</h4>
 <hr class="hr-oom" style="width:300px;" />
 
-<form>
+<form asp-area="Management" asp-controller="Projects" asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-row">
         <div class="form-group col-md-6 mb-0">
-            <label class="sr-only" for="Name">Name</label>
+            <label class="sr-only" asp-for="Name"></label>
             <div class="input-group mb-2">
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning text-secondary"><strong>Name</strong></div>
                 </div>
-                <input type="text" class="form-control" id="Name" placeholder="Name of the project">
+                <input class="form-control" asp-for="Name" placeholder="Name of the project">
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-md-6 mb-0">
-            <label class="sr-only" for="Clinet">Client</label>
+            <label class="sr-only" asp-for="Client"></label>
             <div class="input-group mb-2">
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning text-secondary"><strong>Client</strong></div>
                 </div>
-                <input type="text" class="form-control" id="Client" placeholder="Client name">
+                <input class="form-control" asp-for="Client" placeholder="Client name">
+                <span asp-validation-for="Client" class="text-danger"></span>
             </div>
         </div>
     </div>
     <hr class="hr-oom" />
     <div class="form-group">
         <label for="mytextarea">Description</label>
-        <textarea id="mytextarea"></textarea>
+        <textarea id="mytextarea" asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <hr class="hr-oom" />
     <div class="form-row">
         <div class="form-group col-md-3 mb-0">
-            <label for="status">Status</label>
-            <select class="form-control" id="status">
-                <option selected>In Process</option>
-                <option>Frozen</option>
-                <option>Waiting</option>
-                <option>Delayed</option>
-                <option>Completed</option>
-            </select>
+            <div>
+                <label asp-for="StatusId"></label>
+            </div>
+            <vc:statuses-list status-id="0"></vc:statuses-list>
+            <div>
+                <span asp-validation-for="StatusId" class="text-danger"></span>
+            </div>
         </div>
         <div class="form-group col-md-4 flatpickrcontainer mb-0">
-            <label for="createdOn">Creating Date</label>
+            <label asp-for="CreatedOn"></label>
             <div class="input-group">
-                <input type="text" class="form-control" id="createdOn" name="createdOn" data-input>
+                <input class="form-control" asp-for="CreatedOn" data-input>
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
+            <span asp-validation-for="CreatedOn" class="text-danger"></span>
         </div>
         <div class="form-group col-md-4 flatpickrcontainer mb-0">
-            <label for="deadline">Deadline</label>
+            <label asp-for="Deadline">Deadline</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="deadline" name="deadline" data-input>
+                <input class="form-control" asp-for="Deadline" data-input>
                 <div class="input-group-prepend">
                     <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
         </div>
         <div class="form-group col-md-1 mb-0">
-            <label for="priority">Priority</label>
-            <select class="form-control" id="priority" name="priority">
+            <label asp-for="Priority"></label>
+            <select class="form-control" asp-for="Priority">
                 <option selected disabled>0</option>
                 @for (int i = 1; i <= 10; i++)
                 {
-                <option>@i</option>
+                    <option value="@i">@i</option>
                 }
             </select>
+            <span asp-validation-for="Priority" class="text-danger"></span>
         </div>
     </div>
     <hr class="hr-oom" />
     <div class="form-row">
         <div class="form-group col mb-0">
-            <label for="progressInput">Project progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">0</output>%</span></label>
-            <input type="range" class="custom-range" id="progressInput" name="progress" value="0" min="0" max="100" oninput="progressOutput.value = progressInput.value">
+            <label asp-for="Progress">Assignment progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">0</output>%</span></label>
+            <input type="range" class="custom-range" asp-for="Progress" value="0" min="0" max="100" oninput="progressOutput.value = Progress.value">
         </div>
     </div>
     <hr class="hr-oom" />
@@ -95,6 +101,7 @@
 
 
 @section Scripts{
+    <partial name="_ValidationScriptsPartial" />
     <script src="~/lib/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="~/js/run-tinymce.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
