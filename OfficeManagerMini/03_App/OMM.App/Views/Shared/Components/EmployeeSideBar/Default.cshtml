@@ -18,7 +18,7 @@
                                 <img src="@Model.ProfilePicture" alt="avatar" class="rounded-circle">
                             </a>
                             <h5 class="d-none d-md-block">@Model.EmployeeName</h5>
-                            <span class="d-none d-md-block">@Model.Position</span>
+                            <span class="d-none d-md-block">@Model.Position</span>  `
                         </li>
                     </ul>
                 </li>
@@ -27,11 +27,17 @@
                     <li class="nav-item">
                         <a class="nav-link pl-3 dropdown-toggle" href="#projectsSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-project-diagram mr-2"></i> <span class="d-none d-sm-inline">Projects</span></a>
                         <ul class="collapse list-unstyled" id="projectsSubmenu">
+                            @if (this.User.IsInRole(Constants.ADMIN_ROLE) || this.User.IsInRole(Constants.MANAGEMENT_ROLE))
+                            {
+                                <li>
+                                    <a class="pl-5" href="#">All</a>
+                                </li>
+                                <li>
+                                    <a class="pl-5" asp-area="Management" asp-controller="Projects" asp-action="Create">Create</a>
+                                </li>
+                            }
                             <li>
-                                <a class="pl-5" href="#">All</a>
-                            </li>
-                            <li>
-                                <a class="pl-5" href="#">Create</a>
+                                <a class="pl-5" href="#">My Projects</a>
                             </li>
                         </ul>
                     </li>
@@ -93,7 +99,7 @@
                         <a class="nav-link pl-3 dropdown-toggle" href="#projectsSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-project-diagram mr-2"></i> <span class="d-none d-sm-inline">Projects</span></a>
                         <ul class="collapse list-unstyled" id="projectsSubmenu">
                             <li>
-                                <a class="pl-5" href="#">All</a>
+                                <a class="pl-5" href="#">My Projects</a>
                             </li>
                         </ul>
                     </li>
