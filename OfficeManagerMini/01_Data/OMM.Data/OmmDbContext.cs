@@ -40,6 +40,11 @@ namespace OMM.Data
 
             builder.Entity<Asset>().HasIndex(a => a.InventoryNumber).IsUnique();
 
+            builder.Entity<Comment>()
+                .HasOne(c => c.Assignment)
+                .WithMany(a => a.Comments)
+                .OnDelete(DeleteBehavior.Cascade);
+
             base.OnModelCreating(builder);
         }
 

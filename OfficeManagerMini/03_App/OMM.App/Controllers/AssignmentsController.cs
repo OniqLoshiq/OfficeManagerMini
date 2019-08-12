@@ -164,9 +164,21 @@ namespace OMM.App.Controllers
 
             var assignmentDataToChange = input.To<AssignmentDetailsChangeDto>();
 
-            await this.assignmentsService.ChangeData(assignmentDataToChange);
+            await this.assignmentsService.ChangeDataAsync(assignmentDataToChange);
 
             return RedirectToAction("Details", new { id = input.Id });
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("MyAssignments");
+            }
+
+            await this.assignmentsService.DeleteAsync(id);
+
+            return RedirectToAction("MyAssignments");
         }
     }
 }

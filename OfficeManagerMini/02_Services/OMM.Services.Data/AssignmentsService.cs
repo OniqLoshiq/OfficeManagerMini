@@ -94,7 +94,7 @@ namespace OMM.Services.Data
                 .To<AssignmentDetailsDto>();
         }
 
-        public async Task<bool> ChangeData(AssignmentDetailsChangeDto input)
+        public async Task<bool> ChangeDataAsync(AssignmentDetailsChangeDto input)
         {
             var assignment = await this.context.Assignments.FirstOrDefaultAsync(a => a.Id == input.Id);
 
@@ -126,6 +126,16 @@ namespace OMM.Services.Data
 
             return result > 0;
            
+        }
+
+        public async Task<bool> DeleteAsync(string id)
+        {
+            var assignment = await this.context.Assignments.SingleOrDefaultAsync(a => a.Id == id);
+
+            this.context.Assignments.Remove(assignment);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
         }
     }
 }

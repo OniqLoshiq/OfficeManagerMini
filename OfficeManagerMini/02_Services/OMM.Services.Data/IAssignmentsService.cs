@@ -20,6 +20,8 @@ namespace OMM.Services.Data
 
         IQueryable<AssignmentDetailsDto> GetAssignmentDetails(string id);
 
-        Task<bool> ChangeData(AssignmentDetailsChangeDto input);
+        Task<bool> ChangeDataAsync(AssignmentDetailsChangeDto input);
+
+        Task<bool> DeleteAsync(string id);
     }
 }
