@@ -152,5 +152,14 @@ namespace OMM.App.Areas.Management.Controllers
 
             return this.RedirectToAction(nameof(All));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> LoadProjectParticipantAdditionalData (string employeeId)
+        {
+            var employeeInfo = (await this.employeesService.GetEmployeeDtoByIdAsync<EmployeeProjectParticipantAdditionalInfoDto>(employeeId).FirstOrDefaultAsync())
+                .To<EmployeeProjectParticipantAdditionalInfoViewModel>();
+
+            return new JsonResult(employeeInfo);
+        }
     }
 }

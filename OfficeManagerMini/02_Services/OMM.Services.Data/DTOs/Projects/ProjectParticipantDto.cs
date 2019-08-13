@@ -2,5 +2,8 @@
 {
     public class ProjectParticipantDto
     {
+        public string EmployeeId { get; set; }
+
+        public string ProjectPositionId { get; set; }
     }
 }
