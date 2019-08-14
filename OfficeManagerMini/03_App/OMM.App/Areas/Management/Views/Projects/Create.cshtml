@@ -89,7 +89,46 @@
     <hr class="hr-oom" />
     <div class="form-group">
         <label for="Participants">Participants</label>
-        <partial name="_ProjectParticipantsPartial" />
+        @*<partial name="_ProjectParticipantsPartial" model="@Model.Participants"/>*@
+        <div class="d-flex justify-content-start mb-3">
+            <button class="btn btn-outline-success text-dark" type="button" onclick="addRow()"><i class="fas fa-user-plus pr-2"></i>Add employee to project</button>
+        </div>
+
+        <table class="table table-striped table-warning table-hover">
+            <thead class="bg-warning">
+                <tr>
+                    <th scope="col" style="width: 33.32%;font-weight:bold;" colspan="2">Employee</th>
+                    <th scope="col" class="text-center" style="width: 24.99%; font-weight:bold;">Department</th>
+                    <th scope="col" style="width: 24.99%; font-weight:bold;">Project Position</th>
+                    <th scope="col" style="width: 16.66%; font-weight:bold;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*javascript logic here: edit in file js/addDeleteRows.js *@
+
+                @*<tr class="participants">
+                        <td class="align-middle" style="width: 5%"><img src="~/images/unknownEmployee.png" id="participant-picture" class="proj-participant-img rounded-circle mx-left " alt="..."></td>
+                        <td class="align-middle" style="width: 28.32%">
+                            <div class="input-group mb-2">
+                                <div class="input-group">
+                                    <vc:employees-department-list employee-id=""></vc:employees-department-list>
+                                </div>
+                            </div>
+                        </td>
+                        <td id="participant-department" class="align-middle text-center">-</td>
+                        <td class="align-middle">
+                            <div class="input-group mb-2">
+                                <div class="input-group">
+                                    <vc:project-positions-list project-position-id="0"></vc:project-positions-list>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button>
+                        </td>
+                    </tr>*@
+            </tbody>
+        </table>
     </div>
     <hr class="hr-oom w-25" />
     <div class="d-flex justify-content-center">

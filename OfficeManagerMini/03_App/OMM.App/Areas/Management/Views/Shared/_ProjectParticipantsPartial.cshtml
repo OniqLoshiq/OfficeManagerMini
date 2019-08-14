@@ -1,4 +1,4 @@
-﻿@model OMM.App.Areas.Management.Models.InputModels.ProjectParticipantInputModel
+﻿@model IEnumerable<OMM.App.Areas.Management.Models.InputModels.ProjectParticipantInputModel>
 
 <div class="d-flex justify-content-start mb-3">
     <button class="btn btn-outline-success text-dark" type="button" onclick="addRow()"><i class="fas fa-user-plus pr-2"></i>Add employee to project</button>
@@ -20,15 +20,16 @@
                 <div class="input-group mb-2">
                     <div class="input-group">
                         <vc:employees-department-list employee-id=""></vc:employees-department-list>
-                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
                     </div>
                 </div>
             </td>
             <td id="participant-department" class="align-middle text-center">-</td>
             <td class="align-middle">
-                <select class="form-control" asp-for="ProjectPositionId" asp-items="@ViewBag.ProjectPositions">
-                    <option selected disabled>Please select one</option>
-                </select>
+                <div class="input-group mb-2">
+                    <div class="input-group">
+                        <vc:project-positions-list project-position-id="0"></vc:project-positions-list>
+                    </div>
+                </div>
             </td>
             <td class="align-middle">
                 <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button>

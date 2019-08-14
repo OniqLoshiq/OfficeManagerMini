@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using OMM.App.Areas.Management.Models.InputModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,16 +12,29 @@ namespace OMM.App.Areas.Management.Controllers
     {
         public IActionResult Create()
         {
-            ViewBag.ProjectPositions = new List<SelectListItem>
-                                 {
-                                     new SelectListItem {Text = "Project manager", Value = "1"},
-                                     new SelectListItem {Text = "Participant", Value = "2"},
-                                     new SelectListItem {Text = "Assistant", Value = "3"}
-                                 };
+            var vm = new ProjectCreateInputModel();
+            return View(vm);
+        }
 
-            return ViewComponent("EmployeesDepartmentList", new { employeeId = "" });
+        [HttpPost]
+        public IActionResult Create(ProjectCreateInputModel input)
+        {
+            if(!ModelState.IsValid)
+            {
+                return this.View(input);
+            }
 
-            return View();
+            return Redirect("/");
+        }
+
+        public IActionResult GetEmployeesDepartmentViewComponent()
+        {
+            return ViewComponent("EmployeesDepartmentList", new { employeeId = ""});
+        }
+
+        public IActionResult GetProjectPositionsViewComponent()
+        {
+            return ViewComponent("ProjectPositionsList", new { projectPositionId = 0 });
         }
     }
 }

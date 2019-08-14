@@ -1,4 +1,13 @@
 ﻿//Change Participant Additional Data
+
+
+$(".employee-id").on('change', function () {
+    var contentPanelId = $(this).attr("id");
+    alert(contentPanelId);
+    console.log(contentPanelId);
+});
+
+
 $("#employee-department-list").on('change', function () {
     var val = $(this).val();
 
@@ -37,8 +46,35 @@ function removeRow() {
 }
 
 function addRow() {
-    $("table").append(
-        ' <tr> <td class="align-middle" style="width: 5%"><img src="~/images/unknownEmployee.png" id="participant-picture" class="proj-participant-img rounded-circle mx-left " alt="..."></td> <td class="align-middle" style="width: 28.32%"> <div class="input-group mb-2"> <div class="input-group"> <vc:employees-department-list employee-id=""></vc:employees-department-list> <span asp-validation-for="EmployeeId" class="text-danger"></span> </div> </div> </td> <td id="participant-department" class="align-middle text-center">-</td> <td class="align-middle"> <select class="form-control" asp-for="ProjectPositionId" asp-items="@ViewBag.ProjectPositions"> <option selected disabled>Please select one</option> </select> </td> <td class="align-middle"> <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button> </td> </tr>'
-    );
+    var i = $(".participants").length;
+
+    var projectPositionsList;
+    var employeesDepartmentsList;
+
+    $.get({
+        url: `/Management/Projects/GetEmployeesDepartmentViewComponent`,
+        async: false,
+        success: function success(result) {
+            employeesDepartmentsList = result;
+        },
+    });
+
+    $.get({
+        url: `/Management/Projects/GetProjectPositionsViewComponent`,
+        async: false,
+        success: function success(result) {
+            projectPositionsList = result;
+        },
+    });
+
+    var rowToAppend = ' <tr class="participants"> <td class="align-middle" style="width: 5%"><img src="/images/unknownEmployee.png" id="participant-picture" class="proj-participant-img rounded-circle mx-left " alt="..."></td> <td class="align-middle" style="width: 28.32%"> <div class="input-group mb-2"> <div class="input-group">' + employeesDepartmentsList + ' </div> </div> </td> <td id="participant-department" class="align-middle text-center">-</td> <td class="align-middle">' + projectPositionsList + '</td> <td class="align-middle"> <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button> </td> </tr>';
+    rowToAppend = rowToAppend.replace('id="ProjectPositionId"', 'id="ProjectPositionId-' + i + '"');
+    rowToAppend = rowToAppend.replace('name="ProjectPositionId"', 'name = "Participants[' + i + '].ProjectPositionId"');
+    rowToAppend = rowToAppend.replace('id="EmployeeId"', 'id="EmployeeId-' + i + '"');
+    rowToAppend = rowToAppend.replace('name="EmployeeId"', 'name = "Participants[' + i + '].EmployeeId"');
+    rowToAppend = rowToAppend.replace('participant-picture', 'participant-picture-' + i);
+    rowToAppend = rowToAppend.replace('participant-department', 'participant-department-' + i);
+
+    $("table").append(rowToAppend);
     $('.selectpicker').selectpicker('refresh')
 }
