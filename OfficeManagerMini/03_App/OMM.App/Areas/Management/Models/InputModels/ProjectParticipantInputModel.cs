@@ -10,6 +10,6 @@ namespace OMM.App.Areas.Management.Models.InputModels
         public string EmployeeId { get; set; }
 
         [Required]
-        public string ProjectPositionId { get; set; }
+        public int ProjectPositionId { get; set; }
     }
 }

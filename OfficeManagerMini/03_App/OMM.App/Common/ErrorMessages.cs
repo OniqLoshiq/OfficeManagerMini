@@ -11,5 +11,7 @@
         public const string INVALID_ASSISTANT = "The Executor cannot be an assistant to the assignment!";
 
         public const string INVALID_PROJECT = "Please select a project when the assignment is project related!";
+
+        public const string INVALID_PARTICIPANTS = "The project must have at least one participant and all the added participants must be valid!";
     }
 }

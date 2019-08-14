@@ -1,8 +1,4 @@
-﻿@model IEnumerable<OMM.App.Areas.Management.Models.InputModels.ProjectParticipantInputModel>
-
-<div class="d-flex justify-content-start mb-3">
-    <button class="btn btn-outline-success text-dark" type="button" onclick="addRow()"><i class="fas fa-user-plus pr-2"></i>Add employee to project</button>
-</div>
+﻿@model IList<OMM.App.Areas.Management.Models.InputModels.ProjectParticipantInputModel>
 
 <table class="table table-striped table-warning table-hover">
     <thead class="bg-warning">
@@ -14,26 +10,59 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="align-middle" style="width: 5%"><img src="~/images/unknownEmployee.png" id="participant-picture" class="proj-participant-img rounded-circle mx-left " alt="..."></td>
-            <td class="align-middle" style="width: 28.32%">
-                <div class="input-group mb-2">
-                    <div class="input-group">
-                        <vc:employees-department-list employee-id=""></vc:employees-department-list>
+        @*javascript logic here: edit in file js/addDeleteRows.js *@
+
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr class="participants">
+                <td class="align-middle" style="width: 5%"><img src="~/images/unknownEmployee.png" id="participant-picture-@(i)" class="proj-participant-img rounded-circle mx-left " alt="..."></td>
+                <td class="align-middle" style="width: 28.32%">
+                    <div class="input-group mb-2">
+                        <div class="input-group">
+                            <select class="form-control selectpicker show-tick employee-id" id="@Model[i].EmployeeId" name="@Model[i].EmployeeId" asp-items="@ViewBag.Employees" data-style="btn-white" data-live-search="true" data-width="auto">
+                                <option></option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="@Model[i].EmployeeId" class="text-danger"></span>
                     </div>
-                </div>
-            </td>
-            <td id="participant-department" class="align-middle text-center">-</td>
-            <td class="align-middle">
-                <div class="input-group mb-2">
-                    <div class="input-group">
-                        <vc:project-positions-list project-position-id="0"></vc:project-positions-list>
+                </td>
+                <td id="participant-department-@(i)" class="align-middle text-center">-</td>
+                <td class="align-middle">
+                    <div class="input-group mb-2">
+                        <div class="input-group">
+                            <select class="form-control" id="@Model[i].ProjectPositionId" name="@Model[i].ProjectPositionId" asp-items="@ViewBag.ProjectPositions">
+                                <option selected disabled>--Choose a position--</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="@Model[i].ProjectPositionId" class="text-danger"></span>
                     </div>
-                </div>
-            </td>
-            <td class="align-middle">
-                <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button>
-            </td>
-        </tr>
+                </td>
+                <td class="align-middle">
+                    <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button>
+                </td>
+            </tr>
+        }
+        @*<tr class="participants">
+                <td class="align-middle" style="width: 5%"><img src="~/images/unknownEmployee.png" id="participant-picture" class="proj-participant-img rounded-circle mx-left " alt="..."></td>
+                <td class="align-middle" style="width: 28.32%">
+                    <div class="input-group mb-2">
+                        <div class="input-group">
+                            <vc:employees-department-list employee-id=""></vc:employees-department-list>
+                        </div>
+                    </div>
+                </td>
+                <td id="participant-department" class="align-middle text-center">-</td>
+                <td class="align-middle">
+                    <div class="input-group mb-2">
+                        <div class="input-group">
+                            <vc:project-positions-list project-position-id="0"></vc:project-positions-list>
+                        </div>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button>
+                </td>
+            </tr>*@
     </tbody>
 </table>
+

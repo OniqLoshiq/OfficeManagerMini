@@ -1,11 +1,12 @@
-﻿using OMM.Services.AutoMapper;
+﻿using OMM.App.Common;
+using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.Projects;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OMM.App.Areas.Management.Models.InputModels
 {
-    public class ProjectCreateInputModel : IMapTo<ProjectCreateDto>
+    public class ProjectCreateInputModel : IValidatableObject, IMapTo<ProjectCreateDto>
     {
         [Required]
         [Display(Name = "Name")]
@@ -38,5 +39,13 @@ namespace OMM.App.Areas.Management.Models.InputModels
         public int StatusId { get; set; }
 
         public List<ProjectParticipantInputModel> Participants { get; set; } = new List<ProjectParticipantInputModel>();
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (this.Participants.Count == 0)
+            {
+                yield return new ValidationResult(ErrorMessages.INVALID_PARTICIPANTS, new List<string> { "Participants" });
+            }
+        }
     }
 }
