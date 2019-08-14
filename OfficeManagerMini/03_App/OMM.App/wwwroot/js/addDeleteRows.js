@@ -1,44 +1,57 @@
-﻿//Change Participant Additional Data
-
-
+﻿//Change Participant Additional Data (profile picture and department name) on reloaded page from the view
 $(".employee-id").on('change', function () {
     var contentPanelId = $(this).attr("id");
-    alert(contentPanelId);
-    console.log(contentPanelId);
+    var participantId = $(this).val();
+
+    var regex = /\d+/;
+    var participantNumber = contentPanelId.match(regex)[0];
+
+    changeAdditionalData(participantNumber, participantId);
 });
 
-
-$("#employee-department-list").on('change', function () {
-    var val = $(this).val();
+//Change Participant Additional Data (profile picture and department name)
+function changeAdditionalData(participantNumber, participantId) {
 
     $.get({
-        url: `/Management/Employees/LoadProjectParticipantAdditionalData?employeeId=${val}`,
+        url: `/Management/Employees/LoadProjectParticipantAdditionalData?employeeId=${participantId}`,
         success: function success(result) {
-            importParticipantAdditionalInfo(result);
+            importParticipantAdditionalInfo(result, participantNumber);
         },
         error: function error() {
             alert('Please select an employee!');
-            resetParticipantAddionalInfo();
+            resetParticipantAddionalInfo(participantNumber);
         }
     });
-})
-
-function importParticipantAdditionalInfo(data) {
-    $('#participant-picture').attr('src', data.profilePicture);
-    $('#participant-department').html(data.departmentName);
 }
 
-function resetParticipantAddionalInfo() {
-    $('#participant-picture').attr('src', '/images/unknownEmployee.png');
-    $('#participant-department').html('-');
+function importParticipantAdditionalInfo(data, participantNumber) {
+    $('#participant-picture-' + participantNumber + '').attr('src', data.profilePicture);
+    $('#participant-department-' + participantNumber + '').html(data.departmentName);
+}
+
+function resetParticipantAddionalInfo(participantNumber) {
+    $('#participant-picture-' + participantNumber + '').attr('src', '/images/unknownEmployee.png');
+    $('#participant-department-' + participantNumber + '').html('-');
 }
 
 
+//Reload Participant additional data (profile picture and department name) on page reload
+function fillAdditionalData() {
+    var participants = document.getElementsByClassName('employee-id');
 
+    for (var i = 0; i < participants.length; i++) {
+        
+        var contentPanelId = participants[i].id;
+        var participantId = document.getElementById(contentPanelId).value;
 
+        if (participantId) {
+            var regex = /\d+/;
+            var participantNumber = contentPanelId.match(regex)[0];
 
-
-
+            changeAdditionalData(participantNumber, participantId);
+        }
+    }
+}
 
 //Adding and deleting rows from adding participants
 function removeRow() {
@@ -75,6 +88,17 @@ function addRow() {
     rowToAppend = rowToAppend.replace('participant-picture', 'participant-picture-' + i);
     rowToAppend = rowToAppend.replace('participant-department', 'participant-department-' + i);
 
-    $("table").append(rowToAppend);
+    $("table").append(rowToAppend).find(".employee-id").on('change', function () {
+        var contentPanelId = $(this).attr("id");
+        var participantId = $(this).val();
+
+        var regex = /\d+/;
+        var participantNumber = contentPanelId.match(regex)[0];
+
+        changeAdditionalData(participantNumber, participantId);
+
+        console.log(participantNumber);
+        console.log(participantId);
+    });
     $('.selectpicker').selectpicker('refresh')
 }

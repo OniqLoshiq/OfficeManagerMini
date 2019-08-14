@@ -26,6 +26,8 @@ namespace OMM.App.Areas.Management.Controllers
 
         public async Task<IActionResult> Create()
         {
+            //Little spaghetti code to load dynamically participants
+
             var vm = new ProjectCreateInputModel();
 
             var employeeSelectListInfo = await this.employeesService.GetActiveEmployeesWithDepartment().To<ActiveEmployeeDepartmentViewModel>().ToListAsync();
@@ -57,6 +59,8 @@ namespace OMM.App.Areas.Management.Controllers
         {
             if(!ModelState.IsValid)
             {
+                //Little spaghetti code to load dynamically participants
+
                 var employeeSelectListInfo = await this.employeesService.GetActiveEmployeesWithDepartment().To<ActiveEmployeeDepartmentViewModel>().ToListAsync();
 
                 List<string> departments = employeeSelectListInfo.Select(li => li.DepartmentName).Distinct().ToList();
@@ -77,9 +81,7 @@ namespace OMM.App.Areas.Management.Controllers
 
                 ViewBag.Employees = participants;
                 ViewBag.ProjectPositions = new SelectList(this.projectPositionsService.GetProjectPositions().ToList(), "Id", "Name");
-
-
-
+                               
                 return this.View(input);
             }
 

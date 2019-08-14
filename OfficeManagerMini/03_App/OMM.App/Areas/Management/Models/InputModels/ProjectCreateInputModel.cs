@@ -3,6 +3,7 @@ using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.Projects;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace OMM.App.Areas.Management.Models.InputModels
 {
@@ -44,7 +45,12 @@ namespace OMM.App.Areas.Management.Models.InputModels
         {
             if (this.Participants.Count == 0)
             {
-                yield return new ValidationResult(ErrorMessages.INVALID_PARTICIPANTS, new List<string> { "Participants" });
+                yield return new ValidationResult(ErrorMessages.INVALID_PARTICIPANTS_COUNT, new List<string> { "Participants" });
+            }
+
+            if (this.Participants.Count != this.Participants.Select(p => p.EmployeeId).Distinct().Count())
+            {
+                yield return new ValidationResult(ErrorMessages.INVALID_PARTICIPANTS_DUPLICATE, new List<string> { "Participants" });
             }
         }
     }
