@@ -10,10 +10,12 @@ namespace OMM.Services.Data
     public class ProjectsService : IProjectsService
     {
         private readonly OmmDbContext context;
+        private readonly IReportsService reportsService;
 
-        public ProjectsService(OmmDbContext context)
+        public ProjectsService(OmmDbContext context, IReportsService reportsService)
         {
             this.context = context;
+            this.reportsService = reportsService;
         }
         public IQueryable<ProjectListDto> GetAllProjectsForList()
         {
@@ -26,8 +28,10 @@ namespace OMM.Services.Data
             
             this.context.Projects.Add(project);
             var result = await this.context.SaveChangesAsync();
+
+            var reportResult = await this.reportsService.CreateReportAsync(project.Id);
             
-            return result > 0;
+            return result > 0 && reportResult;
         }
     }
 }
