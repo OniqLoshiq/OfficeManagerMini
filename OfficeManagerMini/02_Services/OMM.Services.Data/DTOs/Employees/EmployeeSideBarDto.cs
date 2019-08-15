@@ -14,6 +14,8 @@ namespace OMM.Services.Data.DTOs.Employees
 
         public string Position { get; set; }
 
+        public int MyProjects { get; set; }
+
         public int MyAssignments => AssignmentsAsAssistant + AssignmentsFromMe + AssignmentsForMe;
 
         public int AssignmentsAsAssistant { get; set; }
@@ -29,6 +31,8 @@ namespace OMM.Services.Data.DTOs.Employees
             configuration.CreateMap<Employee, EmployeeSideBarDto>()
                 .ForMember(destination => destination.EmployeeName,
                 opts => opts.MapFrom(origin => origin.FirstName + " " + origin.LastName))
+                .ForMember(destination => destination.MyProjects,
+                opts => opts.MapFrom(origin => origin.ProjectsPositions.Where(pp => pp.Project.Status.Name != Constants.STATUS_COMPLETED).Count()))
                 .ForMember(destination => destination.AssignmentsFromMe,
                 opts => opts.MapFrom(origin => origin.AssignedAssignments.Where(a => a.Status.Name != Constants.STATUS_COMPLETED).Count()))
                 .ForMember(destination => destination.AssignmentsForMe,

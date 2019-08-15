@@ -30,14 +30,14 @@
                             @if (this.User.IsInRole(Constants.ADMIN_ROLE) || this.User.IsInRole(Constants.MANAGEMENT_ROLE))
                             {
                                 <li>
-                                    <a class="pl-5" href="#">All</a>
+                                    <a class="pl-5" asp-area="Management" asp-controller="Projects" asp-action="All">All</a>
                                 </li>
                                 <li>
                                     <a class="pl-5" asp-area="Management" asp-controller="Projects" asp-action="Create">Create</a>
                                 </li>
                             }
                             <li>
-                                <a class="pl-5" href="#">My Projects</a>
+                                <a class="pl-5" asp-controller="Projects" asp-action="MyProjects">My Projects <span class="badge badge-info">@Model.MyProjects</span></a>
                             </li>
                         </ul>
                     </li>
@@ -99,7 +99,7 @@
                         <a class="nav-link pl-3 dropdown-toggle" href="#projectsSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-project-diagram mr-2"></i> <span class="d-none d-sm-inline">Projects</span></a>
                         <ul class="collapse list-unstyled" id="projectsSubmenu">
                             <li>
-                                <a class="pl-5" href="#">My Projects</a>
+                                <a class="pl-5" asp-controller="Projects" asp-action="MyProjects">My Projects <span class="badge badge-info">@Model.MyProjects</span></a>
                             </li>
                         </ul>
                     </li>

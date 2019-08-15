@@ -11,6 +11,8 @@ namespace OMM.App.Infrastructure.ViewComponents.Models.Employees
 
         public string Position { get; set; }
 
+        public int MyProjects { get; set; }
+
         public int MyAssignments { get; set; }
 
         public int AssignmentsAsAssistant { get; set; }
