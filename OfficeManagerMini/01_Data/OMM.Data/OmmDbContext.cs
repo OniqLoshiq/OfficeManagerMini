@@ -45,6 +45,21 @@ namespace OMM.Data
                 .WithMany(a => a.Comments)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Activity>()
+                .HasOne(a => a.Report)
+                .WithMany(r => r.Activities)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Report>()
+                .HasOne(r => r.Project)
+                .WithOne(p => p.Report)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<EmployeesProjectsPositions>()
+                .HasOne(epp => epp.Project)
+                .WithMany(p => p.Participants)
+                .OnDelete(DeleteBehavior.Cascade);
+
             base.OnModelCreating(builder);
         }
 
