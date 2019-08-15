@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OMM.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,7 +49,7 @@ namespace OMM.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "leavingReasons",
+                name: "LeavingReasons",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -58,7 +58,7 @@ namespace OMM.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_leavingReasons", x => x.Id);
+                    table.PrimaryKey("PK_LeavingReasons", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,13 +132,14 @@ namespace OMM.Data.Migrations
                     LastName = table.Column<string>(nullable: true),
                     MiddleName = table.Column<string>(nullable: true),
                     FullName = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
                     AppointedOn = table.Column<DateTime>(nullable: false),
                     LeftOn = table.Column<DateTime>(nullable: true),
                     Position = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     ProfilePicture = table.Column<string>(nullable: true),
                     AccessLevel = table.Column<int>(nullable: false),
-                    DepartmentId = table.Column<int>(nullable: false),
+                    DepartmentId = table.Column<int>(nullable: true),
                     LeavingReasonId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -149,11 +150,11 @@ namespace OMM.Data.Migrations
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_leavingReasons_LeavingReasonId",
+                        name: "FK_AspNetUsers_LeavingReasons_LeavingReasonId",
                         column: x => x.LeavingReasonId,
-                        principalTable: "leavingReasons",
+                        principalTable: "LeavingReasons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -308,7 +309,8 @@ namespace OMM.Data.Migrations
                     Type = table.Column<string>(nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     IsProjectRelated = table.Column<bool>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    StartingDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: true),
                     Deadline = table.Column<DateTime>(nullable: true),
                     Progress = table.Column<double>(nullable: false),
                     StatusId = table.Column<int>(nullable: false),
@@ -351,8 +353,7 @@ namespace OMM.Data.Migrations
                 {
                     EmployeeId = table.Column<string>(nullable: false),
                     ProjectId = table.Column<string>(nullable: false),
-                    ProjectPositionId = table.Column<string>(nullable: false),
-                    ProjectPositionId1 = table.Column<int>(nullable: true)
+                    ProjectPositionId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -370,11 +371,11 @@ namespace OMM.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EmployeesProjectsRoles_ProjectPositions_ProjectPositionId1",
-                        column: x => x.ProjectPositionId1,
+                        name: "FK_EmployeesProjectsRoles_ProjectPositions_ProjectPositionId",
+                        column: x => x.ProjectPositionId,
                         principalTable: "ProjectPositions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -438,7 +439,7 @@ namespace OMM.Data.Migrations
                         column: x => x.AssignmentId,
                         principalTable: "Assignments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_AspNetUsers_CommentatorId",
                         column: x => x.CommentatorId,
@@ -545,6 +546,13 @@ namespace OMM.Data.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Assets_InventoryNumber",
+                table: "Assets",
+                column: "InventoryNumber",
+                unique: true,
+                filter: "[InventoryNumber] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Assignments_AssignorId",
                 table: "Assignments",
                 column: "AssignorId");
@@ -585,9 +593,9 @@ namespace OMM.Data.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeesProjectsRoles_ProjectPositionId1",
+                name: "IX_EmployeesProjectsRoles_ProjectPositionId",
                 table: "EmployeesProjectsRoles",
-                column: "ProjectPositionId1");
+                column: "ProjectPositionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_StatusId",
@@ -659,7 +667,7 @@ namespace OMM.Data.Migrations
                 name: "Departments");
 
             migrationBuilder.DropTable(
-                name: "leavingReasons");
+                name: "LeavingReasons");
 
             migrationBuilder.DropTable(
                 name: "Statuses");

@@ -381,15 +381,13 @@ namespace OMM.Data.Migrations
 
                     b.Property<string>("EmployeeId");
 
-                    b.Property<string>("ProjectPositionId");
-
-                    b.Property<int?>("ProjectPositionId1");
+                    b.Property<int>("ProjectPositionId");
 
                     b.HasKey("ProjectId", "EmployeeId", "ProjectPositionId");
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("ProjectPositionId1");
+                    b.HasIndex("ProjectPositionId");
 
                     b.ToTable("EmployeesProjectsRoles");
                 });
@@ -615,7 +613,8 @@ namespace OMM.Data.Migrations
 
                     b.HasOne("OMM.Domain.ProjectPosition", "ProjectPosition")
                         .WithMany("EmployeesProjects")
-                        .HasForeignKey("ProjectPositionId1");
+                        .HasForeignKey("ProjectPositionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("OMM.Domain.Project", b =>
