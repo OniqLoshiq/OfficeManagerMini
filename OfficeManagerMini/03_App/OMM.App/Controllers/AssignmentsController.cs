@@ -31,7 +31,9 @@ namespace OMM.App.Controllers
             this.ViewData["AssignorId"] = currentEmployeeId;
             this.ViewData["AssignorName"] = await this.employeesService.GetEmployeeFullNameByIdAsync(currentEmployeeId);
 
-            return View();
+            var inputModel = new AssignmentCreateInputModel();
+
+            return View(inputModel);
         }
 
         [HttpPost]
@@ -43,7 +45,7 @@ namespace OMM.App.Controllers
                 this.ViewData["AssignorId"] = currentEmployeeId;
                 this.ViewData["AssignorName"] = await this.employeesService.GetEmployeeFullNameByIdAsync(currentEmployeeId);
 
-                return View();
+                return View(input);
             }
 
             var inputDto = input.To<AssignmentCreateDto>();

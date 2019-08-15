@@ -6,6 +6,7 @@ using OMM.App.Areas.Management.Models.InputModels;
 using OMM.App.Infrastructure.ViewComponents.Models.Employees;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
+using OMM.Services.Data.DTOs.Projects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +18,13 @@ namespace OMM.App.Areas.Management.Controllers
     {
         private readonly IEmployeesService employeesService;
         private readonly IProjectPositionsService projectPositionsService;
+        private readonly IProjectsService projectsService;
 
-        public ProjectsController(IEmployeesService employeesService, IProjectPositionsService projectPositionsService)
+        public ProjectsController(IEmployeesService employeesService, IProjectPositionsService projectPositionsService, IProjectsService projectsService)
         {
             this.employeesService = employeesService;
             this.projectPositionsService = projectPositionsService;
+            this.projectsService = projectsService;
         }
 
         public async Task<IActionResult> Create()
@@ -84,6 +87,10 @@ namespace OMM.App.Areas.Management.Controllers
                                
                 return this.View(input);
             }
+
+            var project = input.To<ProjectCreateDto>();
+
+            await this.projectsService.CreateProjectAsync(project);
 
             return Redirect("/");
         }

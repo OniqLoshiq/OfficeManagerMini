@@ -33,7 +33,7 @@ namespace OMM.Services.Data.DTOs.Projects
             configuration.CreateMap<ProjectCreateDto, Project>()
                 .ForMember(destination => destination.CreatedOn,
                 opts => opts.MapFrom(origin => DateTime.ParseExact(origin.CreatedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture)))
-                .ForMember(destination => destination.CreatedOn,
+                .ForMember(destination => destination.Deadline,
                 opts => opts.MapFrom(origin => DateTime.ParseExact(origin.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture)))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
         }

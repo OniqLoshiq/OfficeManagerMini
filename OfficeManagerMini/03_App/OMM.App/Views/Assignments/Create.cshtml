@@ -68,7 +68,7 @@
             <label asp-for="ProjectId"></label>
             <fieldset id="toggle-checkbox" disabled>
                 <div class="input-group mb-1">
-                    <vc:projects-list project-id=""></vc:projects-list>
+                    <vc:projects-list project-id="@Model.ProjectId"></vc:projects-list>
                 </div>
             </fieldset>
             <span asp-validation-for="ProjectId" class="text-danger"></span>
@@ -77,8 +77,8 @@
     <hr class="hr-oom" />
     <div class="form-row">
         <div class="form-group col mb-0">
-            <label asp-for="Progress">Assignment progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">0</output>%</span></label>
-            <input type="range" class="custom-range" asp-for="Progress" value="0" min="0" max="100" oninput="progressOutput.value = Progress.value">
+            <label asp-for="Progress">Assignment progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">@Model.Progress</output>%</span></label>
+            <input type="range" class="custom-range" asp-for="Progress" value="@(Model.Progress)" min="0" max="100" oninput="progressOutput.value = Progress.value">
         </div>
     </div>
     <hr class="hr-oom" />
@@ -154,4 +154,7 @@
         });
     </script>
     <script src="~/js/projectRelated.js"></script>
+    <script type="text/javascript">
+        myProjects();
+    </script>
 }

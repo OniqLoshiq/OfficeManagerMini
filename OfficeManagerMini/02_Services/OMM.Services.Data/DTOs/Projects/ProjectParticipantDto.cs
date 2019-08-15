@@ -1,9 +1,12 @@
-﻿namespace OMM.Services.Data.DTOs.Projects
+﻿using OMM.Domain;
+using OMM.Services.AutoMapper;
+
+namespace OMM.Services.Data.DTOs.Projects
 {
-    public class ProjectParticipantDto
+    public class ProjectParticipantDto : IMapTo<EmployeesProjectsPositions>
     {
         public string EmployeeId { get; set; }
 
-        public string ProjectPositionId { get; set; }
+        public int ProjectPositionId { get; set; }
     }
 }
