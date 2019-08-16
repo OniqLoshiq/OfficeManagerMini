@@ -17,5 +17,7 @@
         public const string INVALID_PROJECTPOSITION = "The Project position field is required.";
 
         public const string INVALID_PARTICIPANTS_DUPLICATE = "You cannot have one participant more than once!";
+
+        public const string INVALID_PARTICIPANTS_MANAGER = "The project must have at least one project manager!";
     }
 }

@@ -52,6 +52,11 @@ namespace OMM.App.Areas.Management.Models.InputModels
             {
                 yield return new ValidationResult(ErrorMessages.INVALID_PARTICIPANTS_DUPLICATE, new List<string> { "Participants" });
             }
+
+            if (!this.Participants.Any(p => p.ProjectPositionId == Constants.PROJECT_MANAGER_ROLE_ID))
+            {
+                yield return new ValidationResult(ErrorMessages.INVALID_PARTICIPANTS_MANAGER, new List<string> { "Participants" });
+            }
         }
     }
 }

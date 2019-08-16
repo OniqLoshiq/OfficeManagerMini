@@ -38,5 +38,7 @@ namespace OMM.Services.Data
         Task<bool> RetrievePasswordAsync(string email);
 
         Task<string> GetEmployeeFullNameByIdAsync(string currentEmployeeId);
+
+        Task<bool> CheckIfEmployeeIsInRole(string currentUserId, string roleName);
     }
 }

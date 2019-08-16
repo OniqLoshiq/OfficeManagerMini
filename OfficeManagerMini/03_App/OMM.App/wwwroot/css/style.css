@@ -406,6 +406,7 @@ tfoot input {
 
 #assignmentDetails img {
     width: 140px;
+    max-height: 140px;
 }
 
 #assignmentAssistants img{

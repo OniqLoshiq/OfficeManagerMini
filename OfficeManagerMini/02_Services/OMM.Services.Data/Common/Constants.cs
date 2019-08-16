@@ -28,6 +28,6 @@
 
         public const string STATUS_COMPLETED = "Completed";
 
-
+        public const int PROGRESS_MAX_VALUE = 100;
     }
 }

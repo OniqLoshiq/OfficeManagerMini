@@ -21,5 +21,9 @@
         public const string STATUS_WAITING = "Waiting";
 
         public const string STATUS_DELAYED = "Delayed";
+
+        public const string PROJECT_MANAGER_ROLE = "Project Manager";
+
+        public const int PROJECT_MANAGER_ROLE_ID = 1;
     }
 }

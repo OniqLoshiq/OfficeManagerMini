@@ -276,6 +276,15 @@ namespace OMM.Services.Data
             return fullName;
         }
 
+        public async Task<bool> CheckIfEmployeeIsInRole(string currentUserId, string roleName)
+        {
+            var employee = await this.context.Users.SingleOrDefaultAsync(e => e.Id == currentUserId);
+
+            var result =  await this.userManger.IsInRoleAsync(employee, roleName);
+
+            return result;
+        }
+
         //Helper methods
 
         private async Task SetNewPassword(Employee employee, string newPassword)

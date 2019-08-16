@@ -14,5 +14,8 @@ namespace OMM.Services.Data
 
         IQueryable<ProjectAllListDto> GetMyProjects(string employeeId);
 
+        IQueryable<T> GetProjectById<T>(string projectId);
+
+        Task<bool> ChangeDataAsync(ProjectDetailsChangeDto input);
     }
 }

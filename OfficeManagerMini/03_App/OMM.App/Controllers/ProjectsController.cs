@@ -7,16 +7,19 @@ using OMM.App.Common;
 using OMM.App.Models.ViewModels;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
+using OMM.Services.Data.DTOs.Projects;
 
 namespace OMM.App.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly IProjectsService projectsService;
+        private readonly IEmployeesService employeesService;
 
-        public ProjectsController(IProjectsService projectsService)
+        public ProjectsController(IProjectsService projectsService, IEmployeesService employeesService)
         {
             this.projectsService = projectsService;
+            this.employeesService = employeesService;
         }
 
         public async Task<IActionResult> MyProjects()
@@ -41,9 +44,38 @@ namespace OMM.App.Controllers
             return this.View(myProjects);
         }
 
-        public IActionResult Details()
+        public async Task<IActionResult> Details(string id)
         {
-            return View();
+            var project = (await this.projectsService.GetProjectById<ProjectDetailsDto>(id).FirstOrDefaultAsync()).To<ProjectDetailsViewModel>();
+
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isCurrentUserParticipant = project.Participants.Any(p => p.ParticipantId == currentUserId);
+            var isCurrentUserAdmin = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.ADMIN_ROLE);
+            var isCurrentUserManagement = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.MANAGEMENT_ROLE);
+
+            if (isCurrentUserParticipant || isCurrentUserAdmin || isCurrentUserManagement)
+            {
+                ViewBag.isCurrentUserProjectManager = project.Participants.FirstOrDefault(p => p.ParticipantId == currentUserId)?.ProjectPositionName == Constants.PROJECT_MANAGER_ROLE;
+
+                return View(project);
+            }
+
+            return Forbid();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeData(ProjectDetailsChangeViewModel input)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Details", new { id = input.Id });
+            }
+
+            var projectDataToChange = input.To<ProjectDetailsChangeDto>();
+
+            await this.projectsService.ChangeDataAsync(projectDataToChange);
+
+            return RedirectToAction("Details", new { id = input.Id });
         }
 
 
