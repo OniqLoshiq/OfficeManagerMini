@@ -13,8 +13,6 @@ namespace OMM.Services.Data
 {
     public class AssignmentsService : IAssignmentsService
     {
-        private const int PROGRESS_MAX_VALUE = 100;
-
         private readonly OmmDbContext context;
         private readonly IStatusesService statusesService;
         private readonly IAssignmentsEmployeesService assignmentsEmployeesService;
@@ -95,23 +93,54 @@ namespace OMM.Services.Data
         public async Task<bool> ChangeDataAsync(AssignmentDetailsChangeDto input)
         {
             var assignment = await this.context.Assignments.FirstOrDefaultAsync(a => a.Id == input.Id);
+            var assignmentStatusName = await this.statusesService.GetStatusNameByIdAsync(assignment.StatusId);
+            var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
 
-            if(input.Deadline != "-")
+            if (input.Deadline != "-" && input.Deadline != null)
             {
                 assignment.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             }
-           
-            if(input.EndDate != "-")
+            else if (input.Deadline == null)
             {
-                assignment.Progress = PROGRESS_MAX_VALUE;
+                assignment.Deadline = null;
+            }
+
+            if (input.EndDate != "-" && input.EndDate != null)
+            {
+                assignment.Progress = Constants.PROGRESS_MAX_VALUE;
                 assignment.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
                 assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
             }
-            else if((await this.statusesService.GetStatusNameByIdAsync(input.StatusId)) == Constants.STATUS_COMPLETED)
+            else if (input.EndDate == null)
+            {
+                assignment.EndDate = null;
+
+                if (assignmentStatusName == Constants.STATUS_COMPLETED)
+                {
+                    if (inputStatusName == Constants.STATUS_COMPLETED)
+                    {
+                        assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
+                    }
+                    else
+                    {
+                        assignment.StatusId = input.StatusId;
+                    }
+                }
+                else 
+                {
+                    if (inputStatusName != Constants.STATUS_COMPLETED)
+                    {
+                        assignment.StatusId = input.StatusId;
+                    }
+                }
+
+                assignment.Progress = input.Progress;
+            }
+            else if (inputStatusName == Constants.STATUS_COMPLETED)
             {
                 assignment.EndDate = DateTime.UtcNow;
                 assignment.StatusId = input.StatusId;
-                assignment.Progress = PROGRESS_MAX_VALUE;
+                assignment.Progress = Constants.PROGRESS_MAX_VALUE;
             }
             else
             {
@@ -123,7 +152,7 @@ namespace OMM.Services.Data
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
-           
+
         }
 
         public async Task<bool> DeleteAsync(string id)
@@ -150,6 +179,7 @@ namespace OMM.Services.Data
             assignment.ExecutorId = input.ExecutorId;
 
             assignment.StartingDate = DateTime.ParseExact(input.StartingDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+
             if(input.Deadline != "")
             {
                 assignment.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
@@ -181,7 +211,7 @@ namespace OMM.Services.Data
             {
                 assignment.EndDate = DateTime.UtcNow;
                 assignment.StatusId = input.StatusId;
-                assignment.Progress = PROGRESS_MAX_VALUE;
+                assignment.Progress = Constants.PROGRESS_MAX_VALUE;
             }
             else
             {
