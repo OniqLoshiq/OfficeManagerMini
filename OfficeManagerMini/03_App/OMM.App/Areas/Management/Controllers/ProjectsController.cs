@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OMM.App.Areas.Management.Models.InputModels;
+using OMM.App.Areas.Management.Models.ViewModels;
+using OMM.App.Common;
 using OMM.App.Infrastructure.ViewComponents.Models.Employees;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
@@ -103,6 +105,28 @@ namespace OMM.App.Areas.Management.Controllers
         public IActionResult GetProjectPositionsViewComponent()
         {
             return ViewComponent("ProjectPositionsList", new { projectPositionId = 0 });
+        }
+
+        public async Task<IActionResult> All()
+        {
+            var projects = new ProjectsAllViewModel();
+
+            projects.AllOngoingProjects = await this.projectsService.GetAllProjects()
+                    .Where(p => p.StatusName != Constants.STATUS_COMPLETED)
+                    .OrderByDescending(p => p.StatusName == Constants.STATUS_INPROGRESS)
+                    .ThenByDescending(p => p.Priority)
+                    .To<ProjectsAllOngoingViewModel>()
+                    .ToListAsync();
+
+            projects.AllCompletedProjects = await this.projectsService.GetAllProjects()
+                    .Where(p => p.StatusName == Constants.STATUS_COMPLETED)
+                    .OrderByDescending(p => p.EndDate)
+                    .ThenByDescending(p => p.Priority)
+                    .To<ProjectsAllCompletedViewModel>()
+                    .ToListAsync();
+
+
+            return this.View(projects);
         }
     }
 }

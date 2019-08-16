@@ -121,4 +121,74 @@
             });
         });
     }
+
+    var id5 = document.getElementById("myOngoingProjects");
+    if (id5) {
+        var table6 = $('#myOngoingProjects').DataTable({
+            buttons: ['copy', 'excel', 'pdf',
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        stripHtml: false,
+                    }
+                },
+
+                'colvis'],
+            "aaSorting": []
+        });
+        table6.buttons().container()
+            .appendTo('#myOngoingProjects_wrapper .col-md-6:eq(0)');
+
+        $('#myOngoingProjects tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="' + title + '" />');
+        });
+
+        // DataTable
+        var tableSearch6 = $('#myOngoingProjects').DataTable();
+
+        // Apply the search
+        tableSearch6.columns().eq(0).each(function (colIdx) {
+            $('input', tableSearch6.column(colIdx).footer()).on('keyup change', function () {
+                tableSearch6.column(colIdx)
+                    .search(this.value.replace(/;/g, "|"), true, false)
+                    .draw();
+            });
+        });
+    }
+
+    var id6 = document.getElementById("myCompletedProjects");
+    if (id6) {
+        var table7 = $('#myCompletedProjects').DataTable({
+            buttons: ['copy', 'excel', 'pdf',
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        stripHtml: false,
+                    }
+                },
+
+                'colvis'],
+            "aaSorting": []
+        });
+        table7.buttons().container()
+            .appendTo('#myCompletedProjects_wrapper .col-md-6:eq(0)');
+
+        $('#myCompletedProjects tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="' + title + '" />');
+        });
+
+        // DataTable
+        var tableSearch7 = $('#myCompletedProjects').DataTable();
+
+        // Apply the search
+        tableSearch7.columns().eq(0).each(function (colIdx) {
+            $('input', tableSearch7.column(colIdx).footer()).on('keyup change', function () {
+                tableSearch7.column(colIdx)
+                    .search(this.value.replace(/;/g, "|"), true, false)
+                    .draw();
+            });
+        });
+    }
 });

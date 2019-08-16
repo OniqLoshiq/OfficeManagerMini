@@ -33,5 +33,15 @@ namespace OMM.Services.Data
             
             return result > 0 && reportResult;
         }
+
+        public IQueryable<ProjectAllListDto> GetAllProjects()
+        {
+            return this.context.Projects.To<ProjectAllListDto>();
+        }
+
+        public IQueryable<ProjectAllListDto> GetMyProjects(string employeeId)
+        {
+            return this.context.Projects.Where(p => p.Participants.Any(x => x.EmployeeId == employeeId)).To<ProjectAllListDto>();
+        }
     }
 }

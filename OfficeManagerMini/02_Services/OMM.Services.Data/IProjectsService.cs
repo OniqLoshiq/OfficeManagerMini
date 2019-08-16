@@ -9,5 +9,10 @@ namespace OMM.Services.Data
         IQueryable<ProjectListDto> GetAllProjectsForList();
 
         Task<bool> CreateProjectAsync(ProjectCreateDto input);
+
+        IQueryable<ProjectAllListDto> GetAllProjects();
+
+        IQueryable<ProjectAllListDto> GetMyProjects(string employeeId);
+
     }
 }

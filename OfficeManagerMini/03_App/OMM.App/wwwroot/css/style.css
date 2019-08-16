@@ -299,20 +299,20 @@ tfoot input {
         color: #007bff;
     }
 
-#ongoingAssignments .dataTables_paginate .page-link {
+#ongoingAssignments .dataTables_paginate .page-link, #ongoingProjects .dataTables_paginate .page-link {
     color: #212529;
 }
 
-    #ongoingAssignments .dataTables_paginate .page-link:hover {
+    #ongoingAssignments .dataTables_paginate .page-link:hover, #ongoingProjects .dataTables_paginate .page-link:hover {
         color: #ffc107;
     }
 
-#ongoingAssignments .dataTables_paginate .page-item.active .page-link {
+#ongoingAssignments .dataTables_paginate .page-item.active .page-link, #ongoingProjects .dataTables_paginate .page-item.active .page-link {
     background-color: #A7A8AA;
     border-color: #A7A8AA;
 }
 
-#ongoingAssignments td {
+#ongoingAssignments td, #ongoingProjects td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -320,20 +320,20 @@ tfoot input {
     max-width: 20px;
 }
 
-#collapseCompletedAssignments .dataTables_paginate .page-link {
+#collapseCompletedAssignments .dataTables_paginate .page-link, #collapseCompletedProjects .dataTables_paginate .page-link {
     color: #212529;
 }
 
-    #collapseCompletedAssignments .dataTables_paginate .page-link:hover {
+    #collapseCompletedAssignments .dataTables_paginate .page-link:hover, #collapseCompletedProjects .dataTables_paginate .page-link:hover {
         color: #ffc107;
     }
 
-#collapseCompletedAssignments .dataTables_paginate .page-item.active .page-link {
+#collapseCompletedAssignments .dataTables_paginate .page-item.active .page-link, #collapseCompletedProjects .dataTables_paginate .page-item.active .page-link {
     background-color: #A7A8AA;
     border-color: #A7A8AA;
 }
 
-#collapseCompletedAssignments td {
+#collapseCompletedAssignments td, #collapseCompletedProjects td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<OMM.App.Models.ViewModels.ProjectsAllMyOngoingViewModel>
+@using OMM.App.Common;
+
+
+<div id="ongoingProjects">
+    <table id="myOngoingProjects" class="display table table-sm table-hover" style="width: 100%">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col" style="width: 20px" title="Priority">Pr.</th>
+                <th scope="col" style="width: 180px">Client</th>
+                <th scope="col" style="width: 220px">Name</th>
+                <th scope="col" style="width: 60px" title="Participants Count">n.Part.</th>
+                <th scope="col" style="width: 60px" title="Assignments Count">n.Assignm.</th>
+                <th scope="col" style="width: 90px">Status</th>
+                <th scope="col" style="width: 90px">Progress</th>
+                <th scope="col" style="width: 90px">Created On</th>
+                <th scope="col" style="width: 90px">Deadline</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td class="align-middle py-1"><span class="badge badge-info px-2 py-1">@project.Priority</span></td>
+                    <td class="align-middle" title="@project.Client">@project.Client</td>
+                    <td class="align-middle" title="@project.Name">
+                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id" class="text-dark" style="text-decoration: underline;">
+                            @project.Name
+                        </a>
+                    </td>
+                    <td class="align-middle">@project.ParticipantsCount</td>
+                    <td class="align-middle">@project.AssignmentsCount</td>
+                    <td class="align-middle">
+                        @if (project.StatusName == Constants.STATUS_INPROGRESS)
+                        {
+                            <span class="badge badge-success">@project.StatusName</span>
+                        }
+                        else if (project.StatusName == Constants.STATUS_FROZEN)
+                        {
+                            <span class="badge badge-primary">@project.StatusName</span>
+                        }
+                        else if (project.StatusName == Constants.STATUS_DELAYED)
+                        {
+                            <span class="badge badge-danger">@project.StatusName</span>
+                        }
+                        else if (project.StatusName == Constants.STATUS_WAITING)
+                        {
+                            <span class="badge badge-warning">@project.StatusName</span>
+                        }
+                    </td>
+                    <td class="align-middle">
+                        <div class="progress">
+                            <div class="progress-bar bg-info text-dark" role="progressbar" style="width: @(project.Progress)%;" aria-valuenow="@(project.Progress)" aria-valuemin="0" aria-valuemax="100">@(project.Progress)%</div>
+                        </div>
+                    </td>
+                    <td class="align-middle" title="@project.CreatedOn">@project.CreatedOn</td>
+                    <td class="align-middle" title="@project.Deadline">@project.Deadline</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Pr.</th>
+                <th>Client</th>
+                <th>Name</th>
+                <th>n.Part.</th>
+                <th>n.Assignm.</th>
+                <th>Status</th>
+                <th>Progress</th>
+                <th>Created On</th>
+                <th>Deadline</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
