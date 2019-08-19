@@ -2,6 +2,7 @@
 using OMM.Domain;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data.Common;
+using OMM.Services.Data.DTOs.Assignments;
 using System.Collections.Generic;
 
 namespace OMM.Services.Data.DTOs.Projects
@@ -25,6 +26,8 @@ namespace OMM.Services.Data.DTOs.Projects
         public ProjectDetailsChangeDto ChangeData { get; set; }
 
         public List<ProjectDetailsParticipantDto> Participants { get; set; } = new List<ProjectDetailsParticipantDto>();
+
+        public List<AssignmentListDto> Assignments { get; set; } = new List<AssignmentListDto>();
 
 
         public void CreateMappings(IProfileExpression configuration)

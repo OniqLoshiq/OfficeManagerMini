@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OMM.App.Common;
+using OMM.App.Models.InputModels;
 using OMM.App.Models.ViewModels;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
@@ -78,6 +79,37 @@ namespace OMM.App.Controllers
             return RedirectToAction("Details", new { id = input.Id });
         }
 
+        public IActionResult AddParticipant(string id)
+        {
+            var model = new ProjectParticipantAddInputModel
+            {
+                ProjectId = id
+            };
 
+            return PartialView("_AddParticipantPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddParticipant(ProjectParticipantAddInputModel input)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_AddParticipantPartial", input);
+            }
+            var participantToAdd = input.To<ProjectParticipantAddDto>();
+
+            var checkIsEmployeeParticipant = await this.projectsService.CheckParticipantAsync(participantToAdd);
+
+            if(checkIsEmployeeParticipant)
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessages.INVALID_PARTICIPANTS_DUPLICATE);
+
+                return PartialView("_AddParticipantPartial", input);
+            }
+
+            await this.projectsService.AddParticipantAsync(participantToAdd);
+
+            return RedirectToAction("Details", new { id = input.ProjectId });
+        }
     }
 }

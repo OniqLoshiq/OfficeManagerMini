@@ -2,3 +2,21 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+function addParticipant() {
+    $.ajax({
+        type: "Post",
+        url: '/Projects/AddParticipant',
+        data: $("#fotmContent").serialize(),
+        success: function (result) {
+            if (result.success) {
+
+            } else {
+                $('#Preview').html(result);
+            }
+        }
+    });
+    return false;
+};
+
+

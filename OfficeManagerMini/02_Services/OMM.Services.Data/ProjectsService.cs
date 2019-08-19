@@ -120,5 +120,24 @@ namespace OMM.Services.Data
 
             return result > 0;
         }
+
+        public async Task<bool> AddParticipantAsync(ProjectParticipantAddDto input)
+        {
+            var participantToAdd = input.To<EmployeesProjectsPositions>();
+
+            this.context.EmployeesProjectsRoles.Add(participantToAdd);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> CheckParticipantAsync(ProjectParticipantAddDto input)
+        {
+            var isParticipant = (await this.context.Projects
+                .SingleOrDefaultAsync(p => p.Id == input.ProjectId))
+                .Participants.Any(p => p.EmployeeId == input.EmployeeId);
+
+            return isParticipant;
+        }
     }
 }

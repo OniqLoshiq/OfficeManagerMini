@@ -6,9 +6,13 @@
 
 @inject UserManager<Employee> UserManager
 
+@{
+    ViewData["ProjectId"] = Model.Id;
+}
+
 <h4 class="mb-1 text-center">Project</h4>
 <hr class="hr-oom" style="width:300px;" />
-<h5 class="mb-2 text-center">@Model.Name</h5>
+<h4 class="mb-2 text-center">@Model.Name</h4>
 
 @if (this.User.IsInRole(Constants.ADMIN_ROLE) || this.User.IsInRole(Constants.MANAGEMENT_ROLE))
 {
@@ -30,6 +34,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        Deleting this projecet will result in deletion of the related assignments also!
                         Are you sure you want to delete this project?
                     </div>
                     <div class="modal-footer">
@@ -46,7 +51,7 @@
 
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-3" id="projectDetails">
+        <div class="col-md-12 col-lg-3" id="projectDetails">
             <div class="h6 mb-1">Priority: <span class="badge badge-warning px-2 py-1" style="font-size: 14px">@Model.Priority</span></div>
             <div class="h6 mb-1">Client: @Model.Client</div>
             <hr class="hr-oom" />
@@ -84,8 +89,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-7">
-            <partial name="_ProjectParticipantsPartial" model="@Model.Participants" />
+        <div class="col-md-12 col-lg-7">
+            <partial name="_ProjectDetailsParticipantsPartial" model="@Model.Participants" view-data="@ViewData" />
         </div>
     </div>
     <div class="row justify-content-center mt-2">
@@ -95,8 +100,8 @@
                 <button type="button" class="btn btn-outline-warning p-1" data-toggle="modal" data-target="#projectChangeData">
                     Change
                 </button>
-                <partial name="_ProjectChangeDataPartial" model="@Model.ChangeData" />
-                <a class="btn btn-outline-success btn-sm mr-2" asp-controller="Reports" asp-action="Details" asp-route-id="@Model.ReportId" role="button" title="View report">
+                <partial name="_ProjectDetailsChangeDataPartial" model="@Model.ChangeData" />
+                <a class="btn btn-info btn-sm mr-2" asp-controller="Reports" asp-action="Details" asp-route-id="@Model.ReportId" role="button" title="View report">
                     <i class="far fa-eye"></i> View Report
                 </a>
             </div>
@@ -117,6 +122,23 @@
             <textarea id="mytextarea" style="width:100%; height:100px">@Model.Description</textarea>
         </div>
     </div>
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <hr class="hr-oom" />
+            <div class="h6">Assignments: </div>
+            <partial name="_ProjectAssignmentsOnGoingPartial" model="@Model.AssignmentsOnGoing" />
+
+            <hr class="hr-oom mt-3" style="width:300px;" />
+            <h5 class="mb-3 text-center">
+                <button type="button" class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseCompletedAssignments" aria-expanded="false" aria-controls="collapseCompletedAssignments">
+                    Completed
+                </button>
+            </h5>
+            <hr class="hr-oom" style="width:300px;" />
+
+            <partial name="_ProjectAssignmentsCompletedPartial" model="@Model.AssignmentsCompleted" />
+        </div>
+    </div>
 </div>
 
 @section Scripts{
@@ -133,5 +155,29 @@
             weekNumbers: true,
             dateFormat: "d-m-Y"
         });
+    </script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/run-dataTable.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+    <script>
+    function Open(projectId) {
+        $.ajax({
+            type: "Get",
+            url: '@Url.Action("AddParticipant", "Projects")',
+            data: { id: projectId },
+            success: function (data) {
+                $('#Preview').html(data);
+                $('#addParticipant').modal('show');
+            }
+        });
+        }
     </script>
 }

@@ -6,11 +6,15 @@ namespace OMM.Services.Data.DTOs.Projects
 {
     public class ProjectDetailsParticipantDto : IMapFrom<EmployeesProjectsPositions>, IHaveCustomMappings
     {
+        public string ProjectId { get; set; }
+
         public string ParticipantId { get; set; }
 
         public string ProfilePicture { get; set; }
 
         public string FullName { get; set; }
+
+        public string DepartmentName { get; set; }
 
         public int ProjectPositionId { get; set; }
 
@@ -24,7 +28,9 @@ namespace OMM.Services.Data.DTOs.Projects
                 .ForMember(destination => destination.ProfilePicture,
                 opts => opts.MapFrom(origin => origin.Employee.ProfilePicture))
                 .ForMember(destination => destination.FullName,
-                opts => opts.MapFrom(origin => origin.Employee.FullName));
+                opts => opts.MapFrom(origin => origin.Employee.FullName))
+                .ForMember(destination => destination.DepartmentName,
+                opts => opts.MapFrom(origin => origin.Employee.Department.Name));
         }
     }
 }

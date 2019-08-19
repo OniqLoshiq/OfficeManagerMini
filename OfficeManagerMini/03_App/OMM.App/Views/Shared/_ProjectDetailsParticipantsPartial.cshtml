@@ -1,0 +1,60 @@
+﻿@model IList<OMM.App.Models.ViewModels.ProjectDetailsParticipantViewModel>
+
+<div class="d-flex justify-content-end ">
+    <button type="button" class="btn btn-outline-success btn-sm" title="Add participant" data-toggle="modal" onclick="Open('@ViewData["ProjectId"]')">
+        <i class="fas fa-user-plus pr-2"></i>Add Participant
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addParticipant" tabindex="-1" role="dialog" aria-labelledby="addParticipantModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <!-- Modal Content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addParticipantModalLongTitle">Add Participant to Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="Preview">
+                @*<partial name="_AddParticipantPartial" />*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="h6">Participants</div>
+<hr class="hr-oom-mt-11" />
+<table class="table table-striped table-sm table-warning table-hover w-100" id="participants-table">
+    <thead class="bg-warning">
+        <tr>
+            <th scope="col" style="width: 3%; font-weight:bold;">N.</th>
+            <th scope="col" style="width: 35.32%; font-weight:bold;" colspan="2">Employee</th>
+            <th scope="col" class="text-center" style="width: 22.99%; font-weight:bold;">Department</th>
+            <th scope="col" class="text-center" style="width: 22.99%; font-weight:bold;">Project Position</th>
+            <th scope="col" class="text-center" style="width: 15.66%; font-weight:bold;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr class="participants">
+                <td class="align-middle" style="width: 3%;">@(i + 1)</td>
+                <td class="align-middle" style="width: 7%"><img src="@(Model[i].ProfilePicture)" class="proj-participant-img rounded-circle mx-left " alt="..."></td>
+                <td class="align-middle" style="width: 28.32%">@Model[i].FullName</td>
+                <td class="align-middle text-center">@Model[i].DepartmentName</td>
+                <td class="align-middle text-center">@Model[i].ProjectPositionName</td>
+                <td class="align-middle text-center">
+                    <a class="btn px-1 py-0 text-success" asp-controller="Projects" asp-action="RemoveParticipant" asp-route-id="@Model[i].ParticipantId" role="button" style="font-size: 14px;" title="Edit">
+                        <i class="fas fa-user-edit"></i>
+                    </a>
+                    <a class="btn px-1 py-0 text-danger" asp-controller="Projects" asp-action="RemoveParticipant" asp-route-id="@Model[i].ParticipantId" role="button" style="font-size: 14px;" title="Remove">
+                        <i class="fas fa-user-times"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
