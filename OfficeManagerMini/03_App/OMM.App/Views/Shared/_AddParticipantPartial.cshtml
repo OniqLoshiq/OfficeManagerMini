@@ -1,16 +1,16 @@
 ﻿@model OMM.App.Models.InputModels.ProjectParticipantAddInputModel
 
-<form id="fotmContent"  method="post">
+<form id="fotmContent" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group ">
-        <label class="sr-only" asp-for="EmployeeId"></label>
+        <label class="col-form-label" asp-for="EmployeeId"></label>
         <div class="input-group mb-2">
             <vc:employees-department-list employee-id="@Model.EmployeeId"></vc:employees-department-list>
         </div>
         <span asp-validation-for="EmployeeId" class="text-danger"></span>
     </div>
     <div class="form-group ">
-        <label class="sr-only" asp-for="ProjectPositionId"></label>
+        <label class="col-form-label" asp-for="ProjectPositionId"></label>
         <div class="input-group mb-2">
             <vc:project-positions-list project-position-id="0"></vc:project-positions-list>
         </div>

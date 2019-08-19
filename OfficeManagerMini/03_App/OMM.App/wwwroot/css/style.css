@@ -28,6 +28,10 @@ form label {
     font-weight: bold;
 }
 
+.col-form-label {
+    font-weight:normal;
+}
+
 footer {
     font-size: small;
     bottom: 0;

@@ -13,6 +13,7 @@ function addParticipant() {
 
             } else {
                 $('#Preview').html(result);
+                $('.selectpicker').selectpicker('refresh');
             }
         }
     });

@@ -175,6 +175,7 @@
             data: { id: projectId },
             success: function (data) {
                 $('#Preview').html(data);
+                $('.selectpicker').selectpicker('refresh');
                 $('#addParticipant').modal('show');
             }
         });
