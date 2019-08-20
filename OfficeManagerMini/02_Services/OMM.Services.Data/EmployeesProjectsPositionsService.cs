@@ -23,6 +23,11 @@ namespace OMM.Services.Data
                 .Where(p => p.ProjectId == participantToChange.ProjectId 
                 && p.EmployeeId == participantToChange.EmployeeId).SingleOrDefaultAsync();
 
+            if(projectParticipantRoleToDelete.ProjectPositionId == participantToChange.ProjectPositionId)
+            {
+                return true;
+            }
+
             var newProjectParticiapntRole = participantToChange.To<EmployeesProjectsPositions>();
 
             this.context.EmployeesProjectsRoles.Remove(projectParticipantRoleToDelete);

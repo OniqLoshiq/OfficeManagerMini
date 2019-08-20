@@ -17,12 +17,14 @@ namespace OMM.App.Controllers
         private readonly IProjectsService projectsService;
         private readonly IEmployeesService employeesService;
         private readonly IEmployeesProjectsPositionsService employeesProjectsPositionsService;
+        private readonly IProjectPositionsService projectPositionsService;
 
-        public ProjectsController(IProjectsService projectsService, IEmployeesService employeesService, IEmployeesProjectsPositionsService employeesProjectsPositionsService)
+        public ProjectsController(IProjectsService projectsService, IEmployeesService employeesService, IEmployeesProjectsPositionsService employeesProjectsPositionsService, IProjectPositionsService projectPositionsService)
         {
             this.projectsService = projectsService;
             this.employeesService = employeesService;
             this.employeesProjectsPositionsService = employeesProjectsPositionsService;
+            this.projectPositionsService = projectPositionsService;
         }
 
         public async Task<IActionResult> MyProjects()
@@ -112,7 +114,7 @@ namespace OMM.App.Controllers
 
             return RedirectToAction("Details", new { id = input.ProjectId });
         }
-        
+
         public async Task<IActionResult> ChangeProjectPosition([FromQuery]string projectId, [FromQuery]string participantId, [FromQuery]int projectPositionId)
         {
             var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -131,7 +133,7 @@ namespace OMM.App.Controllers
                 ProjectId = projectId,
                 EmployeeId = participantId,
                 EmployeeFullName = employeeFullName,
-                ProjectPositionId = projectPositionId,
+                ProjectPositionId = projectPositionId
             };
 
             return PartialView("_ChangeProjectPositionPartial", model);
@@ -158,7 +160,10 @@ namespace OMM.App.Controllers
 
             await this.employeesProjectsPositionsService.ChangeEmployeeProjectPositionAsync(participantToChange);
 
-            return RedirectToAction("Details", new { id = input.ProjectId });
+            var newPositionName = this.projectPositionsService.GetProjectPositionNameById(participantToChange.ProjectPositionId);
+            var participantFullName = participantToChange.EmployeeFullName;
+
+            return Json(new { success = true, participantName = participantFullName, position = newPositionName });
         }
     }
 }

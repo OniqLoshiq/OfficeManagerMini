@@ -48,10 +48,14 @@ function changeProjectPosition() {
     $.ajax({
         type: "Post",
         url: '/Projects/ChangeProjectPosition',
-        data: $('#formContent').serialize(),
+        data: $("#formContent").serialize(),
         success: function (result) {
             if (result.success) {
+                $('#changeProjectPosition').on('hidden.bs.modal', function (e) {
+                    $("tr:contains('" + result.participantName + "') td:eq(4)").text(result.position);
+                });
 
+                $('#changeProjectPosition').modal('hide');
             } else {
                 $('#PreviewChangePosition').html(result);
             }
