@@ -152,9 +152,9 @@ namespace OMM.Services.Data
 
             var newProjectPosition = this.projectPositionsService.GetProjectPositionNameById(input.ProjectPositionId);
 
-            if(participantToChange.ProjectPosition.Name == Constants.MANAGEMENT_ROLE && newProjectPosition != Constants.MANAGEMENT_ROLE)
+            if(participantToChange.ProjectPosition.Name == Constants.PROJECT_MANAGER_ROLE && newProjectPosition != Constants.PROJECT_MANAGER_ROLE)
             {
-                var projectManagerRolesCount = projectParticipants.Where(p => p.ProjectPosition.Name == Constants.MANAGEMENT_ROLE).Count();
+                var projectManagerRolesCount = projectParticipants.Where(p => p.ProjectPosition.Name == Constants.PROJECT_MANAGER_ROLE).Count();
 
                 if(projectManagerRolesCount > 1)
                 {

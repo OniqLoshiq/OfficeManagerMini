@@ -6,5 +6,7 @@ namespace OMM.Services.Data
     public interface IEmployeesProjectsPositionsService
     {
         Task<bool> ChangeEmployeeProjectPositionAsync(ProjectParticipantChangeDto participantToChange);
+
+        Task<bool> RemoveParticipantAsync(ProjectParticipantChangeDto participantToRemove);
     }
 }

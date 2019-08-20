@@ -38,5 +38,17 @@ namespace OMM.Services.Data
 
             return resultAdd > 0 && removeResult > 0;
         }
+
+        public async Task<bool> RemoveParticipantAsync(ProjectParticipantChangeDto participantToRemove)
+        {
+            var projectParticipantToDelete = await this.context.EmployeesProjectsRoles
+                .Where(p => p.ProjectId == participantToRemove.ProjectId
+                && p.EmployeeId == participantToRemove.EmployeeId).SingleOrDefaultAsync();
+
+            this.context.EmployeesProjectsRoles.Remove(projectParticipantToDelete);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
     }
 }

@@ -22,7 +22,7 @@ function addParticipant() {
         data: $("#fotmContent").serialize(),
         success: function (result) {
             if (result.success) {
-
+                window.location.href = result.url;
             } else {
                 $('#Preview').html(result);
                 $('.selectpicker').selectpicker('refresh');
@@ -52,12 +52,50 @@ function changeProjectPosition() {
         success: function (result) {
             if (result.success) {
                 $('#changeProjectPosition').on('hidden.bs.modal', function (e) {
-                    $("tr:contains('" + result.participantName + "') td:eq(4)").text(result.position);
+                    $("tr:contains('" + result.participantName + "') td:eq(0)").text(result.position);
                 });
 
                 $('#changeProjectPosition').modal('hide');
             } else {
                 $('#PreviewChangePosition').html(result);
+            }
+        }
+    });
+    return false;
+};
+
+
+function OpenRemoveParticipantModal(projectId, participantId, projectPositionId) {
+    $.ajax({
+        type: "Get",
+        url: '/Projects/RemoveParticipant',
+        data: { projectId: projectId, participantId: participantId, projectPositionId: projectPositionId },
+        success: function (data) {
+            $('#PreviewRemoveParticipant').html(data);
+            $('#removeParticipant').modal('show');
+        }
+    });
+}
+
+function removeParticipant() {
+    $.ajax({
+        type: "Post",
+        url: '/Projects/RemoveParticipant',
+        data: $("#formContent").serialize(),
+        success: function (result) {
+            if (result.success) {
+                $('#removeParticipant').on('hidden.bs.modal', function (e) {
+                    $("tr:contains('" + result.participantName + "')").remove();
+
+                    var participant = 0;
+
+                    $('#participants-table tr').each(function () {
+                        $(this).find("td").eq(0).text(participant++);
+                    });
+                });
+                $('#removeParticipant').modal('hide');
+            } else {
+                $('#PreviewRemoveParticipant').html(result);
             }
         }
     });

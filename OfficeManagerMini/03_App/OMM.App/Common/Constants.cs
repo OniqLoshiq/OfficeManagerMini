@@ -25,5 +25,8 @@
         public const string PROJECT_MANAGER_ROLE = "Project Manager";
 
         public const int PROJECT_MANAGER_ROLE_ID = 1;
+
+        public const string PROJECT_PARTICIPANT_ROLE = "Participant";
+
     }
 }

@@ -62,6 +62,11 @@ namespace OMM.App.Controllers
 
             var project = (await this.projectsService.GetProjectById<ProjectDetailsDto>(id).FirstOrDefaultAsync()).To<ProjectDetailsViewModel>();
 
+            project.Participants = project.Participants
+                .OrderByDescending(p => p.ProjectPositionName == Constants.PROJECT_MANAGER_ROLE)
+                .ThenByDescending(p => p.ProjectPositionName == Constants.PROJECT_PARTICIPANT_ROLE)
+                .ToList();
+
             ViewBag.isCurrentUserProjectManager = project.Participants.FirstOrDefault(p => p.ParticipantId == currentUserId)?.ProjectPositionName == Constants.PROJECT_MANAGER_ROLE;
 
             return View(project);
@@ -112,7 +117,9 @@ namespace OMM.App.Controllers
 
             await this.projectsService.AddParticipantAsync(participantToAdd);
 
-            return RedirectToAction("Details", new { id = input.ProjectId });
+            var redirectUrl = Url.Action("Details", "Projects", new { id = input.ProjectId });
+
+            return Json(new { success = true, url = redirectUrl });
         }
 
         public async Task<IActionResult> ChangeProjectPosition([FromQuery]string projectId, [FromQuery]string participantId, [FromQuery]int projectPositionId)
@@ -164,6 +171,56 @@ namespace OMM.App.Controllers
             var participantFullName = participantToChange.EmployeeFullName;
 
             return Json(new { success = true, participantName = participantFullName, position = newPositionName });
+        }
+
+        public async Task<IActionResult> RemoveParticipant([FromQuery]string projectId, [FromQuery]string participantId, [FromQuery]int projectPositionId)
+        {
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var IsEmployeeAuthorizedToChangeProject = await this.projectsService.IsEmployeeAuthorizedToChangeProject(projectId, currentUserId);
+
+            if (!IsEmployeeAuthorizedToChangeProject)
+            {
+                return Forbid();
+            }
+
+            var employeeFullName = await this.employeesService.GetEmployeeFullNameByIdAsync(participantId);
+
+            var model = new ProjectParticipantChangeViewModel
+            {
+                ProjectId = projectId,
+                EmployeeId = participantId,
+                EmployeeFullName = employeeFullName,
+                ProjectPositionId = projectPositionId
+            };
+
+            return PartialView("_RemoveProjectParticipantPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveParticipant(ProjectParticipantChangeViewModel input)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_RemoveProjectParticipantPartial", input);
+            }
+
+            var participantToRemove = input.To<ProjectParticipantChangeDto>();
+
+            var checkIsEmployeeParticipantLastManager = await this.projectsService.CheckIsParticipantLastManagerAsync(participantToRemove);
+
+            if (checkIsEmployeeParticipantLastManager)
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessages.INVALID_PARTICIPANTS_MANAGER);
+
+                return PartialView("_RemoveProjectParticipantPartial", input);
+            }
+
+            await this.employeesProjectsPositionsService.RemoveParticipantAsync(participantToRemove);
+
+            var participantFullName = participantToRemove.EmployeeFullName;
+
+            return Json(new { success = true, participantName = participantFullName });
         }
     }
 }

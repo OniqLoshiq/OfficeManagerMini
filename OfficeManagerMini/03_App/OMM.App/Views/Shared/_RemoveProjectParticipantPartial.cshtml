@@ -1,0 +1,15 @@
+﻿@model OMM.App.Models.ViewModels.ProjectParticipantChangeViewModel
+
+    <form id="formContent" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="text-center">Are you sure that you want to remove <em>@Model.EmployeeFullName</em> from the project?</div>
+        <input type="hidden" asp-for="ProjectId" />
+        <input type="hidden" asp-for="EmployeeId" />
+        <input type="hidden" asp-for="ProjectPositionId" />
+        <input type="hidden" asp-for="EmployeeFullName" />
+        <div id="dialog-alert"></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline-danger" onclick="removeParticipant()">Remove</button>
+        </div>
+    </form>
