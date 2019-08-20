@@ -117,6 +117,7 @@ namespace OMM.App
             services.AddTransient<IAssignmentsEmployeesService, AssignmentsEmployeesService>();
             services.AddTransient<IProjectPositionsService, ProjectPositionsService>();
             services.AddTransient<IReportsService, ReportsService>();
+            services.AddTransient<IEmployeesProjectsPositionsService, EmployeesProjectsPositionsService>();
 
             //Third parties services
             services.AddTransient<ICloudinaryService, CloudinaryService>();

@@ -16,11 +16,13 @@ namespace OMM.App.Controllers
     {
         private readonly IProjectsService projectsService;
         private readonly IEmployeesService employeesService;
+        private readonly IEmployeesProjectsPositionsService employeesProjectsPositionsService;
 
-        public ProjectsController(IProjectsService projectsService, IEmployeesService employeesService)
+        public ProjectsController(IProjectsService projectsService, IEmployeesService employeesService, IEmployeesProjectsPositionsService employeesProjectsPositionsService)
         {
             this.projectsService = projectsService;
             this.employeesService = employeesService;
+            this.employeesProjectsPositionsService = employeesProjectsPositionsService;
         }
 
         public async Task<IActionResult> MyProjects()
@@ -47,21 +49,20 @@ namespace OMM.App.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var project = (await this.projectsService.GetProjectById<ProjectDetailsDto>(id).FirstOrDefaultAsync()).To<ProjectDetailsViewModel>();
-
             var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var isCurrentUserParticipant = project.Participants.Any(p => p.ParticipantId == currentUserId);
-            var isCurrentUserAdmin = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.ADMIN_ROLE);
-            var isCurrentUserManagement = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.MANAGEMENT_ROLE);
 
-            if (isCurrentUserParticipant || isCurrentUserAdmin || isCurrentUserManagement)
+            var IsEmployeeAuthorizedToChangeProject = await this.projectsService.IsEmployeeAuthorizedToChangeProject(id, currentUserId);
+
+            if (!IsEmployeeAuthorizedToChangeProject)
             {
-                ViewBag.isCurrentUserProjectManager = project.Participants.FirstOrDefault(p => p.ParticipantId == currentUserId)?.ProjectPositionName == Constants.PROJECT_MANAGER_ROLE;
-
-                return View(project);
+                return Forbid();
             }
 
-            return Forbid();
+            var project = (await this.projectsService.GetProjectById<ProjectDetailsDto>(id).FirstOrDefaultAsync()).To<ProjectDetailsViewModel>();
+
+            ViewBag.isCurrentUserProjectManager = project.Participants.FirstOrDefault(p => p.ParticipantId == currentUserId)?.ProjectPositionName == Constants.PROJECT_MANAGER_ROLE;
+
+            return View(project);
         }
 
         [HttpPost]
@@ -81,7 +82,7 @@ namespace OMM.App.Controllers
 
         public IActionResult AddParticipant(string id)
         {
-            var model = new ProjectParticipantAddInputModel
+            var model = new ProjectParticipantInputModel
             {
                 ProjectId = id
             };
@@ -90,13 +91,13 @@ namespace OMM.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddParticipant(ProjectParticipantAddInputModel input)
+        public async Task<IActionResult> AddParticipant(ProjectParticipantInputModel input)
         {
             if (!ModelState.IsValid)
             {
                 return PartialView("_AddParticipantPartial", input);
             }
-            var participantToAdd = input.To<ProjectParticipantAddDto>();
+            var participantToAdd = input.To<ProjectParticipantDto>();
 
             var checkIsEmployeeParticipant = await this.projectsService.CheckParticipantAsync(participantToAdd);
 
@@ -108,6 +109,54 @@ namespace OMM.App.Controllers
             }
 
             await this.projectsService.AddParticipantAsync(participantToAdd);
+
+            return RedirectToAction("Details", new { id = input.ProjectId });
+        }
+        
+        public async Task<IActionResult> ChangeProjectPosition([FromQuery]string projectId, [FromQuery]string participantId, [FromQuery]int projectPositionId)
+        {
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var IsEmployeeAuthorizedToChangeProject = await this.projectsService.IsEmployeeAuthorizedToChangeProject(projectId, currentUserId);
+
+            if(!IsEmployeeAuthorizedToChangeProject)
+            {
+                return Forbid();
+            }
+
+            var employeeFullName = await this.employeesService.GetEmployeeFullNameByIdAsync(participantId);
+
+            var model = new ProjectParticipantChangeViewModel
+            {
+                ProjectId = projectId,
+                EmployeeId = participantId,
+                EmployeeFullName = employeeFullName,
+                ProjectPositionId = projectPositionId,
+            };
+
+            return PartialView("_ChangeProjectPositionPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeProjectPosition(ProjectParticipantChangeViewModel input)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_ChangeProjectPositionPartial", input);
+            }
+
+            var participantToChange = input.To<ProjectParticipantChangeDto>();
+
+            var checkIsEmployeeParticipantLastManager = await this.projectsService.CheckIsParticipantLastManagerAsync(participantToChange);
+
+            if (checkIsEmployeeParticipantLastManager)
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessages.INVALID_PARTICIPANTS_MANAGER);
+
+                return PartialView("_ChangeProjectPositionPartial", input);
+            }
+
+            await this.employeesProjectsPositionsService.ChangeEmployeeProjectPositionAsync(participantToChange);
 
             return RedirectToAction("Details", new { id = input.ProjectId });
         }

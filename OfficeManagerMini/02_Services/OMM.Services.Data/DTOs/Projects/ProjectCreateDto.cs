@@ -26,7 +26,7 @@ namespace OMM.Services.Data.DTOs.Projects
 
         public int StatusId { get; set; }
 
-        public List<ProjectParticipantDto> Participants { get; set; } = new List<ProjectParticipantDto>();
+        public List<ProjectParticipantListDto> Participants { get; set; } = new List<ProjectParticipantListDto>();
 
         public void CreateMappings(IProfileExpression configuration)
         {

@@ -18,8 +18,14 @@ namespace OMM.Services.Data
 
         Task<bool> ChangeDataAsync(ProjectDetailsChangeDto input);
 
-        Task<bool> AddParticipantAsync(ProjectParticipantAddDto input);
+        Task<bool> AddParticipantAsync(ProjectParticipantDto input);
 
-        Task<bool> CheckParticipantAsync(ProjectParticipantAddDto input);
+        Task<bool> CheckParticipantAsync(ProjectParticipantDto input);
+
+        Task<bool> CheckIsParticipantLastManagerAsync(ProjectParticipantChangeDto input);
+
+        Task<bool> IsEmployeeAuthorizedToChangeProject(string projectId, string currentUserId);
+
+        Task<bool> ChangeProjectPositionAsync(ProjectParticipantChangeDto participantToChange);
     }
 }

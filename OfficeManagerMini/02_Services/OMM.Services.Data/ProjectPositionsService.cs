@@ -18,5 +18,10 @@ namespace OMM.Services.Data
         {
             return this.context.ProjectPositions.To<ProjectPostionDto>();
         }
+
+        public string GetProjectPositionNameById(int id)
+        {
+            return this.context.ProjectPositions.SingleOrDefault(p => p.Id == id)?.Name;
+        }
     }
 }

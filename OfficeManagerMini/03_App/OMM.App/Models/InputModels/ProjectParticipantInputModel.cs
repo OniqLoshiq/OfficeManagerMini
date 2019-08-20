@@ -6,14 +6,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OMM.App.Models.InputModels
 {
-    public class ProjectParticipantAddInputModel : IValidatableObject, IMapTo<ProjectParticipantAddDto>
+    public class ProjectParticipantInputModel : IValidatableObject, IMapTo<ProjectParticipantDto>
     {
         [Required]
+        [Display(Name = "Project participant")]
         public string EmployeeId { get; set; }
 
         public string ProjectId { get; set; }
 
         [Required]
+        [Display(Name = "Project position")]
         public int ProjectPositionId { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -47,9 +47,26 @@
                 <td class="align-middle text-center">@Model[i].DepartmentName</td>
                 <td class="align-middle text-center">@Model[i].ProjectPositionName</td>
                 <td class="align-middle text-center">
-                    <a class="btn px-1 py-0 text-success" asp-controller="Projects" asp-action="RemoveParticipant" asp-route-id="@Model[i].ParticipantId" role="button" style="font-size: 14px;" title="Edit">
+                    <button class="btn px-1 py-0 text-success" title="Change position" data-toggle="modal" onclick="OpenChangePositionModal('@ViewData["ProjectId"]', '@Model[i].ParticipantId', '@Model[i].ProjectPositionId')">
                         <i class="fas fa-user-edit"></i>
-                    </a>
+                    </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="changeProjectPosition" tabindex="-1" role="dialog" aria-labelledby="changeProjectPositionModalLongTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <!-- Modal Content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="changeProjectPositionModalLongTitle">Change Project Position</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-left" id="PreviewChangePosition">
+                                        @*<partial name="_ChangeProjectPositionPartial" />*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <a class="btn px-1 py-0 text-danger" asp-controller="Projects" asp-action="RemoveParticipant" asp-route-id="@Model[i].ParticipantId" role="button" style="font-size: 14px;" title="Remove">
                         <i class="fas fa-user-times"></i>
                     </a>

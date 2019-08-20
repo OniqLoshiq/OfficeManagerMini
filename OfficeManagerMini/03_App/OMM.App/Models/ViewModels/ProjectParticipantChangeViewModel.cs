@@ -4,13 +4,16 @@ using OMM.Services.Data.DTOs.Projects;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace OMM.App.Areas.Management.Models.InputModels
+namespace OMM.App.Models.ViewModels
 {
-    public class ProjectParticipantInputModel : IValidatableObject, IMapTo<ProjectParticipantListDto>
+    public class ProjectParticipantChangeViewModel : IValidatableObject, IMapTo<ProjectParticipantChangeDto>
     {
-        [Required]
-        [Display(Name = "Project participant")]
         public string EmployeeId { get; set; }
+
+        public string ProjectId { get; set; }
+
+        [Display(Name = "Project participant")]
+        public string EmployeeFullName { get; set; }
 
         [Required]
         [Display(Name = "Project position")]

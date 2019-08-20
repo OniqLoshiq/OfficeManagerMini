@@ -1,0 +1,25 @@
+﻿@model OMM.App.Models.ViewModels.ProjectParticipantChangeViewModel
+
+    <form id="formContent" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group ">
+            <label class="col-form-label" asp-for="EmployeeFullName"></label>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" asp-for="EmployeeFullName" readonly>
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-form-label" asp-for="ProjectPositionId"></label>
+            <div class="input-group mb-2">
+                <vc:project-positions-list project-position-id="@Model.ProjectPositionId"></vc:project-positions-list>
+            </div>
+            <span asp-validation-for="ProjectPositionId" class="text-danger"></span>
+        </div>
+        <input type="hidden" asp-for="ProjectId" />
+        <input type="hidden" asp-for="EmployeeId" />
+        <div id="dialog-alert"></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline-success" onclick="changeProjectPosition()">Change Position</button>
+        </div>
+    </form>

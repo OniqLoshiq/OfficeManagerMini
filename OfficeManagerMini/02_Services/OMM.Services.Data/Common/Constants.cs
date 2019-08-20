@@ -12,6 +12,8 @@
 
         public const string MANAGEMENT_DEPARTMENT = "Management board";
 
+        public const string ADMIN_ROLE = "Admin";
+
         public const string HR_ROLE = "HR";
 
         public const string HR_DEPARTMENT = "HR";
@@ -29,5 +31,7 @@
         public const string STATUS_COMPLETED = "Completed";
 
         public const int PROGRESS_MAX_VALUE = 100;
+
+        public const string PROJECT_MANAGER_ROLE = "Project Manager";
     }
 }

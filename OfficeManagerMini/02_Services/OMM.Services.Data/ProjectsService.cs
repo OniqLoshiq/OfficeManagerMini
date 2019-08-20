@@ -16,12 +16,16 @@ namespace OMM.Services.Data
         private readonly OmmDbContext context;
         private readonly IReportsService reportsService;
         private readonly IStatusesService statusesService;
+        private readonly IEmployeesService employeesService;
+        private readonly IProjectPositionsService projectPositionsService;
 
-        public ProjectsService(OmmDbContext context, IReportsService reportsService, IStatusesService statusesService)
+        public ProjectsService(OmmDbContext context, IReportsService reportsService, IStatusesService statusesService, IEmployeesService employeesService, IProjectPositionsService projectPositionsService)
         {
             this.context = context;
             this.reportsService = reportsService;
             this.statusesService = statusesService;
+            this.employeesService = employeesService;
+            this.projectPositionsService = projectPositionsService;
         }
         public IQueryable<ProjectListDto> GetAllProjectsForList()
         {
@@ -121,7 +125,7 @@ namespace OMM.Services.Data
             return result > 0;
         }
 
-        public async Task<bool> AddParticipantAsync(ProjectParticipantAddDto input)
+        public async Task<bool> AddParticipantAsync(ProjectParticipantDto input)
         {
             var participantToAdd = input.To<EmployeesProjectsPositions>();
 
@@ -131,13 +135,59 @@ namespace OMM.Services.Data
             return result > 0;
         }
 
-        public async Task<bool> CheckParticipantAsync(ProjectParticipantAddDto input)
+        public async Task<bool> CheckParticipantAsync(ProjectParticipantDto input)
         {
             var isParticipant = (await this.context.Projects
                 .SingleOrDefaultAsync(p => p.Id == input.ProjectId))
                 .Participants.Any(p => p.EmployeeId == input.EmployeeId);
 
             return isParticipant;
+        }
+
+        public async Task<bool> CheckIsParticipantLastManagerAsync(ProjectParticipantChangeDto input)
+        {
+            var projectParticipants = (await this.context.Projects.SingleOrDefaultAsync(p => p.Id == input.ProjectId))?.Participants;
+
+            var participantToChange = projectParticipants.SingleOrDefault(p => p.EmployeeId == input.EmployeeId);
+
+            var newProjectPosition = this.projectPositionsService.GetProjectPositionNameById(input.ProjectPositionId);
+
+            if(participantToChange.ProjectPosition.Name == Constants.MANAGEMENT_ROLE && newProjectPosition != Constants.MANAGEMENT_ROLE)
+            {
+                var projectManagerRolesCount = projectParticipants.Where(p => p.ProjectPosition.Name == Constants.MANAGEMENT_ROLE).Count();
+
+                if(projectManagerRolesCount > 1)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> IsEmployeeAuthorizedToChangeProject(string projectId, string currentUserId)
+        {
+            var projectParticipants = await this.context.Projects.Where(p => p.Id == projectId).Select(p => p.Participants).SingleOrDefaultAsync();
+            var isCurrentUserParticipantIsProjectManager = projectParticipants.Any(p => p.EmployeeId == currentUserId && p.ProjectPosition.Name == Constants.PROJECT_MANAGER_ROLE);
+
+            var isCurrentUserAdmin = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.ADMIN_ROLE);
+            var isCurrentUserManagement = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.MANAGEMENT_ROLE);
+
+            return isCurrentUserParticipantIsProjectManager || isCurrentUserAdmin || isCurrentUserManagement;
+        }
+
+        public async Task<bool> ChangeProjectPositionAsync(ProjectParticipantChangeDto participantToChange)
+        {
+            var projectParticipantRole = await this.context.EmployeesProjectsRoles.SingleOrDefaultAsync(p => p.ProjectId == participantToChange.ProjectId && p.EmployeeId == participantToChange.EmployeeId);
+
+            projectParticipantRole.ProjectPositionId = participantToChange.ProjectPositionId;
+
+            this.context.EmployeesProjectsRoles.Update(projectParticipantRole);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
         }
     }
 }

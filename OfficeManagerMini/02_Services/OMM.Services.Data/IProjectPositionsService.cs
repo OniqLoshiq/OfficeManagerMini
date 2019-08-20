@@ -6,5 +6,7 @@ namespace OMM.Services.Data
     public interface IProjectPositionsService
     {
         IQueryable<ProjectPostionDto> GetProjectPositions();
+
+        string GetProjectPositionNameById(int id);
     }
 }
