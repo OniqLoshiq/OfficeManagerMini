@@ -1,0 +1,30 @@
+﻿@model IList<OMM.App.Models.ViewModels.ProjectReportParticipantViewModel>
+
+<div class="h6">Participants</div>
+<hr class="hr-oom-mt-11" />
+<div class="report-table">
+    <table class="table table-striped table-sm table-hover w-100" id="participants-table">
+        <thead class="report-title-color text-white">
+            <tr>
+                <th scope="col" style="width: 3%; font-weight:bold;">N.</th>
+                <th scope="col" style="width: 41%; font-weight:bold;" colspan="2">Employee</th>
+                <th scope="col" class="text-center" style="width: 28%; font-weight:bold;">Department</th>
+                <th scope="col" class="text-center" style="width: 28%; font-weight:bold;">Project Position</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr class="participants)">
+                    <td class="align-middle" style="width: 3%;">@(i + 1)</td>
+                    <td class="align-middle" style="width: 8%"><img src="@(Model[i].ProfilePicture)" class="proj-participant-img rounded-circle mx-left " alt="..."></td>
+                    <td class="align-middle" style="width: 33%">@Model[i].ParticipantFullName</td>
+                    <td class="align-middle text-center">@Model[i].DepartmentName</td>
+                    <td class="align-middle text-center">@Model[i].ProjectPositionName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

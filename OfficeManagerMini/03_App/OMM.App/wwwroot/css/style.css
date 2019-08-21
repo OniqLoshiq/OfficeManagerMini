@@ -440,3 +440,19 @@ tfoot input {
 #comments .validation-summary-errors, #createComment .validation-summary-errors {
     color: red
 }
+
+.report-title-color {
+    background-color: #7cb342;
+}
+
+.report-table .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: #aed581;
+}
+
+.report-table .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
+    background-color: #c5e1a5;
+}
+
+.report-table .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #dcedc8;
+}

@@ -1,0 +1,45 @@
+﻿@model OMM.App.Models.ViewModels.ProjectReportViewModel
+
+@using OMM.App.Common
+
+<div class="col-md-12 col-lg-3" id="projectDetails">
+    <div class="h6 mb-1">Priority: <span class="badge badge-warning px-2 py-1" style="font-size: 14px">@Model.Priority</span></div>
+    <div class="h6 mb-1">Client: @Model.Client</div>
+    <hr class="hr-oom" />
+    <div class="h6 mb-1">Created on: @Model.CreatedOn</div>
+    <div class="h6 mb-1">Deadline: @Model.Deadline</div>
+    <div class="h6 mb-1">End date: @Model.EndDate</div>
+    <hr class="hr-oom" />
+    <div class="h6 mb-1">
+        Status:
+        @if (Model.StatusName == Constants.STATUS_INPROGRESS)
+        {
+            <span class="badge badge-success">@Model.StatusName</span>
+        }
+        else if (Model.StatusName == Constants.STATUS_FROZEN)
+        {
+            <span class="badge badge-primary">@Model.StatusName</span>
+        }
+        else if (Model.StatusName == Constants.STATUS_DELAYED)
+        {
+            <span class="badge badge-danger">@Model.StatusName</span>
+        }
+        else if (Model.StatusName == Constants.STATUS_WAITING)
+        {
+            <span class="badge badge-warning">@Model.StatusName</span>
+        }
+        else if (Model.StatusName == Constants.STATUS_COMPLETED)
+        {
+            <span class="badge badge-secondary">@Model.StatusName</span>
+        }
+    </div>
+    <div class="h6 mb-1 row d-flex align-content-center mx-0">
+        <span class="h6 mb-1 mr-2">Progress: </span>
+        <div class="progress mt-1" style="width:60%">
+            <div class="progress-bar bg-info text-dark" role="progressbar" style="width: @(Model.Progress)%;" aria-valuenow="@(Model.Progress)" aria-valuemin="0" aria-valuemax="100">@(Model.Progress)%</div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 col-lg-7">
+    <partial name="_ProjectReportParticipantsPartial" model="@Model.Participants" />
+</div>
