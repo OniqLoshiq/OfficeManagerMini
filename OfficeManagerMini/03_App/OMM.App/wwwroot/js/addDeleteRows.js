@@ -96,9 +96,6 @@ function addRow() {
         var participantNumber = contentPanelId.match(regex)[0];
 
         changeAdditionalData(participantNumber, participantId);
-
-        console.log(participantNumber);
-        console.log(participantId);
     });
     $('.selectpicker').selectpicker('refresh')
 }

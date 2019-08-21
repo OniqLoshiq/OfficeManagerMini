@@ -1,0 +1,169 @@
+﻿@model OMM.App.Areas.Management.Models.ViewModels.ProjectEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Project";
+}
+
+<h4 class="mb-3 text-center">Create Project</h4>
+<hr class="hr-oom" style="width:300px;" />
+
+<form asp-area="Management" asp-controller="Projects" asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+            <label class="sr-only" asp-for="Name"></label>
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text bg-warning text-secondary"><strong>Name</strong></div>
+                </div>
+                <input class="form-control" asp-for="Name" placeholder="Name of the project">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-md-6 mb-0">
+            <label class="sr-only" asp-for="Client"></label>
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text bg-warning text-secondary"><strong>Client</strong></div>
+                </div>
+                <input class="form-control" asp-for="Client" placeholder="Client name">
+                <span asp-validation-for="Client" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <hr class="hr-oom" />
+    <div class="form-group">
+        <label for="mytextarea">Description</label>
+        <textarea id="mytextarea" asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <hr class="hr-oom" />
+    <div class="form-row">
+        <div class="form-group col-md-3 mb-0">
+            <div>
+                <label asp-for="StatusId"></label>
+            </div>
+            <vc:statuses-list status-id="@Model.StatusId"></vc:statuses-list>
+            <div>
+                <span asp-validation-for="StatusId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-md-4 flatpickrcontainer mb-0">
+            <label asp-for="CreatedOn"></label>
+            <div class="input-group">
+                <input type="text" class="form-control" asp-for="CreatedOn" data-input>
+                <div class="input-group-prepend">
+                    <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+            <span asp-validation-for="CreatedOn" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4 flatpickrcontainer mb-0">
+            <label asp-for="Deadline">Deadline</label>
+            <div class="input-group">
+                <input type="text" class="form-control" asp-for="Deadline" data-input>
+                <div class="input-group-prepend">
+                    <div class="input-group-text bg-warning"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-1 mb-0">
+            <label asp-for="Priority"></label>
+            <select class="form-control" asp-for="Priority">
+                <option selected disabled>@Model.Priority</option>
+                @for (int i = 1; i <= 10; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+            <span asp-validation-for="Priority" class="text-danger"></span>
+        </div>
+    </div>
+    <hr class="hr-oom" />
+    <div class="form-row">
+        <div class="form-group col mb-0">
+            <label asp-for="Progress">Assignment progress: <span class="badge badge-info"><output name="progressOutput" id="progressOutput">@Model.Progress</output>%</span></label>
+            <input type="range" class="custom-range" asp-for="Progress" value="@(Model.Progress)" min="0" max="100" oninput="progressOutput.value = Progress.value">
+        </div>
+    </div>
+    <hr class="hr-oom" />
+    <div class="form-group">
+        <label for="Participants">Participants</label>
+        <div class="d-flex justify-content-start mb-3">
+            <button class="btn btn-outline-success text-dark" type="button" onclick="addRow()"><i class="fas fa-user-plus pr-2"></i>Add employee to project</button>
+        </div>
+        <span asp-validation-for="@Model.Participants" class="text-danger text-center"></span>
+        <table class="table table-striped table-warning table-hover" id="participants-table">
+            <thead class="bg-warning">
+                <tr>
+                    <th scope="col" style="width: 33.32%;font-weight:bold;" colspan="2">Employee</th>
+                    <th scope="col" class="text-center" style="width: 24.99%; font-weight:bold;">Department</th>
+                    <th scope="col" style="width: 24.99%; font-weight:bold;">Project Position</th>
+                    <th scope="col" style="width: 16.66%; font-weight:bold;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*javascript logic here: edit in file js/addDeleteRows.js *@
+
+                @for (int i = 0; i < Model.Participants.Count(); i++)
+                {
+                    <tr class="participants">
+                        <td class="align-middle" style="width: 5%"><img src="@(Model.Participants[i].ProfilePicture)" id="participant-picture-@(i)" class="proj-participant-img rounded-circle mx-left " alt="..."></td>
+                        <td class="align-middle" style="width: 28.32%">
+                            <div class="input-group mb-2">
+                                <div class="input-group">
+                                    <select class="form-control selectpicker show-tick employee-id" asp-for="@Model.Participants[i].EmployeeId" asp-items="@((ViewBag.Employees as IList<SelectListItem>))" data-style="btn-white" data-live-search="true" data-width="auto">
+                                        <option></option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="@Model.Participants[i].EmployeeId" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td id="participant-department-@(i)" class="align-middle text-center">@Model.Participants[i].DepartmentName</td>
+                        <td class="align-middle">
+                            <div class="input-group mb-2">
+                                <div class="input-group">
+                                    <select class="form-control" asp-for="@Model.Participants[i].ProjectPositionId" asp-items="@((ViewBag.ProjectPositions as SelectList))">
+                                    </select>
+                                </div>
+                                <span asp-validation-for="@Model.Participants[i].ProjectPositionId" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <hr class="hr-oom w-25" />
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-outline-warning">Edit</button>
+    </div>
+    <hr class="hr-oom w-25" />
+</form>
+
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="~/js/run-tinymce.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday default is sunday
+
+        document.getElementsByClassName("flatpickrcontainer").flatpickr({
+            wrap: true,
+            weekNumbers: true,
+            dateFormat: "d-m-Y"
+        });
+    </script>
+    <script src="~/js/addDeleteRows.js"></script>
+    <script type="text/javascript">
+        fillAdditionalData();
+    </script>
+}
+

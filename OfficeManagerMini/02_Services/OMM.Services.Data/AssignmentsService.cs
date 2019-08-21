@@ -180,7 +180,7 @@ namespace OMM.Services.Data
 
             assignment.StartingDate = DateTime.ParseExact(input.StartingDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
 
-            if(input.Deadline != "")
+            if(input.Deadline != "" || input.Deadline != null)
             {
                 assignment.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             }

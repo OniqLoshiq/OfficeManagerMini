@@ -94,7 +94,7 @@ namespace OMM.App.Areas.Management.Controllers
 
             await this.projectsService.CreateProjectAsync(project);
 
-            return Redirect("/");
+            return RedirectToAction("All");
         }
 
         public IActionResult GetEmployeesDepartmentViewComponent()
@@ -127,6 +127,70 @@ namespace OMM.App.Areas.Management.Controllers
 
 
             return this.View(projects);
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var projectToEdit = (await this.projectsService.GetProjectById<ProjectEditDto>(id).SingleOrDefaultAsync()).To<ProjectEditViewModel>();
+
+            var employeeSelectListInfo = await this.employeesService.GetActiveEmployeesWithDepartment().To<ActiveEmployeeDepartmentViewModel>().ToListAsync();
+
+            List<string> departments = employeeSelectListInfo.Select(li => li.DepartmentName).Distinct().ToList();
+
+            var departmentGroups = departments.Select(d => new SelectListGroup { Name = d });
+
+            var participants = new List<SelectListItem>();
+
+            employeeSelectListInfo.ForEach(esli =>
+                participants.Add(
+                    new SelectListItem
+                    {
+                        Value = esli.Id,
+                        Text = esli.FullName,
+                        Group = departmentGroups.FirstOrDefault(d => d.Name == esli.DepartmentName)
+                    }));
+
+
+            ViewBag.Employees = participants;
+            ViewBag.ProjectPositions = new SelectList(this.projectPositionsService.GetProjectPositions().ToList(), "Id", "Name");
+
+            return this.View(projectToEdit);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProjectEditViewModel input)
+        {
+            if(!ModelState.IsValid)
+            {
+                var employeeSelectListInfo = await this.employeesService.GetActiveEmployeesWithDepartment().To<ActiveEmployeeDepartmentViewModel>().ToListAsync();
+
+                List<string> departments = employeeSelectListInfo.Select(li => li.DepartmentName).Distinct().ToList();
+
+                var departmentGroups = departments.Select(d => new SelectListGroup { Name = d });
+
+                var participants = new List<SelectListItem>();
+
+                employeeSelectListInfo.ForEach(esli =>
+                    participants.Add(
+                        new SelectListItem
+                        {
+                            Value = esli.Id,
+                            Text = esli.FullName,
+                            Group = departmentGroups.FirstOrDefault(d => d.Name == esli.DepartmentName)
+                        }));
+
+
+                ViewBag.Employees = participants;
+                ViewBag.ProjectPositions = new SelectList(this.projectPositionsService.GetProjectPositions().ToList(), "Id", "Name");
+
+                return this.View(input);
+            }
+
+            var projectToEdit = input.To<ProjectEditDto>();
+
+            await this.projectsService.EditProjectAsync(projectToEdit);
+
+            return RedirectToAction("Details", "Projects", new { id = projectToEdit.Id });
         }
     }
 }

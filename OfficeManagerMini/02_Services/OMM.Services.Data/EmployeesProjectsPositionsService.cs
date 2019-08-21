@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OMM.Data;
@@ -46,6 +47,28 @@ namespace OMM.Services.Data
                 && p.EmployeeId == participantToRemove.EmployeeId).SingleOrDefaultAsync();
 
             this.context.EmployeesProjectsRoles.Remove(projectParticipantToDelete);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> RemoveParticipantsAsync(List<ProjectEditParticipantDto> participantsToRemove)
+        {
+            var projectParticipantsPositions = this.context.EmployeesProjectsRoles
+                .Where(epr => participantsToRemove
+                        .Any(pr => epr.ProjectId == pr.ProjectId && epr.EmployeeId == pr.EmployeeId && epr.ProjectPositionId == pr.ProjectPositionId));
+
+            this.context.EmployeesProjectsRoles.RemoveRange(projectParticipantsPositions);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> AddParticipantsAsync(List<ProjectEditParticipantDto> participantsToAdd)
+        {
+            var projectParticipantsPositions = participantsToAdd.Select(p => p.To<EmployeesProjectsPositions>()).ToList();
+
+            await this.context.EmployeesProjectsRoles.AddRangeAsync(projectParticipantsPositions);
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;

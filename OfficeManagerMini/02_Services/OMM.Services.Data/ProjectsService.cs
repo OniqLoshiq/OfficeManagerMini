@@ -18,14 +18,17 @@ namespace OMM.Services.Data
         private readonly IStatusesService statusesService;
         private readonly IEmployeesService employeesService;
         private readonly IProjectPositionsService projectPositionsService;
+        private readonly IEmployeesProjectsPositionsService employeesProjectsPositionsService;
 
-        public ProjectsService(OmmDbContext context, IReportsService reportsService, IStatusesService statusesService, IEmployeesService employeesService, IProjectPositionsService projectPositionsService)
+        public ProjectsService(OmmDbContext context, IReportsService reportsService, IStatusesService statusesService, 
+            IEmployeesService employeesService, IProjectPositionsService projectPositionsService, IEmployeesProjectsPositionsService employeesProjectsPositionsService)
         {
             this.context = context;
             this.reportsService = reportsService;
             this.statusesService = statusesService;
             this.employeesService = employeesService;
             this.projectPositionsService = projectPositionsService;
+            this.employeesProjectsPositionsService = employeesProjectsPositionsService;
         }
         public IQueryable<ProjectListDto> GetAllProjectsForList()
         {
@@ -185,6 +188,66 @@ namespace OMM.Services.Data
             projectParticipantRole.ProjectPositionId = participantToChange.ProjectPositionId;
 
             this.context.EmployeesProjectsRoles.Update(projectParticipantRole);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> EditProjectAsync(ProjectEditDto projectToEdit)
+        {
+            var project = await this.context.Projects.Where(p => p.Id == projectToEdit.Id).SingleOrDefaultAsync();
+
+            project.Name = projectToEdit.Name;
+            project.Client = projectToEdit.Client;
+            project.Description = projectToEdit.Description;
+            project.Priority = projectToEdit.Priority;
+
+            project.CreatedOn = DateTime.ParseExact(projectToEdit.CreatedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+
+            if (projectToEdit.Deadline != "" || projectToEdit.Deadline != null)
+            {
+                project.Deadline = DateTime.ParseExact(projectToEdit.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            }
+
+            #region ChangeStatusLogic 
+            if (project.Status.Name == Constants.STATUS_COMPLETED && project.StatusId != projectToEdit.StatusId)
+            {
+                project.EndDate = null;
+                project.StatusId = projectToEdit.StatusId;
+                project.Progress = projectToEdit.Progress;
+            }
+            else if ((await this.statusesService.GetStatusNameByIdAsync(projectToEdit.StatusId)) == Constants.STATUS_COMPLETED && project.StatusId != projectToEdit.StatusId)
+            {
+                project.EndDate = DateTime.UtcNow;
+                project.StatusId = projectToEdit.StatusId;
+                project.Progress = Constants.PROGRESS_MAX_VALUE;
+            }
+            else
+            {
+                project.StatusId = projectToEdit.StatusId;
+                project.Progress = projectToEdit.Progress;
+            }
+            #endregion  
+
+
+            var participantsWithPositionsToRemove = project.Participants
+                .Where(p => !projectToEdit.Participants
+                        .Any(pp => p.EmployeeId == pp.EmployeeId && p.ProjectPositionId == pp.ProjectPositionId)).Select(p => p.To<ProjectEditParticipantDto>()).ToList();
+
+            var participantsWithPositionsToAdd = projectToEdit.Participants
+                .Where(pp => !project.Participants
+                        .Any(p => pp.EmployeeId == p.EmployeeId && pp.ProjectPositionId == p.ProjectPositionId)).ToList();
+
+            if (participantsWithPositionsToRemove.Count() > 0)
+            {
+                await this.employeesProjectsPositionsService.RemoveParticipantsAsync(participantsWithPositionsToRemove);
+            }
+
+            if (participantsWithPositionsToAdd.Count() > 0)
+            {
+                await this.employeesProjectsPositionsService.AddParticipantsAsync(participantsWithPositionsToAdd);
+            }
+
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
