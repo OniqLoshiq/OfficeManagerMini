@@ -259,6 +259,7 @@ namespace OMM.Services.Data
                 await this.employeesProjectsPositionsService.AddParticipantsAsync(participantsWithPositionsToAdd);
             }
 
+            this.context.Projects.Update(project);
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
