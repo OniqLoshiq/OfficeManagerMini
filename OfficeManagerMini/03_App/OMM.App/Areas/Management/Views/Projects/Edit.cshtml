@@ -128,6 +128,7 @@
                                 </div>
                                 <span asp-validation-for="@Model.Participants[i].ProjectPositionId" class="text-danger"></span>
                             </div>
+                            <input type="hidden" asp-for="@Model.Participants[i].ProjectId" />
                         </td>
                         <td class="align-middle">
                             <button type="button" class="btn btn-danger" onclick="removeRow()">Remove</button>

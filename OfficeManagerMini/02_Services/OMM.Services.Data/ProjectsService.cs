@@ -207,7 +207,7 @@ namespace OMM.Services.Data
 
             project.CreatedOn = DateTime.ParseExact(projectToEdit.CreatedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
 
-            if (projectToEdit.Deadline != "" || projectToEdit.Deadline != null)
+            if (projectToEdit.Deadline != "" && projectToEdit.Deadline != null)
             {
                 project.Deadline = DateTime.ParseExact(projectToEdit.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             }
@@ -248,6 +248,11 @@ namespace OMM.Services.Data
 
             if (participantsWithPositionsToAdd.Count() > 0)
             {
+                foreach (var participant in participantsWithPositionsToAdd)
+                {
+                    participant.ProjectId = project.Id;
+                }
+
                 await this.employeesProjectsPositionsService.AddParticipantsAsync(participantsWithPositionsToAdd);
             }
 

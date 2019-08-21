@@ -56,7 +56,7 @@ namespace OMM.Services.Data
         {
             var projectParticipantsPositions = this.context.EmployeesProjectsRoles
                 .Where(epr => participantsToRemove
-                        .Any(pr => epr.ProjectId == pr.ProjectId && epr.EmployeeId == pr.EmployeeId && epr.ProjectPositionId == pr.ProjectPositionId));
+                        .Any(pr => epr.ProjectId == pr.ProjectId && epr.EmployeeId == pr.EmployeeId && epr.ProjectPositionId == pr.ProjectPositionId)).ToList();
 
             this.context.EmployeesProjectsRoles.RemoveRange(projectParticipantsPositions);
             var result = await this.context.SaveChangesAsync();
