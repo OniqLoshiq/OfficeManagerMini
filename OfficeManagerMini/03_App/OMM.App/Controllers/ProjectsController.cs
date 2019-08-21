@@ -53,9 +53,9 @@ namespace OMM.App.Controllers
         {
             var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var IsEmployeeAuthorizedToChangeProject = await this.projectsService.IsEmployeeAuthorizedToChangeProject(id, currentUserId);
+            var IsEmployeeAuthorizedForProject = await this.projectsService.IsEmployeeAuthorizedForProject(id, currentUserId);
 
-            if (!IsEmployeeAuthorizedToChangeProject)
+            if (!IsEmployeeAuthorizedForProject)
             {
                 return Forbid();
             }

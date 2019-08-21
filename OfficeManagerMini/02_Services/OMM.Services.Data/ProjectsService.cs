@@ -187,6 +187,17 @@ namespace OMM.Services.Data
             return isCurrentUserParticipantIsProjectManager || isCurrentUserAdmin || isCurrentUserManagement;
         }
 
+        public async Task<bool> IsEmployeeAuthorizedForProject(string projectId, string currentUserId)
+        {
+            var projectParticipants = await this.context.Projects.Where(p => p.Id == projectId).Select(p => p.Participants).SingleOrDefaultAsync();
+            var isCurrentUserParticipant = projectParticipants.Any(p => p.EmployeeId == currentUserId);
+
+            var isCurrentUserAdmin = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.ADMIN_ROLE);
+            var isCurrentUserManagement = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.MANAGEMENT_ROLE);
+
+            return isCurrentUserParticipant || isCurrentUserAdmin || isCurrentUserManagement;
+        }
+
         public async Task<bool> ChangeProjectPositionAsync(ProjectParticipantChangeDto participantToChange)
         {
             var projectParticipantRole = await this.context.EmployeesProjectsRoles.SingleOrDefaultAsync(p => p.ProjectId == participantToChange.ProjectId && p.EmployeeId == participantToChange.EmployeeId);

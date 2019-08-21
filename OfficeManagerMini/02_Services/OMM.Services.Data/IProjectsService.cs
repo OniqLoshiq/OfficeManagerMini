@@ -26,6 +26,8 @@ namespace OMM.Services.Data
 
         Task<bool> IsEmployeeAuthorizedToChangeProject(string projectId, string currentUserId);
 
+        Task<bool> IsEmployeeAuthorizedForProject(string projectId, string currentUserId);
+
         Task<bool> ChangeProjectPositionAsync(ProjectParticipantChangeDto participantToChange);
 
         Task<bool> EditProjectAsync(ProjectEditDto projectToEdit);
