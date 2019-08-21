@@ -55,7 +55,7 @@ namespace OMM.Services.Data
                 .ToList();
 
             var allAssignmentIds = assignmentIds.Union(assignmentAssistantIds);
-            
+
             return this.context.Assignments
                 .Where(a => allAssignmentIds.Contains(a.Id))
                 .To<AssignmentListDto>();
@@ -105,47 +105,50 @@ namespace OMM.Services.Data
                 assignment.Deadline = null;
             }
 
-            if (input.EndDate != "-" && input.EndDate != null)
+            if ((input.EndDate != "-" && input.EndDate != null) && assignmentStatusName != Constants.STATUS_COMPLETED)
             {
                 assignment.Progress = Constants.PROGRESS_MAX_VALUE;
                 assignment.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
                 assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
             }
-            else if (input.EndDate == null)
+            else if ((input.EndDate != "-" && input.EndDate != null) && assignmentStatusName == Constants.STATUS_COMPLETED)
+            {
+                if (inputStatusName != Constants.STATUS_COMPLETED)
+                {
+                    assignment.EndDate = null;
+                    assignment.StatusId = input.StatusId;
+                }
+
+                assignment.Progress = input.Progress;
+            }
+            else if ((input.EndDate == "-" || input.EndDate == null) && assignmentStatusName == Constants.STATUS_COMPLETED)
             {
                 assignment.EndDate = null;
 
-                if (assignmentStatusName == Constants.STATUS_COMPLETED)
+                if (inputStatusName == Constants.STATUS_COMPLETED)
                 {
-                    if (inputStatusName == Constants.STATUS_COMPLETED)
-                    {
-                        assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
-                    }
-                    else
-                    {
-                        assignment.StatusId = input.StatusId;
-                    }
+                    assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
                 }
-                else 
+                else
                 {
-                    if (inputStatusName != Constants.STATUS_COMPLETED)
-                    {
-                        assignment.StatusId = input.StatusId;
-                    }
+                    assignment.StatusId = input.StatusId;
                 }
 
                 assignment.Progress = input.Progress;
             }
-            else if (inputStatusName == Constants.STATUS_COMPLETED)
+            else if ((input.EndDate == "-" || input.EndDate == null) && assignmentStatusName != Constants.STATUS_COMPLETED)
             {
-                assignment.EndDate = DateTime.UtcNow;
-                assignment.StatusId = input.StatusId;
-                assignment.Progress = Constants.PROGRESS_MAX_VALUE;
-            }
-            else
-            {
-                assignment.Progress = input.Progress;
-                assignment.StatusId = input.StatusId;
+                if (inputStatusName == Constants.STATUS_COMPLETED)
+                {
+                    assignment.EndDate = DateTime.UtcNow;
+                    assignment.StatusId = input.StatusId;
+                    assignment.Progress = Constants.PROGRESS_MAX_VALUE;
+                }
+                else
+                {
+                    assignment.Progress = input.Progress;
+                    assignment.StatusId = input.StatusId;
+                }
             }
 
             this.context.Assignments.Update(assignment);
@@ -180,7 +183,7 @@ namespace OMM.Services.Data
 
             assignment.StartingDate = DateTime.ParseExact(input.StartingDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
 
-            if(input.Deadline != "" || input.Deadline != null)
+            if (input.Deadline != "" || input.Deadline != null)
             {
                 assignment.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             }
@@ -191,7 +194,7 @@ namespace OMM.Services.Data
             assignment.Description = input.Description;
 
             assignment.IsProjectRelated = input.IsProjectRelated;
-            if(input.IsProjectRelated)
+            if (input.IsProjectRelated)
             {
                 assignment.ProjectId = input.ProjectId;
             }
@@ -207,7 +210,7 @@ namespace OMM.Services.Data
                 assignment.StatusId = input.StatusId;
                 assignment.Progress = input.Progress;
             }
-            else if((await this.statusesService.GetStatusNameByIdAsync(input.StatusId)) == Constants.STATUS_COMPLETED && assignment.StatusId != input.StatusId)
+            else if ((await this.statusesService.GetStatusNameByIdAsync(input.StatusId)) == Constants.STATUS_COMPLETED && assignment.StatusId != input.StatusId)
             {
                 assignment.EndDate = DateTime.UtcNow;
                 assignment.StatusId = input.StatusId;
@@ -221,17 +224,17 @@ namespace OMM.Services.Data
             #endregion  
 
             var assignmentAssistantsIds = assignment.AssignmentsAssistants.Select(aa => aa.AssistantId).ToList();
-             
+
             var assistantsToRemove = assignmentAssistantsIds.Except(input.AssistantsIds).ToList();
 
             var assistantsToAdd = input.AssistantsIds.Except(assignmentAssistantsIds).ToList();
 
-            if(assistantsToRemove.Count() > 0)
+            if (assistantsToRemove.Count() > 0)
             {
-                 await this.assignmentsEmployeesService.RemoveAssistantsAsync(assistantsToRemove, assignment.Id);
+                await this.assignmentsEmployeesService.RemoveAssistantsAsync(assistantsToRemove, assignment.Id);
             }
 
-            if(assistantsToAdd.Count() > 0)
+            if (assistantsToAdd.Count() > 0)
             {
                 await this.assignmentsEmployeesService.AddAssistantsAsync(assistantsToAdd, assignment.Id);
             }

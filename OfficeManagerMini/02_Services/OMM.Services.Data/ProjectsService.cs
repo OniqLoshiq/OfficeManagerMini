@@ -79,47 +79,50 @@ namespace OMM.Services.Data
                 project.Deadline = null;
             }
 
-            if (input.EndDate != "-" && input.EndDate != null)
+            if ((input.EndDate != "-" && input.EndDate != null) && projectStatusName != Constants.STATUS_COMPLETED)
             {
                 project.Progress = Constants.PROGRESS_MAX_VALUE;
                 project.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
                 project.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
             }
-            else if(input.EndDate == null)
+            else if ((input.EndDate != "-" && input.EndDate != null) && projectStatusName == Constants.STATUS_COMPLETED)
+            {
+                if (inputStatusName != Constants.STATUS_COMPLETED)
+                {
+                    project.EndDate = null;
+                    project.StatusId = input.StatusId;
+                }
+
+                project.Progress = input.Progress;
+            }
+            else if ((input.EndDate == "-" || input.EndDate == null) && projectStatusName == Constants.STATUS_COMPLETED)
             {
                 project.EndDate = null;
 
-                if(projectStatusName == Constants.STATUS_COMPLETED)
+                if (inputStatusName == Constants.STATUS_COMPLETED)
                 {
-                    if (inputStatusName == Constants.STATUS_COMPLETED)
-                    {
-                        project.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
-                    }
-                    else
-                    {
-                        project.StatusId = input.StatusId;
-                    }
+                    project.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
                 }
                 else
                 {
-                    if (inputStatusName != Constants.STATUS_COMPLETED)
-                    {
-                        project.StatusId = input.StatusId;
-                    }
+                    project.StatusId = input.StatusId;
                 }
 
                 project.Progress = input.Progress;
             }
-            else if (inputStatusName == Constants.STATUS_COMPLETED)
+            else if ((input.EndDate == "-" || input.EndDate == null) && projectStatusName != Constants.STATUS_COMPLETED)
             {
-                project.EndDate = DateTime.UtcNow;
-                project.StatusId = input.StatusId;
-                project.Progress = Constants.PROGRESS_MAX_VALUE;
-            }
-            else
-            {
-                project.Progress = input.Progress;
-                project.StatusId = input.StatusId;
+                if (inputStatusName == Constants.STATUS_COMPLETED)
+                {
+                    project.EndDate = DateTime.UtcNow;
+                    project.StatusId = input.StatusId;
+                    project.Progress = Constants.PROGRESS_MAX_VALUE;
+                }
+                else
+                {
+                    project.Progress = input.Progress;
+                    project.StatusId = input.StatusId;
+                }
             }
 
             this.context.Projects.Update(project);
