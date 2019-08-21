@@ -33,5 +33,7 @@
         public const int PROGRESS_MAX_VALUE = 100;
 
         public const string PROJECT_MANAGER_ROLE = "Project Manager";
+
+        public const int MINUTES_IN_HOUR = 60;
     }
 }
