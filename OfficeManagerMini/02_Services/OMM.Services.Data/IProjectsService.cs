@@ -29,5 +29,7 @@ namespace OMM.Services.Data
         Task<bool> ChangeProjectPositionAsync(ProjectParticipantChangeDto participantToChange);
 
         Task<bool> EditProjectAsync(ProjectEditDto projectToEdit);
+
+        Task<bool> DeleteProjectAsync(string id);
     }
 }

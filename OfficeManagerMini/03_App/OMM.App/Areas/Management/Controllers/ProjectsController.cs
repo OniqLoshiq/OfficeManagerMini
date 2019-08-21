@@ -192,5 +192,17 @@ namespace OMM.App.Areas.Management.Controllers
 
             return RedirectToAction("Details", "Projects", new { id = projectToEdit.Id });
         }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            if(id == null)
+            {
+                return RedirectToAction("All");
+            }
+
+            await this.projectsService.DeleteProjectAsync(id);
+
+            return RedirectToAction("All");
+        }
     }
 }

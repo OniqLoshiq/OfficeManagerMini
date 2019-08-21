@@ -19,9 +19,11 @@ namespace OMM.Services.Data
         private readonly IEmployeesService employeesService;
         private readonly IProjectPositionsService projectPositionsService;
         private readonly IEmployeesProjectsPositionsService employeesProjectsPositionsService;
+        private readonly IAssignmentsService assignmentsService;
 
         public ProjectsService(OmmDbContext context, IReportsService reportsService, IStatusesService statusesService, 
-            IEmployeesService employeesService, IProjectPositionsService projectPositionsService, IEmployeesProjectsPositionsService employeesProjectsPositionsService)
+            IEmployeesService employeesService, IProjectPositionsService projectPositionsService, 
+            IEmployeesProjectsPositionsService employeesProjectsPositionsService, IAssignmentsService assignmentsService)
         {
             this.context = context;
             this.reportsService = reportsService;
@@ -29,6 +31,7 @@ namespace OMM.Services.Data
             this.employeesService = employeesService;
             this.projectPositionsService = projectPositionsService;
             this.employeesProjectsPositionsService = employeesProjectsPositionsService;
+            this.assignmentsService = assignmentsService;
         }
         public IQueryable<ProjectListDto> GetAllProjectsForList()
         {
@@ -256,6 +259,21 @@ namespace OMM.Services.Data
                 await this.employeesProjectsPositionsService.AddParticipantsAsync(participantsWithPositionsToAdd);
             }
 
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteProjectAsync(string id)
+        {
+            var project = await this.context.Projects.Where(p => p.Id == id).SingleOrDefaultAsync();
+
+            if(project.Assignments.Count > 0)
+            {
+                await this.assignmentsService.DeleteProjectAssignmentsAsync(project.Assignments.ToList());
+            }
+
+            this.context.Projects.Remove(project);
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;

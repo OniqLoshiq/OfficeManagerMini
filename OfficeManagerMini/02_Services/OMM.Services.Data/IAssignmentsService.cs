@@ -1,4 +1,6 @@
-﻿using OMM.Services.Data.DTOs.Assignments;
+﻿using OMM.Domain;
+using OMM.Services.Data.DTOs.Assignments;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,5 +29,7 @@ namespace OMM.Services.Data
         Task<bool> EditAsync(AssignmentEditDto input);
 
         Task<AssignmentEditDto> GetAssignmentToEditAsync(string id);
+
+        Task<bool> DeleteProjectAssignmentsAsync(List<Assignment> assignmentsToDelete);
     }
 }

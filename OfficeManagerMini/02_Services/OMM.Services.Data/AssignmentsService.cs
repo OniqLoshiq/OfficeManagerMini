@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -240,6 +241,15 @@ namespace OMM.Services.Data
             }
 
             this.context.Assignments.Update(assignment);
+
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteProjectAssignmentsAsync(List<Assignment> assignmentsToDelete)
+        {
+            this.context.Assignments.RemoveRange(assignmentsToDelete);
 
             var result = await this.context.SaveChangesAsync();
 
