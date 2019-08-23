@@ -21,6 +21,9 @@ namespace OMM.Services.Data.DTOs.Activities
 
         public string EmployeeId { get; set; }
 
+        public string EmployeeProfilePicture { get; set; }
+
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Activity, ActivityListDto>()

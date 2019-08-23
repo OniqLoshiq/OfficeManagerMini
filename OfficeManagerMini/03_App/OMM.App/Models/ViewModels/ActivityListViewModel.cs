@@ -17,6 +17,8 @@ namespace OMM.App.Models.ViewModels
 
         public string EmployeeFullName { get; set; }
 
+        public string EmployeeProfilePicture { get; set; }
+        
         public string EmployeeId { get; set; }
     }
 }

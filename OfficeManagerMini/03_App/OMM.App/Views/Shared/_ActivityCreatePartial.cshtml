@@ -1,0 +1,37 @@
+﻿@model OMM.App.Models.InputModels.ActivityCreateInputModel
+
+<form id="formContent" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group flatpickrcontainer">
+        <label asp-for="Date"></label>
+        <div class="input-group">
+            <input type="text" class="form-control" asp-for="Date" data-input>
+            <div class="input-group-prepend">
+                <div class="input-group-text report-calendar-color"><i class="fa fa-calendar"></i></div>
+            </div>
+        </div>
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <div class="form-group flatpickr-hours">
+        <label asp-for="WorkingTime"></label>
+        <div class="input-group">
+            <input type="text" class="form-control" asp-for="WorkingTime" data-input placeholder="Select Hours : Minutes">
+            <div class="input-group-prepend">
+                <div class="input-group-text report-calendar-color"><i class="fa fa-calendar"></i></div>
+            </div>
+        </div>
+        <span asp-validation-for="WorkingTime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="col-form-label"></label>
+        <textarea type="text" class="form-control" rows="3" asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+        <input type="hidden" asp-for="ReportId" value="@Model.ReportId" />
+        <input type="hidden" asp-for="EmployeeId" value="@Model.EmployeeId" />
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-success" onclick="createActivity()">Create</button>
+    </div>
+</form>
+

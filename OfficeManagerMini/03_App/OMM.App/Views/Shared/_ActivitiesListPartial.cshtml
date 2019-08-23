@@ -1,8 +1,45 @@
 ﻿@model IEnumerable<OMM.App.Models.ViewModels.ActivityListViewModel>
 
-@{
-    ViewData["Title"] = "_ActivitiesListPartial";
-}
-
-<h1>_ActivitiesListPartial</h1>
-
+<div id="report-activities">
+    <table id="activities-list" class="display table table-striped table-sm table-hover" style="width: 100%">
+        <thead class="report-title-color text-white">
+            <tr>
+                <th scope="col" style="width: 13%">Date</th>
+                <th scope="col" style="width: 35%">Description</th>
+                <th scope="col" style="width: 13%">Working hours</th>
+                <th scope="col" style="width: 26%" colspan="2">Participant</th>
+                <th scope="col" style="width: 13%">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var activity in Model)
+            {
+                <tr>
+                    <td class="align-middle">@activity.Date</td>
+                    <td class="align-middle" style="font-size:14px">@activity.Description</td>
+                    <td class="align-middle">@activity.Hours hrs : @activity.Minutes mins.</td>
+                    <td class="align-middle" style="width: 6%;"><img src="@(activity.EmployeeProfilePicture)" class="proj-participant-img rounded-circle mx-left " alt="..."></td>
+                    <td class="align-middle" style="width: 20%;">@activity.EmployeeFullName</td>
+                    <td class="align-middle" >
+                        <div class="d-flex justify-content-center">
+                            <a class="btn px-1 py-0" asp-controller="Activities" asp-action="Edit" asp-route-id="@activity.Id" role="button" style="font-size: 16px;" title="Edit"><i class="fas fa-edit text-success"></i></a>
+                            @if (ViewBag.IsEmployeeAuthorizeToChange)
+                            {
+                                <a class="btn px-1 py-0" asp-controller="Activities" asp-action="Delete" asp-route-id="@activity.Id" role="button" style="font-size: 16px;" title="Delete"><i class="far fa-times-circle text-danger"></i></a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Working hours</th>
+                <th>Participant</th>
+                <th>Actions</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>

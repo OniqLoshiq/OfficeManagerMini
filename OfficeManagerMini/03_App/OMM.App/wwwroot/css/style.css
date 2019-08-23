@@ -445,6 +445,10 @@ tfoot input {
     background-color: #7cb342;
 }
 
+.report-calendar-color {
+    background-color: #c5e1a5;
+}
+
 .report-table .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
     background-color: #aed581;
 }
@@ -456,3 +460,33 @@ tfoot input {
 .report-table .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
     background-color: #dcedc8;
 }
+
+.report-button {
+    border: 1px solid #7cb342;
+    color: #7cb342;
+}
+
+    .report-button:hover {
+        background-color: #7cb342;
+        color: #fff
+    }
+
+#report-activities .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: #dcedc8;
+}
+
+#report-activities .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
+    background-color: #f1f8e9;
+}
+
+#report-activities .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #f0f4c3;
+}
+
+#report-activities td {
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50px;
+    font-size: 16px;
+}

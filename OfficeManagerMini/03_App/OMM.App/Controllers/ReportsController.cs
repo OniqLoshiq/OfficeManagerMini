@@ -34,7 +34,10 @@ namespace OMM.App.Controllers
 
             var isEmployeeAuthorizedToChangeProject = await this.projectsService.IsEmployeeAuthorizedToChangeProject(report.Project.Id, currentUserId);
 
-            if(!isEmployeeAuthorizedToChangeProject)
+            ViewBag.IsEmployeeAuthorizeToChange = isEmployeeAuthorizedToChangeProject;
+            ViewBag.CurrentUserId = currentUserId;
+
+            if (!isEmployeeAuthorizedToChangeProject)
             {
                 report.Activities = report.Activities.Where(a => a.EmployeeId == currentUserId).OrderByDescending(a => a.Date).ToList();
 

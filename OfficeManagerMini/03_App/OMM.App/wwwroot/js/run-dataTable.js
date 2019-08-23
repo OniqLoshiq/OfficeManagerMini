@@ -191,4 +191,39 @@
             });
         });
     }
+
+    var id7 = document.getElementById("activities-list");
+    if (id7) {
+        var table8 = $('#activities-list').DataTable({
+            buttons: ['copy', 'excel', 'pdf',
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        stripHtml: false,
+                    }
+                },
+
+                'colvis'],
+            "aaSorting": []
+        });
+        table8.buttons().container()
+            .appendTo('#activities-list_wrapper .col-md-6:eq(0)');
+
+        $('#activities-list tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="' + title + '" />');
+        });
+
+        // DataTable
+        var tableSearch8 = $('#activities-list').DataTable();
+
+        // Apply the search
+        tableSearch8.columns().eq(0).each(function (colIdx) {
+            $('input', tableSearch8.column(colIdx).footer()).on('keyup change', function () {
+                tableSearch8.column(colIdx)
+                    .search(this.value.replace(/;/g, "|"), true, false)
+                    .draw();
+            });
+        });
+    }
 });
