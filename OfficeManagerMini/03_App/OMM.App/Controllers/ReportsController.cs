@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OMM.App.Common;
 using OMM.App.Models.ViewModels;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data;
@@ -37,14 +38,27 @@ namespace OMM.App.Controllers
             ViewBag.IsEmployeeAuthorizeToChange = isEmployeeAuthorizedToChangeProject;
             ViewBag.CurrentUserId = currentUserId;
 
+            report.Project.Participants = report.Project.Participants
+                .OrderByDescending(p => p.ProjectPositionName == Constants.PROJECT_MANAGER_ROLE)
+                .ThenByDescending(p => p.ProjectPositionName == Constants.PROJECT_PARTICIPANT_ROLE)
+                .ToList();
+
+            report.Activities = report.Activities.OrderByDescending(a => a.Date).ToList();
+
             if (!isEmployeeAuthorizedToChangeProject)
             {
                 report.Activities = report.Activities.Where(a => a.EmployeeId == currentUserId).OrderByDescending(a => a.Date).ToList();
-
-                return View(report);
             }
 
-            report.Activities = report.Activities.OrderByDescending(a => a.Date).ToList();
+            int totalWorkingTime = 0;
+            int totalWorkingHours = 0;
+            int totalWorkingMinutes = 0;
+
+            totalWorkingTime = report.Activities.Sum(a => a.WorkingMinutes);
+            totalWorkingHours = totalWorkingTime / Constants.MINUTES_IN_HOUR;
+            totalWorkingMinutes = totalWorkingTime % Constants.MINUTES_IN_HOUR;
+            ViewBag.TotalProjectHours = totalWorkingHours;
+            ViewBag.TotalProjectMinutes = totalWorkingMinutes;
 
             return View(report);
         }

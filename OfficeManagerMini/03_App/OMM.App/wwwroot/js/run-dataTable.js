@@ -204,8 +204,9 @@
                 },
 
                 'colvis'],
-            "aaSorting": []
-        });
+            "aaSorting": [],
+            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+         });
         table8.buttons().container()
             .appendTo('#activities-list_wrapper .col-md-6:eq(0)');
 

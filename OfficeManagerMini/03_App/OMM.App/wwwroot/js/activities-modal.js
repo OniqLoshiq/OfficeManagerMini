@@ -30,22 +30,51 @@ function createActivity() {
     return false;
 };
 
+function OpenEditActivityModal(activityId) {
+    $.ajax({
+        type: "Get",
+        url: '/Activities/Edit',
+        data: { id: activityId },
+        success: function (data) {
+            $('#PreviewEditActivityForm').html(data);
+            loadFlatpickr();
+            $('#editActivity').modal('show');
+        }
+    });
+}
+
+function editActivity() {
+    $.ajax({
+        type: "Post",
+        url: '/Activities/Edit',
+        data: $("#formContent").serialize(),
+        success: function (result) {
+            if (result.success) {
+                window.location.href = result.url;
+            } else {
+                $('#PreviewEditActivityForm').html(result);
+                loadFlatpickr();
+            }
+        }
+    });
+    return false;
+};
 
 function loadFlatpickr() {
     flatpickr.l10ns.default.firstDayOfWeek = 1;
 
-    $(".flatpickrcontainer").flatpickr({
+    flatpickr(".flatpickrcontainer", {
         wrap: true,
         weekNumbers: true,
-        dateFormat: "d-m-Y",
+        dateFormat: "d/m/Y",
         maxDate: "today"
     });
 
-    $(".flatpickr-hours").flatpickr({
+    flatpickr(".flatpickr-hours", {
+        dateFormat: "H:i",
         wrap: true,
         enableTime: true,
         noCalendar: true,
-        dateFormat: "H:i",
         time_24hr: true,
     });
 }

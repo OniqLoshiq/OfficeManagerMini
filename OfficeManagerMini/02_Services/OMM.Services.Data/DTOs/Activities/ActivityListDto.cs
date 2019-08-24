@@ -16,6 +16,8 @@ namespace OMM.Services.Data.DTOs.Activities
         public string Hours { get; set; }
 
         public string Minutes { get; set; }
+
+        public int WorkingMinutes { get; set; }
         
         public string EmployeeFullName { get; set; }
 
@@ -28,7 +30,7 @@ namespace OMM.Services.Data.DTOs.Activities
         {
             configuration.CreateMap<Activity, ActivityListDto>()
                  .ForMember(destination => destination.Date,
-                 opts => opts.MapFrom(origin => origin.Date.ToString(Constants.DATETIME_FORMAT)))
+                 opts => opts.MapFrom(origin => origin.Date.ToString(Constants.ACTIVITY_DATETIME_FORMAT)))
                  .ForMember(destination => destination.Hours,
                  opts => opts.MapFrom(origin => (origin.WorkingMinutes / Constants.MINUTES_IN_HOUR).ToString("D2")))
                  .ForMember(destination => destination.Minutes,

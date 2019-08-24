@@ -15,6 +15,8 @@ namespace OMM.App.Models.ViewModels
 
         public string Minutes { get; set; }
 
+        public int WorkingMinutes { get; set; }
+
         public string EmployeeFullName { get; set; }
 
         public string EmployeeProfilePicture { get; set; }

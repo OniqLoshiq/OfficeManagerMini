@@ -28,5 +28,7 @@
 
         public const string PROJECT_PARTICIPANT_ROLE = "Participant";
 
+        public const int MINUTES_IN_HOUR = 60;
+
     }
 }

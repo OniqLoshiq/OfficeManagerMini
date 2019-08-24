@@ -450,15 +450,15 @@ tfoot input {
 }
 
 .report-table .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-    background-color: #aed581;
+    background-color: #dcedc8;
 }
 
 .report-table .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
-    background-color: #c5e1a5;
+    background-color: #f1f8e9;
 }
 
 .report-table .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-    background-color: #dcedc8;
+    background-color: #f0f4c3;
 }
 
 .report-button {
@@ -489,4 +489,32 @@ tfoot input {
     text-overflow: ellipsis;
     max-width: 50px;
     font-size: 16px;
-}
+}
+
+#report-activities paginate_button page-item active {
+    background-color: #c5e1a5;
+}
+
+
+#report-activities .page-item.active .page-link {
+    background-color: #7cb342;
+    border-color: #7cb342;
+}
+
+#report-activities .dataTables_paginatet .page-link {
+    color: #7cb342;
+}
+
+#report-activities .page-link:hover {
+    color: #ef5350;
+}
+
+.activity-description-list {
+    line-height: 15px; /* fallback */
+    max-height: 30px; /* fallback */
+    overflow: hidden;
+    /*text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* number of lines to show */
+}

@@ -27,7 +27,7 @@ namespace OMM.Services.Data.DTOs.Activities
                  (int.Parse(origin.WorkingTime.Split( ':', StringSplitOptions.RemoveEmptyEntries)[0]) * 60) 
                  + int.Parse(origin.WorkingTime.Split(':', StringSplitOptions.RemoveEmptyEntries)[1])))
                  .ForMember(destination => destination.Date,
-                 opts => opts.MapFrom(origin => DateTime.ParseExact(origin.Date, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture)));
+                 opts => opts.MapFrom(origin => DateTime.ParseExact(origin.Date, Constants.ACTIVITY_DATETIME_FORMAT, CultureInfo.InvariantCulture)));
         }
 }
 }
