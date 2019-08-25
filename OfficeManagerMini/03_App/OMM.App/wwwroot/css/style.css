@@ -518,3 +518,27 @@ tfoot input {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3; /* number of lines to show */
 }
+
+.bd-callout {
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #eee;
+    border-left-width: .25rem;
+    border-radius: .25rem
+}
+
+.bd-callout-warning {
+    border-left-color: #f0ad4e
+}
+
+.bd-callout-a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+    .bd-callout-a:hover {
+        color: #f0ad4e;
+        text-decoration: none;
+    }

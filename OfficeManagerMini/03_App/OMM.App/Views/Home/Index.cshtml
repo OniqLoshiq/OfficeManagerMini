@@ -1,13 +1,47 @@
-﻿@{
+﻿@model OMM.App.Models.ViewModels.EmployeeIndexViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h4 class="text-center mb-2">
+    Welcome to the Office Manager mini platform for management of a small company!
+
+</h4>
+<h5 class="text-center mb-2">
+    Enjoy your working time!
+</h5>
+<hr class="hr-oom" style="width: 400px;" />
 
 <cache vary-by-user="false" expires-after="TimeSpan.FromMinutes(20)">
     <vc:weather-forecast></vc:weather-forecast>
 </cache>
 
+<div class="container-fluid">
+    <div class="row d-flex justify-content-lg-around">
+        <div class="bd-callout bd-callout-warning col-12 col-lg-4">
+            <h5>Projects</h5>
+            <hr class="hr-oom my-1" />
+            <div class="my-2">
+                <a class="bd-callout-a" asp-controller="Projects" asp-action="MyProjects"><span class="badge badge-info p-2">@Model.MyProjects</span>  My activie projects</a>
+            </div>
+        </div>
+        <div class="bd-callout bd-callout-warning col-12 col-lg-4">
+            <h5>Assignments</h5>
+            <hr class="hr-oom my-1" />
+            <div class="my-2">
+                <a class="bd-callout-a" asp-controller="Assignments" asp-action="FromMe"><span class="badge badge-info p-2">@Model.AssignmentsFromMe</span>  From me</a>
+            </div>
+            <div class="my-2">
+                <a class="bd-callout-a" asp-controller="Assignments" asp-action="ForMe"><span class="badge badge-info p-2">@Model.AssignmentsForMe</span>  For me</a>
+            </div>
+            <div class="my-2">
+                <a class="bd-callout-a" asp-controller="Assignments" asp-action="AsAssistant"><span class="badge badge-info p-2">@Model.AssignmentsAsAssistant</span>  As assistant</a>
+            </div>
+            <hr class="hr-oom my-1" />
+            <div class="mt-2">
+                <a class="bd-callout-a" asp-controller="Assignments" asp-action="MyAssignments"><span class="badge badge-info p-2">@Model.MyAssignments</span>  Assignments to observe</a>
+            </div>
+        </div>
+    </div>
+</div>
