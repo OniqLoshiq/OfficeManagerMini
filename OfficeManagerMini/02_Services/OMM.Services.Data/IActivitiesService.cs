@@ -13,5 +13,7 @@ namespace OMM.Services.Data
         IQueryable<T> GetActivityById<T>(string id);
 
         Task<bool> EditActivityAsync(ActivityEditDto input);
+
+        IQueryable<ActivityPieDataDto> GetActivitiesByReportId(string reportId);
     }
 }

@@ -6,7 +6,7 @@
 
 @inject UserManager<Employee> UserManager
 
-@{ 
+@{
     ViewData["ReportId"] = Model.Id;
 }
 
@@ -28,33 +28,43 @@
             <hr class="hr-oom" />
             <div class="d-flex justify-content-between mb-3">
                 <div class="h6">Activities: </div>
-                <button type="button" class="btn report-button btn-sm" title="Add activity" data-toggle="modal" onclick="OpenCreateActivityModal('@Model.Id')">
-                    <i class="fas fa-plus pr-2"></i>Add Activity
-                </button>
+                @if (ViewBag.IsEmployeeParticipant)
+                {
+                    <button type="button" class="btn report-button btn-sm" title="Add activity" data-toggle="modal" onclick="OpenCreateActivityModal('@Model.Id')">
+                        <i class="fas fa-plus pr-2"></i>Add Activity
+                    </button>
 
-                <div class="modal fade" id="createActivity" role="dialog" aria-labelledby="createActivityModalLongTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <!-- Modal Content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="createActivityModalLongTitle">Create Activity</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body" id="PreviewActivityForm">
-                                @*<partial name="_ActivityCreatePartial" />*@
+                    <div class="modal fade" id="createActivity" role="dialog" aria-labelledby="createActivityModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <!-- Modal Content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createActivityModalLongTitle">Create Activity</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="PreviewActivityForm">
+                                    @*<partial name="_ActivityCreatePartial" />*@
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
 
             <partial name="_ActivitiesListPartial" model="@Model.Activities" view-data="ViewData" />
 
         </div>
     </div>
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <hr class="hr-oom" />
+            <vc:activities-pie-chart report-id="@Model.Id"></vc:activities-pie-chart>
+        </div>
+    </div>
 </div>
+
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
@@ -74,6 +84,27 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript">
+
+        // Radialize the colors
+        Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+            return {
+                radialGradient: {
+                    cx: 0.5,
+                    cy: 0.3,
+                    r: 0.7
+                },
+                stops: [
+                    [0, color],
+                    [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                ]
+            };
+        });
+
+
+    </script>
 }
 
 

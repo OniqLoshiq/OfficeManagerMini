@@ -61,5 +61,10 @@ namespace OMM.Services.Data
 
             return activity;
         }
+
+        public IQueryable<ActivityPieDataDto> GetActivitiesByReportId(string reportId)
+        {
+            return this.context.Activities.Where(a => a.ReportId == reportId).To<ActivityPieDataDto>();
+        }
     }
 }

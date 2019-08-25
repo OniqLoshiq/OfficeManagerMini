@@ -1,0 +1,54 @@
+﻿@model OMM.App.Infrastructure.ViewComponents.Models.Activities.ActivitiesPieSeriesDataViewComponentViewModel
+
+
+@using Highsoft.Web.Mvc.Charts
+@using Highsoft.Web.Mvc.Charts.Rendering
+@using System.Collections
+
+
+@{ var chartOptions =
+         new Highcharts
+         {
+             Chart = new Highsoft.Web.Mvc.Charts.Chart
+             {
+                 PlotBackgroundColor = null,
+                 PlotBorderWidth = null,
+                 PlotShadow = new Shadow
+                 {
+                     Enabled = false
+                 }
+             },
+             Title = new Title
+             {
+                 Text = "Distribution of the working time for the project by participants"
+             },
+             Tooltip = new Tooltip
+             {
+                //PointFormat = "{series.name}: <b> {point.y} </b>",
+                Formatter = @"function() {return '<b>' + this.point.name + '</b><br>' + this.series.name + ' :  <b>'  + parseInt(this.y / 60, 10)  + ' hours and ' + this.y % 60 + ' minutes  </b><br>Man-days: <b>' + (this.y / 480).toFixed(2) + ' days</b>'  }"
+
+             },
+             PlotOptions = new PlotOptions
+             {
+                 Pie = new PlotOptionsPie
+                 {
+                     AllowPointSelect = true,
+                     Cursor = PlotOptionsPieCursor.Pointer,
+                     DataLabels = new PlotOptionsPieDataLabels { ClassName = "Working Time" , Format = "<b>{point.name}</b>:<br>{point.percentage:.2f} %<br>minutes: {point.y}" },
+                 }
+             },
+             Series = new List<Series>
+             {
+            new PieSeries
+            {
+                Name = "Working Time",
+                Data = Model.PieData
+            }
+                                             }
+         };
+
+    chartOptions.ID = "chart";
+    var renderer = new HighchartsRenderer(chartOptions);
+}
+
+@Html.Raw(renderer.RenderHtml())

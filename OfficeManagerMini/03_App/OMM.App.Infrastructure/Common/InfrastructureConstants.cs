@@ -13,5 +13,7 @@
         public const string PASSWORD_NOT_MATCH = "The passwords do not match";
 
         public const string INVALID_PASSWORD = "Your current password does not match";
+
+        public const double MAX_PERCENTAGES = 100.0;
     }
 }

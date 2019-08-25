@@ -34,8 +34,10 @@ namespace OMM.App.Controllers
             }
 
             var isEmployeeAuthorizedToChangeProject = await this.projectsService.IsEmployeeAuthorizedToChangeProject(report.Project.Id, currentUserId);
+            var isEmployeeParticipant = await this.projectsService.IsEmployeeParticipant(report.Project.Id, currentUserId);
 
             ViewBag.IsEmployeeAuthorizeToChange = isEmployeeAuthorizedToChangeProject;
+            ViewBag.IsEmployeeParticipant = isEmployeeParticipant;
             ViewBag.CurrentUserId = currentUserId;
 
             report.Project.Participants = report.Project.Participants
