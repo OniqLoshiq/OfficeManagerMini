@@ -87,9 +87,12 @@ namespace OMM.App.Controllers
             else
             {
                 ModelState.AddModelError(string.Empty, ErrorMessages.INVALID_EMAIL);
+                return PartialView("_ForgotPasswordPartial");
             }
 
-            return this.RedirectToAction("Login");
+            var redirectUrl = Url.Action("Login", "Employees");
+
+            return Json(new { success = true, url = redirectUrl }); ;
         }
 
         public async Task<IActionResult> Profile()
