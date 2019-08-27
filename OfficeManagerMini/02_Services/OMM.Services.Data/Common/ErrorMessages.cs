@@ -10,5 +10,8 @@
 
         public const string ProjectPositionInvalidRange = "Project position with id {0} is not found";
 
+        public const string DepartmentInvalidRange = "Department with id {0} is not found";
+
+
     }
 }

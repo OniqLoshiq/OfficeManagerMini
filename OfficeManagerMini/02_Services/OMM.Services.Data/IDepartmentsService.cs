@@ -1,5 +1,5 @@
-﻿using OMM.Services.Data.DTOs.Departments;
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace OMM.Services.Data
 {
@@ -7,6 +7,6 @@ namespace OMM.Services.Data
     {
         IQueryable<T> GetAllDepartmentsByDto<T>();
 
-        string GetDepartmentNameById(int departmentId);
+        Task<string> GetDepartmentNameByIdAsync(int departmentId);
     }
 }

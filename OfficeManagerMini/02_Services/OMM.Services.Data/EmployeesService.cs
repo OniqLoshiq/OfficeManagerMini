@@ -320,7 +320,7 @@ namespace OMM.Services.Data
 
         private async Task ChangeRolesAsync(Employee employee, int departmentId)
         {
-            var departmentName = this.departmentsService.GetDepartmentNameById(departmentId);
+            var departmentName = await this.departmentsService.GetDepartmentNameByIdAsync(departmentId);
 
             var rolesCount = this.userManger.GetRolesAsync(employee).GetAwaiter().GetResult().Count;
 
@@ -369,7 +369,7 @@ namespace OMM.Services.Data
 
             roles.Add(Constants.DEFAULT_ROLE);
 
-            var departmentName = this.departmentsService.GetDepartmentNameById(departmentId);
+            var departmentName = await this.departmentsService.GetDepartmentNameByIdAsync(departmentId);
 
             //TODO:
             //if(departmentName == null)

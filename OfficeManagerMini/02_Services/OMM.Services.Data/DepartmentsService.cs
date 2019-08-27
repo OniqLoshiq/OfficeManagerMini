@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OMM.Data;
 using OMM.Services.AutoMapper;
-using OMM.Services.Data.DTOs.Departments;
+using OMM.Services.Data.Common;
 
 namespace OMM.Services.Data
 {
@@ -23,15 +22,14 @@ namespace OMM.Services.Data
             return this.context.Departments.To<T>();
         }
 
-        public string GetDepartmentNameById(int departmentId)
+        public async Task<string> GetDepartmentNameByIdAsync(int departmentId)
         {
-            var name = this.context.Departments.SingleOrDefault(d => d.Id == departmentId)?.Name;
+            var name = (await this.context.Departments.SingleOrDefaultAsync(d => d.Id == departmentId))?.Name;
 
-            //TODO:
-            //if(name == null)
-            //{
-
-            //}
+            if(name == null)
+            {
+                throw new ArgumentOutOfRangeException(null, string.Format(ErrorMessages.DepartmentInvalidRange, departmentId));
+            }
 
             return name;
         }
