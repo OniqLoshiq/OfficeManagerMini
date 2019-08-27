@@ -1,5 +1,6 @@
 ﻿using OMM.Services.Data.DTOs.ProjectPositions;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OMM.Services.Data
 {
@@ -7,6 +8,6 @@ namespace OMM.Services.Data
     {
         IQueryable<ProjectPostionDto> GetProjectPositions();
 
-        string GetProjectPositionNameById(int id);
+        Task<string> GetProjectPositionNameByIdAsync(int id);
     }
 }

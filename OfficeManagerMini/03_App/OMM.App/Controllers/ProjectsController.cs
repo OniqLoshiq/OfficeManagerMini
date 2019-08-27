@@ -167,7 +167,7 @@ namespace OMM.App.Controllers
 
             await this.employeesProjectsPositionsService.ChangeEmployeeProjectPositionAsync(participantToChange);
 
-            var newPositionName = this.projectPositionsService.GetProjectPositionNameById(participantToChange.ProjectPositionId);
+            var newPositionName = await this.projectPositionsService.GetProjectPositionNameByIdAsync(participantToChange.ProjectPositionId);
             var participantFullName = participantToChange.EmployeeFullName;
 
             return Json(new { success = true, participantName = participantFullName, position = newPositionName });

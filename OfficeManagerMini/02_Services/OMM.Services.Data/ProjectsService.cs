@@ -159,7 +159,7 @@ namespace OMM.Services.Data
 
             var participantToChange = projectParticipants.SingleOrDefault(p => p.EmployeeId == input.EmployeeId);
 
-            var newProjectPosition = this.projectPositionsService.GetProjectPositionNameById(input.ProjectPositionId);
+            var newProjectPosition = await this.projectPositionsService.GetProjectPositionNameByIdAsync(input.ProjectPositionId);
 
             if(participantToChange.ProjectPosition.Name == Constants.PROJECT_MANAGER_ROLE && newProjectPosition != Constants.PROJECT_MANAGER_ROLE)
             {

@@ -1,7 +1,11 @@
-﻿using OMM.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using OMM.Data;
 using OMM.Services.AutoMapper;
+using OMM.Services.Data.Common;
 using OMM.Services.Data.DTOs.ProjectPositions;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OMM.Services.Data
 {
@@ -19,9 +23,16 @@ namespace OMM.Services.Data
             return this.context.ProjectPositions.To<ProjectPostionDto>();
         }
 
-        public string GetProjectPositionNameById(int id)
+        public async Task<string> GetProjectPositionNameByIdAsync(int id)
         {
-            return this.context.ProjectPositions.SingleOrDefault(p => p.Id == id)?.Name;
+            var name = await this.context.ProjectPositions.Where(p => p.Id == id).Select(p => p.Name).SingleOrDefaultAsync();
+
+            if(name == null)
+            {
+                throw new ArgumentOutOfRangeException(null, string.Format(ErrorMessages.ProjectPositionInvalidRange, id));
+            }
+
+            return name;
         }
     }
 }
