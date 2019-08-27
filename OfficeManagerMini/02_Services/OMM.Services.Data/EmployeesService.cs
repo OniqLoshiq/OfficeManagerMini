@@ -264,7 +264,7 @@ namespace OMM.Services.Data
 
         public bool IsEmailValid (string email)
         {
-            var isMailValid = this.IsEmployeeActive(email);
+            var isMailValid = this.context.Users.Any(u => u.Email == email && u.IsActive == true);
 
             return isMailValid;
         }
