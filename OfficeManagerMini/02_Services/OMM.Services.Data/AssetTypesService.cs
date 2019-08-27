@@ -1,10 +1,7 @@
 ﻿using OMM.Data;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.AssetTypes;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace OMM.Services.Data
 {
