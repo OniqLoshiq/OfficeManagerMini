@@ -58,7 +58,8 @@ small {
     overflow-y: auto;
     transition: all 0.5s ease;
     color: #fff;
-    background-color: rgba(255, 0, 0, 0.4);
+    background-color: #eeeeee;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.19);
 }
 
     #sidebar .sidebar-header {
@@ -95,10 +96,14 @@ small {
         font-size: 0.9em !important;
         color: #FFFFFF;
         text-decoration: none;
-        background: #6d7fcc;
+        background: #cfd8dc;
     }
 
     #sidebar sidenav-header-inner {
+    }
+
+    #sidebar .navbar-dark .navbar-nav .nav-link {
+        color: #fa7268;
     }
 
     #sidebar img {
@@ -110,7 +115,7 @@ small {
     padding-top: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid;
-    background: red;
+    background: #37474f;
 }
 
 .profile-picture{
