@@ -71,7 +71,7 @@ namespace OMM.Tests.Services
             this.statusesService = new StatusesService(context);
 
             List<StatusListDto> actualResults = await this.statusesService.GetAllStatuses().ToListAsync();
-            List<StatusListDto> expectedResults = GetDummyData().ToList().To<StatusListDto>().ToList();
+            List<StatusListDto> expectedResults = GetDummyData().To<StatusListDto>().ToList();
 
             for (int i = 0; i < expectedResults.Count; i++)
             {
@@ -135,11 +135,9 @@ namespace OMM.Tests.Services
             await SeedData(context);
             this.statusesService = new StatusesService(context);
 
-            var invalidStatusName = "Invalid";
+            var ex = await Assert.ThrowsAsync<NullReferenceException>(() => this.statusesService.GetStatusIdByNameAsync(Invalid_Status_Name));
 
-            var ex = await Assert.ThrowsAsync<NullReferenceException>(() => this.statusesService.GetStatusIdByNameAsync(invalidStatusName));
-
-            Assert.Equal(string.Format(ErrorMessages.StatusNameNullReference, invalidStatusName), ex.Message);
+            Assert.Equal(string.Format(ErrorMessages.StatusNameNullReference, Invalid_Status_Name), ex.Message);
         }
 
         [Theory]
