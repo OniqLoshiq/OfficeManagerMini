@@ -16,7 +16,10 @@
 
         public const string AssetTypeIdNullReference = "Asset type with id {0} does not exist!";
 
+        public const string AssignmentIdNullReference = "Assignment with id {0} does not exist!";
 
+        public const string EmployeeIdNullReference = "Employee with id {0} does not exist!";
 
+        public const string CommentIdNullReference = "Comment with id {0} does not exist!";
     }
 }
