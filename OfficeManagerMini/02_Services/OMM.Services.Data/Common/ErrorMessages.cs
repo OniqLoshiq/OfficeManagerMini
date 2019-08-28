@@ -21,5 +21,10 @@
         public const string EmployeeIdNullReference = "Employee with id {0} does not exist!";
 
         public const string CommentIdNullReference = "Comment with id {0} does not exist!";
+
+        public const string ReportIdNullReference = "Report with id {0} does not exist!";
+
+        public const string ActivityIdNullReference = "Activity with id {0} does not exist!";
+
     }
 }

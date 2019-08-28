@@ -22,6 +22,20 @@ namespace OMM.Services.Data
 
         public async Task<bool> CreateActivityAsync(ActivityCreateDto input)
         {
+            var isEmployeeValid = await this.context.Users.AnyAsync(e => e.Id == input.EmployeeId);
+
+            if(!isEmployeeValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, input.EmployeeId));
+            }
+
+            var isReportValid = await this.context.Reports.AnyAsync(r => r.Id == input.ReportId);
+
+            if(!isReportValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ReportIdNullReference, input.ReportId));
+            }
+
             var activity = input.To<Activity>();
 
             await this.context.Activities.AddAsync(activity);
@@ -34,6 +48,11 @@ namespace OMM.Services.Data
         {
             var activity = await this.context.Activities.SingleOrDefaultAsync(a => a.Id == id);
 
+            if(activity == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ActivityIdNullReference, id));
+            }
+
             this.context.Activities.Remove(activity);
             var result = await this.context.SaveChangesAsync();
 
@@ -43,6 +62,11 @@ namespace OMM.Services.Data
         public async Task<bool> EditActivityAsync(ActivityEditDto input)
         {
             var activity = await this.context.Activities.SingleOrDefaultAsync(a => a.Id == input.Id);
+
+            if(activity == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ActivityIdNullReference, input.Id));
+            }
 
             activity.Date = DateTime.ParseExact(input.Date, Constants.ACTIVITY_DATETIME_FORMAT, CultureInfo.InvariantCulture);
             activity.Description = input.Description;
@@ -58,6 +82,11 @@ namespace OMM.Services.Data
         public IQueryable<T> GetActivityById<T>(string id)
         {
             var activity = this.context.Activities.Where(a => a.Id == id).To<T>();
+
+            if(!activity.Any())
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ActivityIdNullReference, id));
+            }
 
             return activity;
         }

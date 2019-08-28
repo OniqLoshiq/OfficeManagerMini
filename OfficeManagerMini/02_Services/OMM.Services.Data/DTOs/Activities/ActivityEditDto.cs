@@ -2,6 +2,7 @@
 using OMM.Domain;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data.Common;
+using System.Globalization;
 
 namespace OMM.Services.Data.DTOs.Activities
 {
@@ -23,7 +24,7 @@ namespace OMM.Services.Data.DTOs.Activities
                 .ForMember(destination => destination.WorkingTime,
                 opts => opts.MapFrom(origin => (origin.WorkingMinutes / Constants.MINUTES_IN_HOUR).ToString("D2") + ":" + (origin.WorkingMinutes % Constants.MINUTES_IN_HOUR).ToString("D2")))
                 .ForMember(destination => destination.Date,
-                opts => opts.MapFrom(origin => origin.Date.ToString(Constants.ACTIVITY_DATETIME_FORMAT)));
+                opts => opts.MapFrom(origin => origin.Date.ToString(Constants.ACTIVITY_DATETIME_FORMAT,CultureInfo.InvariantCulture)));
         }
     }
 }
