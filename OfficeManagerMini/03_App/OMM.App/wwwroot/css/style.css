@@ -59,7 +59,7 @@ small {
     transition: all 0.5s ease;
     color: #fff;
     background-color: #eeeeee;
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 }
 
     #sidebar .sidebar-header {
@@ -81,20 +81,22 @@ small {
         padding: 10px;
         display: block;
     }
-
+        /*Sidebar dropdown inner hover*/
         #sidebar ul li a:hover {
-            color: #7386D5;
-            background: #fff;
+            color: #ef5350 !important;
+            background: #fff8e1;
         }
 
+    /*Sidebar active*/
     #sidebar ul li.active > a, #sidebar a[aria-expanded="true"] {
-        color: #fff;
-        background: #6d7fcc;
+        color: #1b5e20 !important;
+        background: #ffd180;
     }
 
+    /*Sidebar dropdown inner*/
     #sidebar ul ul a {
         font-size: 0.9em !important;
-        color: #FFFFFF;
+        color: #00897b;
         text-decoration: none;
         background: #cfd8dc;
     }
@@ -102,8 +104,9 @@ small {
     #sidebar sidenav-header-inner {
     }
 
+    /*Sidebar text*/
     #sidebar .navbar-dark .navbar-nav .nav-link {
-        color: #fa7268;
+        color: #6e7185; 
     }
 
     #sidebar img {
@@ -111,11 +114,12 @@ small {
         height: 95px;
     }
 
+/*Sidebar top*/
 .sidenav-header {
     padding-top: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid;
-    background: #37474f;
+    background: #616161;
 }
 
 .profile-picture{
