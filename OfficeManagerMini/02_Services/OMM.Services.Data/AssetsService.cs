@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OMM.Data;
 using OMM.Domain;
 using OMM.Services.AutoMapper;
@@ -23,9 +22,9 @@ namespace OMM.Services.Data
 
         public async Task<bool> CreateAsync(AssetCreateDto assetModel)
         {
-            var asset = Mapper.Map<Asset>(assetModel);
+            var asset = assetModel.To<Asset>();
 
-            this.context.Assets.Add(asset);
+            await this.context.Assets.AddAsync(asset);
 
             var result = await this.context.SaveChangesAsync();
 
@@ -39,13 +38,12 @@ namespace OMM.Services.Data
 
         public async Task<bool> DeleteAsync(string id)
         {
-            var asset = this.context.Assets.SingleOrDefault(a => a.Id == id);
+            var asset = await this.context.Assets.SingleOrDefaultAsync(a => a.Id == id);
 
-            //TODO:
-            //if(asset == null)
-            //{
-            //    throw new System.Exception();
-            //}
+            if(asset == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.AssetIdNullReference, id));
+            }
 
             this.context.Assets.Remove(asset);
 
@@ -56,20 +54,31 @@ namespace OMM.Services.Data
 
         public async Task<AssetEditDto> GetAssetByIdAsync(string id)
         {
-            var asset = await this.context.Assets.Where(a => a.Id == id).To<AssetEditDto>().FirstOrDefaultAsync();
+            var asset = await this.context.Assets.Where(a => a.Id == id).To<AssetEditDto>().SingleOrDefaultAsync();
+
+            if(asset == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.AssetIdNullReference, id));
+            }
             
             return asset;
         }
 
         public async Task<bool> EditAsync(AssetEditDto assetToEdit)
         {
-            var asset = await this.context.Assets.FirstOrDefaultAsync(a => a.Id == assetToEdit.Id);
+            var assetType = await this.context.AssetTypes.SingleOrDefaultAsync(at => at.Id == assetToEdit.AssetTypeId);
 
-            //TODO:
-            //if(asset == null)
-            //{
-            //    throw new System.Exception();
-            //}
+            if(assetType == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.AssetTypeIdNullReference, assetToEdit.AssetTypeId));
+            }
+
+            var asset = await this.context.Assets.SingleOrDefaultAsync(a => a.Id == assetToEdit.Id);
+
+            if(asset == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.AssetIdNullReference, assetToEdit.Id));
+            }
 
             asset.InventoryNumber = assetToEdit.InventoryNumber;
             asset.Make = assetToEdit.Make;
