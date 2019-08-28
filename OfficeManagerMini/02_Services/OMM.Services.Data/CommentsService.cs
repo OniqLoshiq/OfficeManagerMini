@@ -20,16 +20,16 @@ namespace OMM.Services.Data
 
         public async Task<bool> CreateAsync(CommentCreateDto input)
         {
-            var assignment = await this.context.Assignments.AnyAsync(a => a.Id == input.AssignmentId);
+            var isAssignmentValid = await this.context.Assignments.AnyAsync(a => a.Id == input.AssignmentId);
 
-            if(!assignment)
+            if(!isAssignmentValid)
             {
                 throw new NullReferenceException(string.Format(ErrorMessages.AssignmentIdNullReference, input.AssignmentId));
             }
 
-            var commentator = await this.context.Users.AnyAsync(e => e.Id == input.CommentatorId);
+            var isCommentatorValid = await this.context.Users.AnyAsync(e => e.Id == input.CommentatorId);
 
-            if(!commentator)
+            if(!isCommentatorValid)
             {
                 throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, input.CommentatorId));
             }

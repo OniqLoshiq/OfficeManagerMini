@@ -48,7 +48,7 @@ namespace OMM.Tests.Services
                     AssignmentId = Assignment_Id_1,
                     Assignment = new Assignment { Id = Assignment_Id_1, Name = Assignment_Name_1},
                     CommentatorId = Employee_Id_1,
-                    Commentator = new Employee { Id = Employee_Id_1, FirstName = Employee_FullName_1}
+                    Commentator = new Employee { Id = Employee_Id_1, FullName = Employee_FullName_1}
                 },
                 new Comment
                 {
@@ -59,7 +59,7 @@ namespace OMM.Tests.Services
                     AssignmentId = Assignment_Id_2,
                     Assignment = new Assignment { Id = Assignment_Id_2, Name = Assignment_Name_2},
                     CommentatorId = Employee_Id_1,
-                    Commentator = new Employee { Id = Employee_Id_2, FirstName = Employee_FullName_2}
+                    Commentator = new Employee { Id = Employee_Id_2, FullName = Employee_FullName_2}
                 }
             };
         }
