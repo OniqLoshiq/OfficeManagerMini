@@ -26,5 +26,10 @@
 
         public const string ActivityIdNullReference = "Activity with id {0} does not exist!";
 
+        public const string ProjectIdNullReference = "Project with id {0} does not exist!";
+
+        public const string ReportInvalidProjectId = "There is already a report for project with id {0}!";
+
+
     }
 }
