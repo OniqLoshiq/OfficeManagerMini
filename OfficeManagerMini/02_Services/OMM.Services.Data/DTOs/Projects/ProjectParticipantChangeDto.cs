@@ -3,7 +3,7 @@ using OMM.Services.AutoMapper;
 
 namespace OMM.Services.Data.DTOs.Projects
 {
-    public class ProjectParticipantChangeDto : IMapTo<EmployeesProjectsPositions>
+    public class ProjectParticipantChangeDto : IMapTo<EmployeesProjectsPositions>, IMapFrom<EmployeesProjectsPositions>
     {
         public string EmployeeId { get; set; }
 

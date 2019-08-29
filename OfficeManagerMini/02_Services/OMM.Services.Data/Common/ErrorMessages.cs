@@ -30,6 +30,11 @@
 
         public const string ReportInvalidProjectId = "There is already a report for project with id {0}!";
 
+        public const string ProjectParticipantNullReference = "Project and/or Participant does not exists!";
+
+        public const string ProjectPositionNullReference = "ProjectPosition with id {0} does not exist!";
+
+        public const string ProjectParticipantsToRemoveNullReference = "Project participants to remove are invalid!";
 
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OMM.Data;
 using OMM.Domain;
 using OMM.Services.AutoMapper;
+using OMM.Services.Data.Common;
 using OMM.Services.Data.DTOs.Projects;
 
 namespace OMM.Services.Data
@@ -23,6 +25,18 @@ namespace OMM.Services.Data
             var projectParticipantRoleToDelete = await this.context.EmployeesProjectsRoles
                 .Where(p => p.ProjectId == participantToChange.ProjectId 
                 && p.EmployeeId == participantToChange.EmployeeId).SingleOrDefaultAsync();
+
+            if(projectParticipantRoleToDelete == null)
+            {
+                throw new NullReferenceException(ErrorMessages.ProjectParticipantNullReference);
+            }
+
+            var isProjectPositionValid = await this.context.ProjectPositions.AnyAsync(pp => pp.Id == participantToChange.ProjectPositionId);
+
+            if(!isProjectPositionValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectPositionNullReference, participantToChange.ProjectPositionId));
+            }
 
             if(projectParticipantRoleToDelete.ProjectPositionId == participantToChange.ProjectPositionId)
             {
@@ -46,6 +60,11 @@ namespace OMM.Services.Data
                 .Where(p => p.ProjectId == participantToRemove.ProjectId
                 && p.EmployeeId == participantToRemove.EmployeeId).SingleOrDefaultAsync();
 
+            if (projectParticipantToDelete == null)
+            {
+                throw new NullReferenceException(ErrorMessages.ProjectParticipantNullReference);
+            }
+
             this.context.EmployeesProjectsRoles.Remove(projectParticipantToDelete);
             var result = await this.context.SaveChangesAsync();
 
@@ -57,6 +76,11 @@ namespace OMM.Services.Data
             var projectParticipantsPositions = this.context.EmployeesProjectsRoles
                 .Where(epr => participantsToRemove
                         .Any(pr => epr.ProjectId == pr.ProjectId && epr.EmployeeId == pr.EmployeeId && epr.ProjectPositionId == pr.ProjectPositionId)).ToList();
+
+            if(projectParticipantsPositions.Count == 0)
+            {
+                throw new NullReferenceException(ErrorMessages.ProjectParticipantsToRemoveNullReference);
+            }
 
             this.context.EmployeesProjectsRoles.RemoveRange(projectParticipantsPositions);
             var result = await this.context.SaveChangesAsync();
