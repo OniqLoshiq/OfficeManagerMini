@@ -36,5 +36,10 @@
 
         public const string ProjectParticipantsToRemoveNullReference = "Project participants to remove are invalid!";
 
+        public const string AssistantsToAddNullException = "Assistants to add are not found!";
+
+        public const string AssistantArgumentException = "Assistant/s is/are already part of the assignment!";
+
+
     }
 }
