@@ -260,7 +260,7 @@ namespace OMM.Tests.Services
         [Theory]
         [InlineData(Activity_Id_1)]
         [InlineData(Activity_Id_2)]
-        public async Task GetActivityById_WithValidData_ShoultReturnCorrectResult(string id)
+        public async Task GetActivityById_WithValidData_ShouldReturnCorrectResult(string id)
         {
             string errorMessagePrefix = "ActivitiesService EditActivityAsync() method does not work properly.";
 
@@ -278,7 +278,7 @@ namespace OMM.Tests.Services
         }
 
         [Fact]
-        public async Task GetActivityById_WithInvalidId_ShoultReturnCorrectResult()
+        public async Task GetActivityById_WithInvalidId_ShouldThrowNullReferenceException()
         {
             var context = OmmDbContextInMemoryFactory.InitializeContext();
             await SeedData(context);
