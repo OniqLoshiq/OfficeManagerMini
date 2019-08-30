@@ -42,6 +42,14 @@ namespace OMM.Services.Data
         {
             var project = input.To<Project>();
 
+            var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
+
+            if (inputStatusName == Constants.STATUS_COMPLETED)
+            {
+                project.EndDate = DateTime.UtcNow;
+                project.Progress = Constants.PROGRESS_MAX_VALUE;
+            }
+
             this.context.Projects.Add(project);
             var result = await this.context.SaveChangesAsync();
 
@@ -57,11 +65,25 @@ namespace OMM.Services.Data
 
         public IQueryable<ProjectAllListDto> GetMyProjects(string employeeId)
         {
+            var isEmployeeIdValid = this.context.Users.Any(e => e.Id == employeeId);
+            
+            if(!isEmployeeIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, employeeId));
+            }
+
             return this.context.Projects.Where(p => p.Participants.Any(x => x.EmployeeId == employeeId)).To<ProjectAllListDto>();
         }
 
         public IQueryable<T> GetProjectById<T>(string projectId)
         {
+            var isProjectIdValid = this.context.Projects.Any(p => p.Id == projectId);
+
+            if(!isProjectIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, projectId));
+            }
+
             var project = this.context.Projects.Where(p => p.Id == projectId).To<T>();
 
             return project;
@@ -70,6 +92,12 @@ namespace OMM.Services.Data
         public async Task<bool> ChangeDataAsync(ProjectDetailsChangeDto input)
         {
             var project = await this.context.Projects.FirstOrDefaultAsync(p => p.Id == input.Id);
+
+            if(project == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, input.Id));
+            }
+
             var projectStatusName = await this.statusesService.GetStatusNameByIdAsync(project.StatusId);
             var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
 
@@ -155,9 +183,21 @@ namespace OMM.Services.Data
 
         public async Task<bool> CheckIsParticipantLastManagerAsync(ProjectParticipantChangeDto input)
         {
-            var projectParticipants = (await this.context.Projects.SingleOrDefaultAsync(p => p.Id == input.ProjectId))?.Participants;
+            var project = await this.context.Projects.SingleOrDefaultAsync(p => p.Id == input.ProjectId);
+
+            if(project == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, input.ProjectId));
+            }
+
+            var projectParticipants = project.Participants;
 
             var participantToChange = projectParticipants.SingleOrDefault(p => p.EmployeeId == input.EmployeeId);
+
+            if(participantToChange == null)
+            {
+                throw new ArgumentException(string.Format(ErrorMessages.ProjectParticipantArgumentException, input.EmployeeId, input.ProjectId));
+            }
 
             var newProjectPosition = await this.projectPositionsService.GetProjectPositionNameByIdAsync(input.ProjectPositionId);
 
@@ -178,7 +218,14 @@ namespace OMM.Services.Data
 
         public async Task<bool> IsEmployeeAuthorizedToChangeProject(string projectId, string currentUserId)
         {
-            var projectParticipants = await this.context.Projects.Where(p => p.Id == projectId).Select(p => p.Participants).SingleOrDefaultAsync();
+            var project = await this.context.Projects.Where(p => p.Id == projectId).SingleOrDefaultAsync();
+
+            if(project == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, projectId));
+            }
+
+            var projectParticipants = project.Participants.ToList();
             var isCurrentUserParticipantIsProjectManager = projectParticipants.Any(p => p.EmployeeId == currentUserId && p.ProjectPosition.Name == Constants.PROJECT_MANAGER_ROLE);
 
             var isCurrentUserAdmin = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.ADMIN_ROLE);
@@ -189,7 +236,14 @@ namespace OMM.Services.Data
 
         public async Task<bool> IsEmployeeAuthorizedForProject(string projectId, string currentUserId)
         {
-            var projectParticipants = await this.context.Projects.Where(p => p.Id == projectId).Select(p => p.Participants).SingleOrDefaultAsync();
+            var project = await this.context.Projects.Where(p => p.Id == projectId).SingleOrDefaultAsync();
+
+            if (project == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, projectId));
+            }
+
+            var projectParticipants = project.Participants.ToList();
             var isCurrentUserParticipant = projectParticipants.Any(p => p.EmployeeId == currentUserId);
 
             var isCurrentUserAdmin = await this.employeesService.CheckIfEmployeeIsInRole(currentUserId, Constants.ADMIN_ROLE);
@@ -201,23 +255,17 @@ namespace OMM.Services.Data
         public async Task<bool> IsEmployeeParticipant(string projectId, string currentUserId)
         {
             var project = await this.context.Projects.Where(p => p.Id == projectId).SingleOrDefaultAsync();
+
+            if (project == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, projectId));
+            }
+
             var isCurrentUserParticipant = project.Participants.Any(p => p.EmployeeId == currentUserId);
 
             return isCurrentUserParticipant;
         }
-
-        public async Task<bool> ChangeProjectPositionAsync(ProjectParticipantChangeDto participantToChange)
-        {
-            var projectParticipantRole = await this.context.EmployeesProjectsRoles.SingleOrDefaultAsync(p => p.ProjectId == participantToChange.ProjectId && p.EmployeeId == participantToChange.EmployeeId);
-
-            projectParticipantRole.ProjectPositionId = participantToChange.ProjectPositionId;
-
-            this.context.EmployeesProjectsRoles.Update(projectParticipantRole);
-            var result = await this.context.SaveChangesAsync();
-
-            return result > 0;
-        }
-
+        
         public async Task<bool> EditProjectAsync(ProjectEditDto projectToEdit)
         {
             var project = await this.context.Projects.Where(p => p.Id == projectToEdit.Id).SingleOrDefaultAsync();
@@ -232,6 +280,10 @@ namespace OMM.Services.Data
             if (projectToEdit.Deadline != "" && projectToEdit.Deadline != null)
             {
                 project.Deadline = DateTime.ParseExact(projectToEdit.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                project.Deadline = null;
             }
 
             #region ChangeStatusLogic 
@@ -287,6 +339,11 @@ namespace OMM.Services.Data
         public async Task<bool> DeleteProjectAsync(string id)
         {
             var project = await this.context.Projects.Where(p => p.Id == id).SingleOrDefaultAsync();
+
+            if(project == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, id));
+            }
 
             if(project.Assignments.Count > 0)
             {

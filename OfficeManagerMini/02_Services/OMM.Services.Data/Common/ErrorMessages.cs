@@ -40,6 +40,8 @@
 
         public const string AssistantArgumentException = "Assistant/s is/are already part of the assignment!";
 
+        public const string ProjectParticipantArgumentException = "Employee with id {0} is not participant in project with id {1}";
+
 
     }
 }

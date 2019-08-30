@@ -30,8 +30,6 @@ namespace OMM.Services.Data
 
         Task<bool> IsEmployeeParticipant(string projectId, string currentUserId);
 
-        Task<bool> ChangeProjectPositionAsync(ProjectParticipantChangeDto participantToChange);
-
         Task<bool> EditProjectAsync(ProjectEditDto projectToEdit);
 
         Task<bool> DeleteProjectAsync(string id);
