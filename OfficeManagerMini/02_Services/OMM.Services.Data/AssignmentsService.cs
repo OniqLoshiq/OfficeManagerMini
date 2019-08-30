@@ -29,6 +29,14 @@ namespace OMM.Services.Data
         {
             var assignment = input.To<Assignment>();
 
+            var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
+
+            if(inputStatusName == Constants.STATUS_COMPLETED)
+            {
+                assignment.EndDate = DateTime.UtcNow;
+                assignment.Progress = Constants.PROGRESS_MAX_VALUE;
+            }
+
             assignment.AssignmentsAssistants = this.assignmentsEmployeesService.CreateWithAssistantsIds(input.AssistantsIds).ToList();
 
             await this.context.Assignments.AddAsync(assignment);

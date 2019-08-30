@@ -267,13 +267,21 @@ namespace OMM.Tests.Services
         }
 
         [Fact]
-        public async Task CreateAssignmentAsync_WithValidDataNotProjectRelated_ShouldCreateAssignmentAndReturnTrue()
+        public async Task CreateAssignmentAsync_WithValidDataNotProjectRelatedAndStatusNotCompleted_ShouldCreateAssignmentAndReturnTrue()
         {
             string errorMessagePrefix = "AssignmentsService CreateAssignmentAsync() method does not work properly.";
 
             var context = OmmDbContextInMemoryFactory.InitializeContext();
             await SeedData(context);
             var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
             var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
             this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
 
@@ -297,6 +305,50 @@ namespace OMM.Tests.Services
         }
 
         [Fact]
+        public async Task CreateAssignmentAsync_WithValidDataAndStatustCompleted_ShouldCreateAssignmentAndSetEndDateToDateAndProgressTo100AndReturnTrue()
+        {
+            string errorMessagePrefix = "AssignmentsService CreateAssignmentAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
+
+            var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
+            this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
+
+            var assignmentToCreate = new AssignmentCreateDto
+            {
+                Name = Assignment_Name_5,
+                Description = Assignment_Description_5,
+                AssignorId = Employee_Id_5,
+                ExecutorId = Employee_Id_4,
+                StartingDate = "28-08-2019",
+                Priority = Priority_5,
+                Progress = Assignment_Progress_0,
+                StatusId = Status_Id_Completed,
+                Type = Assignment_Type_1,
+                IsProjectRelated = Assignment_IsProjectRelated_NO
+            };
+
+            bool result = await this.assignmentsService.CreateAssignmentAsync(assignmentToCreate);
+            var actualAssignment = await context.Assignments.SingleAsync(a => a.Name == Assignment_Name_5);
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.True(actualAssignment.EndDate.HasValue, errorMessagePrefix + " " + "EndDate was not set correctly during the creation!");
+            Assert.True(actualAssignment.Progress == Assignment_Progress_100, errorMessagePrefix + " " + "Progress was not set correctly during the creation!");
+            Assert.True(actualAssignment.StatusId == Status_Id_Completed, errorMessagePrefix + " " + "StatusId was not set correctly during the creation!");
+
+        }
+
+        [Fact]
         public async Task CreateAssignmentAsync_WithValidDataProjectRelated_ShouldCreateAssignmentAndReturnTrue()
         {
             string errorMessagePrefix = "AssignmentsService CreateAssignmentAsync() method does not work properly.";
@@ -304,6 +356,14 @@ namespace OMM.Tests.Services
             var context = OmmDbContextInMemoryFactory.InitializeContext();
             await SeedData(context);
             var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
             var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
             this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
 
@@ -335,6 +395,14 @@ namespace OMM.Tests.Services
             var context = OmmDbContextInMemoryFactory.InitializeContext();
             await SeedData(context);
             var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
             var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
             this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
 
