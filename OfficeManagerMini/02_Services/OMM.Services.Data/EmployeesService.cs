@@ -69,11 +69,10 @@ namespace OMM.Services.Data
 
             var emailResult = await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, password);
 
-            //TODO:
-            //if(!emailResult)
-            //{
-            //    throw new System.Exception("Problem with email");
-            //}
+            if(!emailResult)
+            {
+                throw new ArgumentException(ErrorMessages.SendGridMailArgumentException);
+            }
             
             if (result.Succeeded)
             {
@@ -109,6 +108,13 @@ namespace OMM.Services.Data
 
         public IQueryable<T> GetEmployeeDtoByIdAsync<T>(string id)
         {
+            var isEmployeeIdValid = this.context.Users.Any(e => e.Id == id);
+
+            if(!isEmployeeIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, id));
+            }
+
             var employee = this.context.Users.Where(u => u.Id == id).To<T>();
 
             return employee;
@@ -116,6 +122,13 @@ namespace OMM.Services.Data
 
         public IQueryable<T> GetEmployeeDtoByUsernameAsync<T>(string username)
         {
+            var isUsernameValid = this.context.Users.Any(e => e.UserName == username);
+
+            if(!isUsernameValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeUsernameNullReference, username));
+            }
+
             var employee = this.context.Users.Where(u => u.UserName == username).To<T>();
 
             return employee;
@@ -125,14 +138,15 @@ namespace OMM.Services.Data
         {
             var employee = await this.context.Users.FirstOrDefaultAsync(a => a.Id == employeeToEdit.Id);
 
-            //TODO:
-            //if(employee == null)
-            //{
-            //    throw new System.Exception();
-            //}
+            if (employee == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, employeeToEdit.Id));
+            }
 
             employee.UserName = employeeToEdit.Username;
+            employee.NormalizedUserName = employeeToEdit.Username.ToUpper();
             employee.Email = employeeToEdit.Email;
+            employee.NormalizedEmail = employeeToEdit.Email.ToUpper();
             employee.FirstName = employeeToEdit.FirstName;
             employee.MiddleName = employeeToEdit.MiddleName;
             employee.LastName = employeeToEdit.LastName;
@@ -225,6 +239,11 @@ namespace OMM.Services.Data
 
             var emailResult = await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, newPassword);
 
+            if (!emailResult)
+            {
+                throw new ArgumentException(ErrorMessages.SendGridMailArgumentException);
+            }
+
             this.context.Users.Update(employee);
             var result = await this.context.SaveChangesAsync();
 
@@ -235,12 +254,22 @@ namespace OMM.Services.Data
         {
             var employee = await this.context.Users.SingleOrDefaultAsync(u => u.Id == employeeId);
 
+            if(employee == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, employeeId));
+            }
+
             return await this.userManger.CheckPasswordAsync(employee, currentPassword);
         }
 
         public async Task<bool> ChangePasswordAsync(string employeeId, EmployeeChangePasswordDto changePasswordDto)
         {
             var employee = await this.context.Users.SingleOrDefaultAsync(u => u.Id == employeeId);
+
+            if(employee == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, employeeId));
+            }
 
             var result = await this.userManger.ChangePasswordAsync(employee, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
 
@@ -253,32 +282,59 @@ namespace OMM.Services.Data
 
             var employee = await this.context.Users.SingleOrDefaultAsync(u => u.Email == email);
 
+            if(employee == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeEmailNullReference, email));
+            }
+
             await this.userManger.RemovePasswordAsync(employee);
 
             var result = await this.userManger.AddPasswordAsync(employee, newPassword);
 
-            await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, newPassword);
+            var emailResult = await this.emailSender.SendRegistrationMailAsync(employee.Email, employee.FullName, newPassword);
+
+            if(!emailResult)
+            {
+                throw new ArgumentException(ErrorMessages.SendGridMailArgumentException);
+            }
 
             return result.Succeeded;
         }
 
         public bool IsEmailValid (string email)
         {
-            var isMailValid = this.context.Users.Any(u => u.Email == email && u.IsActive == true);
+            var isMailValid = this.IsEmployeeActive(email);
 
             return isMailValid;
         }
 
         public async Task<string> GetEmployeeFullNameByIdAsync(string currentEmployeeId)
         {
-            var fullName = (await this.context.Users.SingleOrDefaultAsync(u => u.Id == currentEmployeeId)).FullName;
+            var employee = await this.context.Users.SingleOrDefaultAsync(u => u.Id == currentEmployeeId);
 
-            return fullName;
+            if(employee == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, currentEmployeeId));
+            }
+
+            return employee.FullName;
         }
 
         public async Task<bool> CheckIfEmployeeIsInRole(string currentUserId, string roleName)
         {
             var employee = await this.context.Users.SingleOrDefaultAsync(e => e.Id == currentUserId);
+
+            if(employee == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, currentUserId));
+            }
+
+            var isRoleNameValid = this.context.Roles.Any(r => r.NormalizedName == roleName.ToUpper());
+
+            if(!isRoleNameValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.RoleNameNullReferenceException, roleName));
+            }
 
             var result =  await this.userManger.IsInRoleAsync(employee, roleName);
 
@@ -370,12 +426,6 @@ namespace OMM.Services.Data
             roles.Add(Constants.DEFAULT_ROLE);
 
             var departmentName = await this.departmentsService.GetDepartmentNameByIdAsync(departmentId);
-
-            //TODO:
-            //if(departmentName == null)
-            //{
-
-            //}
 
             if (departmentName == Constants.MANAGEMENT_DEPARTMENT)
             {
