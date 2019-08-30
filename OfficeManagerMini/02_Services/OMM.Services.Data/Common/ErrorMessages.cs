@@ -42,6 +42,13 @@
 
         public const string ProjectParticipantArgumentException = "Employee with id {0} is not participant in project with id {1}";
 
+        public const string SendGridMailArgumentException = "There was a problem sending an email!";
+
+        public const string RoleNameNullReferenceException = "RoleName with name {0} does not exist!";
+
+        public const string EmployeeEmailNullReference = "Employee with email {0} does not exist!";
+
+        public const string EmployeeUsernameNullReference = "Employee with username {0} does not exist!";
 
     }
 }

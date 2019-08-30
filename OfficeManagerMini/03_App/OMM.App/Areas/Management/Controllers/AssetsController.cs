@@ -43,7 +43,7 @@ namespace OMM.App.Areas.Management.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return this.View();
+                return this.View(input);
             }
 
             var asset = AutoMapper.Mapper.Map<AssetCreateDto>(input);
@@ -70,7 +70,7 @@ namespace OMM.App.Areas.Management.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return this.View();
+                return this.View(viewModel);
             }
 
             var assetToEdit = AutoMapper.Mapper.Map<AssetEditDto>(viewModel);

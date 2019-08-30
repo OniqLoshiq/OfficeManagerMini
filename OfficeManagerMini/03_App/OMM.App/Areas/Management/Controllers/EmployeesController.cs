@@ -72,7 +72,7 @@ namespace OMM.App.Areas.Management.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return this.View();
+                return this.View(input);
             }
 
             if (input.ProfilePictureNew != null)
@@ -108,7 +108,7 @@ namespace OMM.App.Areas.Management.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return this.View();
+                return this.View(input);
             }
 
             var employeeToRelease = input.To<EmployeeReleaseDto>();

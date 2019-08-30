@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using OMM.App.Common;
+using OMM.App.Infrastructure.Attributes;
 using OMM.Services.AutoMapper;
 using OMM.Services.Data.DTOs.Employees;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +16,7 @@ namespace OMM.App.Areas.Management.Models.ViewModels
         [Required]
         [Display(Name = "Email")]
         [EmailAddress]
+        [IsUniqueUserProperty(nameof(Email), ErrorMessage = ErrorMessages.NOT_UNIQUE_EMAIL)]
         public string Email { get; set; }
 
         [Required]

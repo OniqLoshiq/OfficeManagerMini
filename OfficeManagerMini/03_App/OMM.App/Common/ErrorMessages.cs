@@ -8,6 +8,8 @@
 
         public const string INVALID_EMAIL = "This is an invalid email address";
 
+        public const string NOT_UNIQUE_EMAIL = "The email is already in use";
+
         public const string INVALID_ASSISTANT = "The Executor cannot be an assistant to the assignment!";
 
         public const string INVALID_PROJECT = "Please select a project when the assignment is project related!";
