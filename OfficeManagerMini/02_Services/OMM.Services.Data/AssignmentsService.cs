@@ -45,6 +45,13 @@ namespace OMM.Services.Data
 
         public IQueryable<AssignmentListDto> GetAllMyAssignments(string employeeId)
         {
+            var isEmployeeIdValid = this.context.Users.Any(e => e.Id == employeeId);
+
+            if(!isEmployeeIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, employeeId));
+            }
+
             var assignmentIds = this.context.Assignments
                 .Where(a => a.ExecutorId == employeeId || a.AssignorId == employeeId)
                 .Select(a => a.Id)
@@ -64,6 +71,13 @@ namespace OMM.Services.Data
 
         public IQueryable<AssignmentListDto> GetAllAssignmentsForMe(string executorId)
         {
+            var isExecutorIdValid = this.context.Users.Any(e => e.Id == executorId);
+
+            if (!isExecutorIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, executorId));
+            }
+
             return this.context.Assignments
                 .Where(a => a.ExecutorId == executorId)
                 .To<AssignmentListDto>();
@@ -71,6 +85,13 @@ namespace OMM.Services.Data
 
         public IQueryable<AssignmentListDto> GetAllAssignmentsFromMe(string assignorId)
         {
+            var isAssignorIdValid = this.context.Users.Any(e => e.Id == assignorId);
+
+            if (!isAssignorIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, assignorId));
+            }
+
             return this.context.Assignments
                 .Where(a => a.AssignorId == assignorId)
                 .To<AssignmentListDto>();
@@ -78,6 +99,13 @@ namespace OMM.Services.Data
 
         public IQueryable<AssignmentListDto> GetAllAssignmentsAsAssistant(string assistantId)
         {
+            var isAssistantIdValid = this.context.Users.Any(e => e.Id == assistantId);
+
+            if (!isAssistantIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, assistantId));
+            }
+
             return this.context.AssignmentsEmployees
                 .Where(a => a.AssistantId == assistantId)
                 .Select(a => a.Assignment)
@@ -86,6 +114,13 @@ namespace OMM.Services.Data
 
         public IQueryable<AssignmentDetailsDto> GetAssignmentDetails(string id)
         {
+            var isAssignmentIdValid = this.context.Assignments.Any(a => a.Id == id);
+
+            if(!isAssignmentIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.AssignmentIdNullReference, id));
+            }
+
             return this.context.Assignments
                 .Where(a => a.Id == id)
                 .To<AssignmentDetailsDto>();
@@ -161,6 +196,13 @@ namespace OMM.Services.Data
 
         public async Task<bool> DeleteAsync(string id)
         {
+            var isAssignmentIdValid = this.context.Assignments.Any(a => a.Id == id);
+
+            if (!isAssignmentIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.AssignmentIdNullReference, id));
+            }
+
             var assignment = await this.context.Assignments.SingleOrDefaultAsync(a => a.Id == id);
 
             this.context.Assignments.Remove(assignment);
@@ -171,6 +213,13 @@ namespace OMM.Services.Data
 
         public async Task<AssignmentEditDto> GetAssignmentToEditAsync(string id)
         {
+            var isAssignmentIdValid = this.context.Assignments.Any(a => a.Id == id);
+
+            if (!isAssignmentIdValid)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.AssignmentIdNullReference, id));
+            }
+
             return await this.context.Assignments
                 .Where(a => a.Id == id)
                 .To<AssignmentEditDto>().FirstOrDefaultAsync();
@@ -183,8 +232,16 @@ namespace OMM.Services.Data
             assignment.ExecutorId = input.ExecutorId;
 
             assignment.StartingDate = DateTime.ParseExact(input.StartingDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
-
-            if (input.Deadline != "" || input.Deadline != null)
+                        
+            if (input.Deadline == "")
+            {
+                assignment.Deadline = null;
+            }
+            else if (input.Deadline == null)
+            {
+                assignment.Deadline = null;
+            }
+            else
             {
                 assignment.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             }
