@@ -1161,5 +1161,289 @@ namespace OMM.Tests.Services
             assignmentsEmployeesService.Verify(ae => ae.AddAssistantsAsync(It.IsAny<List<string>>(), It.IsAny<string>()), Times.Once, errorMessagePrefix);
             assignmentsEmployeesService.Verify(ae => ae.RemoveAssistantsAsync(It.IsAny<List<string>>(), It.IsAny<string>()), Times.Once, errorMessagePrefix);
         }
+
+        [Fact]
+        public async Task ChangeDataAsync_WithInvalidAssignmnentId_ShouldThrowNullReferenceException()
+        {
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var statusService = new Mock<IStatusesService>();
+            var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
+
+            this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
+
+            var input = (await context.Assignments.FirstAsync()).To<AssignmentDetailsChangeDto>();
+
+            string invalidId = "Invlaid id";
+
+            input.Id = invalidId;
+
+            var ex = await Assert.ThrowsAsync<NullReferenceException>(() => this.assignmentsService.ChangeDataAsync(input));
+            Assert.Equal(string.Format(ErrorMessages.AssignmentIdNullReference, invalidId), ex.Message);
+        }
+
+        [Fact]
+        public async Task ChangeDataAsync_ChangeDeadlineFromNullToDate_ShouldChangeAssignmentCorrectlyAndReturnTrue()
+        {
+            string errorMessagePrefix = "AssignmentsService ChangeDataAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
+
+            statusService.Setup(ss => ss.GetStatusIdByNameAsync(It.IsAny<string>()))
+                         .ReturnsAsync((string statusName) => {
+                             if (statusName == Status_InProgress) return Status_Id_InProgress;
+                             else if (statusName == Status_Waiting) return Status_Id_Waiting;
+                             else if (statusName == Status_Frozen) return Status_Id_Frozen;
+                             else if (statusName == Status_Delayed) return Status_Id_Delayed;
+                             else return Status_Id_Completed;
+                         });
+
+            var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
+
+            this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
+
+            AssignmentDetailsChangeDto expectedResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_1)).To<AssignmentDetailsChangeDto>();
+
+            expectedResult.Deadline = "30-08-2019";
+
+            bool result = await this.assignmentsService.ChangeDataAsync(expectedResult);
+
+            AssignmentDetailsChangeDto actualResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_1)).To<AssignmentDetailsChangeDto>();
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.True(expectedResult.Deadline == actualResult.Deadline, errorMessagePrefix + " " + "Deadline is not changed correctly!");
+        }
+
+        [Fact]
+        public async Task ChangeDataAsync_ChangeDeadlineFromDateToNull_ShouldChangeAssignmentCorrectlyAndReturnTrue()
+        {
+            string errorMessagePrefix = "AssignmentsService ChangeDataAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
+
+            statusService.Setup(ss => ss.GetStatusIdByNameAsync(It.IsAny<string>()))
+                         .ReturnsAsync((string statusName) => {
+                             if (statusName == Status_InProgress) return Status_Id_InProgress;
+                             else if (statusName == Status_Waiting) return Status_Id_Waiting;
+                             else if (statusName == Status_Frozen) return Status_Id_Frozen;
+                             else if (statusName == Status_Delayed) return Status_Id_Delayed;
+                             else return Status_Id_Completed;
+                         });
+
+            var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
+
+            this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
+
+            AssignmentDetailsChangeDto expectedResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_3)).To<AssignmentDetailsChangeDto>();
+
+            expectedResult.Deadline = null;
+
+            bool result = await this.assignmentsService.ChangeDataAsync(expectedResult);
+
+            Assignment actualResult = await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_3);
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.False(actualResult.Deadline.HasValue, errorMessagePrefix + " " + "Deadline is not changed correctly!");
+        }
+
+        [Fact]
+        public async Task ChangeDataAsync_SetOnlyEndDateFromNullToDateWhenStatusIsNotCompleted_ShouldChangeStatusToCompletedAndProgressTo100AndReturnTrue()
+        {
+            string errorMessagePrefix = "AssignmentsService ChangeDataAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
+
+            statusService.Setup(ss => ss.GetStatusIdByNameAsync(It.IsAny<string>()))
+                         .ReturnsAsync((string statusName) => {
+                             if (statusName == Status_InProgress) return Status_Id_InProgress;
+                             else if (statusName == Status_Waiting) return Status_Id_Waiting;
+                             else if (statusName == Status_Frozen) return Status_Id_Frozen;
+                             else if (statusName == Status_Delayed) return Status_Id_Delayed;
+                             else return Status_Id_Completed;
+                         });
+
+            var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
+
+            this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
+
+            AssignmentDetailsChangeDto expectedResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_1)).To<AssignmentDetailsChangeDto>();
+
+            expectedResult.EndDate = "30-08-2019";
+
+            bool result = await this.assignmentsService.ChangeDataAsync(expectedResult);
+
+            AssignmentDetailsChangeDto actualResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_1)).To<AssignmentDetailsChangeDto>();
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.True(expectedResult.EndDate == actualResult.EndDate , errorMessagePrefix + " " + "EndDate is not changed correctly!");
+            Assert.True(actualResult.StatusId == Status_Id_Completed , errorMessagePrefix + " " + "StatusId is not changed correctly!");
+            Assert.True(actualResult.StatusName == Status_Completed, errorMessagePrefix + " " + "StatusName is not changed correctly!");
+            Assert.True(actualResult.Progress == Assignment_Progress_100, errorMessagePrefix + " " + "Progress is not changed correctly!");
+        }
+
+        [Fact]
+        public async Task ChangeDataAsync_SetOnlyEndDateFromDateToNullWhenStatusIsCompleted_ShouldChangeStatusToInProgressAndReturnTrue()
+        {
+            string errorMessagePrefix = "AssignmentsService ChangeDataAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
+
+            statusService.Setup(ss => ss.GetStatusIdByNameAsync(It.IsAny<string>()))
+                         .ReturnsAsync((string statusName) => {
+                             if (statusName == Status_InProgress) return Status_Id_InProgress;
+                             else if (statusName == Status_Waiting) return Status_Id_Waiting;
+                             else if (statusName == Status_Frozen) return Status_Id_Frozen;
+                             else if (statusName == Status_Delayed) return Status_Id_Delayed;
+                             else return Status_Id_Completed;
+                         });
+
+            var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
+
+            this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
+
+            AssignmentDetailsChangeDto expectedResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_3)).To<AssignmentDetailsChangeDto>();
+
+            expectedResult.EndDate = null;
+
+            bool result = await this.assignmentsService.ChangeDataAsync(expectedResult);
+
+            Assignment actualResult = await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_3);
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.False(actualResult.EndDate.HasValue, errorMessagePrefix + " " + "EndDate is not changed correctly!");
+            Assert.True(actualResult.StatusId == Status_Id_InProgress, errorMessagePrefix + " " + "StatusId is not changed correctly!");
+            Assert.True(expectedResult.Progress == actualResult.Progress, errorMessagePrefix + " " + "Progress is not changed correctly!");
+        }
+
+        [Fact]
+        public async Task ChangeDataAsync_SetOnlyStatusToCompletedWithNoEndDate_ShouldSetEndDateToDateAndProgressTo100AndReturnTrue()
+        {
+            string errorMessagePrefix = "AssignmentsService ChangeDataAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
+
+            statusService.Setup(ss => ss.GetStatusIdByNameAsync(It.IsAny<string>()))
+                         .ReturnsAsync((string statusName) => {
+                             if (statusName == Status_InProgress) return Status_Id_InProgress;
+                             else if (statusName == Status_Waiting) return Status_Id_Waiting;
+                             else if (statusName == Status_Frozen) return Status_Id_Frozen;
+                             else if (statusName == Status_Delayed) return Status_Id_Delayed;
+                             else return Status_Id_Completed;
+                         });
+
+            var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
+
+            this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
+
+            AssignmentDetailsChangeDto expectedResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_1)).To<AssignmentDetailsChangeDto>();
+
+            expectedResult.StatusId = Status_Id_Completed;
+            expectedResult.StatusName = Status_Completed;
+
+            bool result = await this.assignmentsService.ChangeDataAsync(expectedResult);
+
+            Assignment actualResult = await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_1);
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.True(actualResult.EndDate.HasValue, errorMessagePrefix + " " + "EndDate is not changed correctly!");
+            Assert.True(expectedResult.StatusId == actualResult.StatusId, errorMessagePrefix + " " + "StatusId is not changed correctly!");
+            Assert.True(actualResult.Progress == Assignment_Progress_100, errorMessagePrefix + " " + "Progress is not changed correctly!");
+        }
+
+        [Fact]
+        public async Task ChangeDataAsync_SetStatusFromNotCompletedToNotCompletedAndChangeProgress_ShouldChangeStatusAndProgressCorrectlyAndReturnTrue()
+        {
+            string errorMessagePrefix = "AssignmentsService ChangeDataAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var statusService = new Mock<IStatusesService>();
+            statusService.Setup(ss => ss.GetStatusNameByIdAsync(It.IsAny<int>()))
+                         .ReturnsAsync((int id) => {
+                             if (id == Status_Id_InProgress) return Status_InProgress;
+                             else if (id == Status_Id_Waiting) return Status_Waiting;
+                             else if (id == Status_Id_Frozen) return Status_Frozen;
+                             else if (id == Status_Id_Delayed) return Status_Delayed;
+                             else return Status_Completed;
+                         });
+
+            statusService.Setup(ss => ss.GetStatusIdByNameAsync(It.IsAny<string>()))
+                         .ReturnsAsync((string statusName) => {
+                             if (statusName == Status_InProgress) return Status_Id_InProgress;
+                             else if (statusName == Status_Waiting) return Status_Id_Waiting;
+                             else if (statusName == Status_Frozen) return Status_Id_Frozen;
+                             else if (statusName == Status_Delayed) return Status_Id_Delayed;
+                             else return Status_Id_Completed;
+                         });
+
+            var assignmentsEmployeesService = new Mock<IAssignmentsEmployeesService>();
+
+            this.assignmentsService = new AssignmentsService(context, statusService.Object, assignmentsEmployeesService.Object);
+
+            AssignmentDetailsChangeDto expectedResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_1)).To<AssignmentDetailsChangeDto>();
+
+            expectedResult.StatusId = Status_Id_Frozen;
+            expectedResult.StatusName = Status_Frozen;
+            expectedResult.Progress = Assignment_Progress_50;
+
+            bool result = await this.assignmentsService.ChangeDataAsync(expectedResult);
+
+            AssignmentDetailsChangeDto actualResult = (await context.Assignments.SingleAsync(a => a.Id == Assignment_Id_1)).To<AssignmentDetailsChangeDto>();
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.True(expectedResult.StatusId == actualResult.StatusId, errorMessagePrefix + " " + "StatusId is not changed correctly!");
+            Assert.True(expectedResult.StatusName == actualResult.StatusName, errorMessagePrefix + " " + "StatusName is not changed correctly!");
+            Assert.True(expectedResult.Progress == actualResult.Progress, errorMessagePrefix + " " + "Progress is not changed correctly!");
+        }
     }
 }

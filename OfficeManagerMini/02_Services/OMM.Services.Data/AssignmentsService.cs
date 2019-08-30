@@ -129,6 +129,12 @@ namespace OMM.Services.Data
         public async Task<bool> ChangeDataAsync(AssignmentDetailsChangeDto input)
         {
             var assignment = await this.context.Assignments.FirstOrDefaultAsync(a => a.Id == input.Id);
+
+            if(assignment == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.AssignmentIdNullReference, input.Id));
+            }
+
             var assignmentStatusName = await this.statusesService.GetStatusNameByIdAsync(assignment.StatusId);
             var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
 
