@@ -341,6 +341,30 @@ namespace OMM.Services.Data
             return result;
         }
 
+        public async Task<bool> IsEmailValidToChange(string email, string employeeId)
+        {
+            var employee = await this.context.Users.FirstOrDefaultAsync(a => a.Id == employeeId);
+
+            if (employee == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, employeeId));
+            }
+
+            if(employee.Email == email)
+            {
+                return true;
+            }
+
+            var isEmailRegistered = await this.context.Users.AnyAsync(e => e.Email == email);
+
+            if(isEmailRegistered)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         //Helper methods
 
         private async Task SetNewPassword(Employee employee, string newPassword)

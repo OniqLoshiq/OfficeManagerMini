@@ -40,5 +40,7 @@ namespace OMM.Services.Data
         Task<string> GetEmployeeFullNameByIdAsync(string currentEmployeeId);
 
         Task<bool> CheckIfEmployeeIsInRole(string currentUserId, string roleName);
+
+        Task<bool> IsEmailValidToChange(string email, string employeeId);
     }
 }

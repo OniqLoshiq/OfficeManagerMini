@@ -75,6 +75,14 @@ namespace OMM.App.Areas.Management.Controllers
                 return this.View(input);
             }
 
+            var shouldChangeMail = await this.employeesService.IsEmailValidToChange(input.Email, input.Id);
+
+            if(!shouldChangeMail)
+            {
+                ModelState.AddModelError("Email", ErrorMessages.NOT_UNIQUE_EMAIL);
+                return this.View(input);
+            }
+
             if (input.ProfilePictureNew != null)
             {
                 string pictureName = string.Join("_", input.FirstName, input.MiddleName[0], input.LastName);
@@ -86,7 +94,7 @@ namespace OMM.App.Areas.Management.Controllers
                 input.ProfilePicture = pictureUrl;
             }
 
-            var employeeToEdit = AutoMapper.Mapper.Map<EmployeeEditDto>(input);
+            var employeeToEdit = input.To<EmployeeEditDto>();
 
             await this.employeesService.EditAsync(employeeToEdit);
 
