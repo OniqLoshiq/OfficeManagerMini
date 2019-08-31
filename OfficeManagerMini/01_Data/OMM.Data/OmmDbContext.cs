@@ -24,6 +24,7 @@ namespace OMM.Data
         public DbSet<Report> Reports { get; set; }
         public DbSet<ProjectPosition> ProjectPositions { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<OmmException> OmmExceptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

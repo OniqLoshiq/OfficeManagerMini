@@ -22,6 +22,7 @@ using CloudinaryDotNet;
 using OMM.Services.SendGrid;
 using OMM.Services.YWeather;
 using OMM.App.Infrastructure.ViewComponents.Models.Departments;
+using OMM.App.Infrastructure.Filters;
 
 namespace OMM.App
 {
@@ -82,6 +83,7 @@ namespace OMM.App
                 options.Filters.Add(new AuthorizeFilter(policy));
 
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add<CustomExceptionFilterAttribute>();
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             Account cloudinaryCredentials = new Account(
@@ -119,6 +121,8 @@ namespace OMM.App
             services.AddTransient<IReportsService, ReportsService>();
             services.AddTransient<IEmployeesProjectsPositionsService, EmployeesProjectsPositionsService>();
             services.AddTransient<IActivitiesService, ActivitiesService>();
+
+            services.AddScoped<CustomExceptionFilterAttribute>();
 
             //Third parties services
             services.AddTransient<ICloudinaryService, CloudinaryService>();
