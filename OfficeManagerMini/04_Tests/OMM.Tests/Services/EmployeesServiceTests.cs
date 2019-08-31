@@ -12,7 +12,9 @@ using OMM.Services.SendGrid;
 using OMM.Tests.Common;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -214,8 +216,6 @@ namespace OMM.Tests.Services
                     Email = Employee_Email_4,
                     UserName = Employee_Email_4,
                     ProfilePicture = Employee_ProfilePicture_4,
-                    PhoneNumber = Employee_PhoneNumber_4,
-                    PersonalPhoneNumber = Employee_PersonalPhoneNumber_4,
                     AccessLevel = AccessLevel_0,
                     DateOfBirth = DateTime.UtcNow.AddDays(-10229),
                     AppointedOn = DateTime.UtcNow.AddDays(-40),
@@ -734,56 +734,61 @@ namespace OMM.Tests.Services
             }
         }
 
-        //[Fact]
-        //public async Task EditAsync_WithValidData_ShouldEditEmployeeAndReturnTrue()
-        //{
-        //    string errorMessagePrefix = "EmployeesService EditAsync() method does not work properly.";
+        [Fact]
+        public async Task EditAsync_WithValidData_ShouldEditEmployeeAndReturnTrue()
+        {
+            string errorMessagePrefix = "EmployeesService EditAsync() method does not work properly.";
 
-        //    var context = OmmDbContextInMemoryFactory.InitializeContext();
-        //    await SeedData(context);
-        //    var emailSender = new Mock<ISendGrid>();
-        //    var departmentsService = new Mock<IDepartmentsService>();
-        //    var store = new Mock<IUserStore<Employee>>();
-        //    var userManager = new Mock<UserManager<Employee>>(store.Object, null, null, null, null, null, null, null, null);
-        //    var contextAccessor = new Mock<IHttpContextAccessor>();
-        //    var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<Employee>>();
-        //    var signInManager = new Mock<SignInManager<Employee>>(userManager.Object, contextAccessor.Object, userPrincipalFactory.Object, null, null, null);
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var emailSender = new Mock<ISendGrid>();
+            var departmentsService = new Mock<IDepartmentsService>();
+            departmentsService.Setup(ds => ds.GetDepartmentNameByIdAsync(It.IsAny<int>())).ReturnsAsync(Department_Name_4);
 
-        //    this.employeesService = new EmployeesService(userManager.Object, signInManager.Object, context, departmentsService.Object, emailSender.Object);
+            var store = new Mock<IUserStore<Employee>>();
+            var userManager = new Mock<UserManager<Employee>>(store.Object, null, null, null, null, null, null, null, null);
+            userManager.Setup(um => um.GetRolesAsync(It.IsAny<Employee>())).ReturnsAsync(new List<string> { "Employe" });
+            userManager.Setup(um => um.GetClaimsAsync(It.IsAny<Employee>())).ReturnsAsync(new List<Claim> { new Claim ( "AccessLevel", "7"  ) });
 
-        //    EmployeeEditDto expectedResult = (await context.Users.SingleAsync(e => e.Id == Employee_Id_1)).To<EmployeeEditDto>();
+            var contextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<Employee>>();
+            var signInManager = new Mock<SignInManager<Employee>>(userManager.Object, contextAccessor.Object, userPrincipalFactory.Object, null, null, null);
 
-        //    expectedResult.AccessLevel = AccessLevel_7;
-        //    expectedResult.AppointedOn = "30-09-2019";
-        //    expectedResult.DateOfBirth = "12-12-1982";
-        //    expectedResult.DepartmentId = Department_Id_4;
-        //    expectedResult.Email = Employee_Email_5;
-        //    expectedResult.FirstName = Employee_FirstName_5;
-        //    expectedResult.MiddleName = Employee_MiddleName_5;
-        //    expectedResult.LastName = Employee_LastName_5;
-        //    expectedResult.PersonalPhoneNumber = Employee_PersonalPhoneNumber_5;
-        //    expectedResult.PhoneNumber = Employee_PhoneNumber_5;
-        //    expectedResult.Position = Employee_Position_5;
-        //    expectedResult.Username = Employee_Email_5;
+            this.employeesService = new EmployeesService(userManager.Object, signInManager.Object, context, departmentsService.Object, emailSender.Object);
 
-        //    var result = await this.employeesService.EditAsync(expectedResult);
+            EmployeeEditDto expectedResult = (await context.Users.SingleAsync(e => e.Id == Employee_Id_1)).To<EmployeeEditDto>();
 
-        //    EmployeeEditDto actualResult = (await context.Users.SingleAsync(e => e.Id == Employee_Id_1)).To<EmployeeEditDto>();
+            expectedResult.AccessLevel = AccessLevel_7;
+            expectedResult.AppointedOn = "30-09-2019";
+            expectedResult.DateOfBirth = "12-12-1982";
+            expectedResult.DepartmentId = Department_Id_4;
+            expectedResult.Email = Employee_Email_5;
+            expectedResult.FirstName = Employee_FirstName_5;
+            expectedResult.MiddleName = Employee_MiddleName_5;
+            expectedResult.LastName = Employee_LastName_5;
+            expectedResult.PersonalPhoneNumber = Employee_PersonalPhoneNumber_5;
+            expectedResult.PhoneNumber = Employee_PhoneNumber_5;
+            expectedResult.Position = Employee_Position_5;
+            expectedResult.Username = Employee_Email_5;
 
-        //    Assert.True(result, errorMessagePrefix);
-        //    Assert.True(expectedResult.AccessLevel == actualResult.AccessLevel, errorMessagePrefix + " " + "AccessLevel not changed correctly!");
-        //    Assert.True(expectedResult.AppointedOn == actualResult.AppointedOn, errorMessagePrefix + " " + "AppointedOn not changed correctly!");
-        //    Assert.True(expectedResult.DateOfBirth == actualResult.DateOfBirth, errorMessagePrefix + " " + "DateOfBirth not changed correctly!");
-        //    Assert.True(expectedResult.DepartmentId == actualResult.DepartmentId, errorMessagePrefix + " " + "DepartmentId not changed correctly!");
-        //    Assert.True(expectedResult.Email == actualResult.Email, errorMessagePrefix + " " + "Email not changed correctly!");
-        //    Assert.True(expectedResult.FirstName == actualResult.FirstName, errorMessagePrefix + " " + "FirstName not changed correctly!");
-        //    Assert.True(expectedResult.MiddleName == actualResult.MiddleName, errorMessagePrefix + " " + "MiddleName not changed correctly!");
-        //    Assert.True(expectedResult.LastName == actualResult.LastName, errorMessagePrefix + " " + "LastName not changed correctly!");
-        //    Assert.True(expectedResult.PersonalPhoneNumber == actualResult.PersonalPhoneNumber, errorMessagePrefix + " " + "PersonalPhoneNumber not changed correctly!");
-        //    Assert.True(expectedResult.PhoneNumber == actualResult.PhoneNumber, errorMessagePrefix + " " + "PhoneNumber not changed correctly!");
-        //    Assert.True(expectedResult.Position == actualResult.Position, errorMessagePrefix + " " + "Position not changed correctly!");
-        //    Assert.True(expectedResult.Username == actualResult.Username, errorMessagePrefix + " " + "Username not changed correctly!");
-        //}
+            var result = await this.employeesService.EditAsync(expectedResult);
+
+            EmployeeEditDto actualResult = (await context.Users.SingleAsync(e => e.Id == Employee_Id_1)).To<EmployeeEditDto>();
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.True(expectedResult.AccessLevel == actualResult.AccessLevel, errorMessagePrefix + " " + "AccessLevel not changed correctly!");
+            Assert.True(expectedResult.AppointedOn == actualResult.AppointedOn, errorMessagePrefix + " " + "AppointedOn not changed correctly!");
+            Assert.True(expectedResult.DateOfBirth == actualResult.DateOfBirth, errorMessagePrefix + " " + "DateOfBirth not changed correctly!");
+            Assert.True(expectedResult.DepartmentId == actualResult.DepartmentId, errorMessagePrefix + " " + "DepartmentId not changed correctly!");
+            Assert.True(expectedResult.Email == actualResult.Email, errorMessagePrefix + " " + "Email not changed correctly!");
+            Assert.True(expectedResult.FirstName == actualResult.FirstName, errorMessagePrefix + " " + "FirstName not changed correctly!");
+            Assert.True(expectedResult.MiddleName == actualResult.MiddleName, errorMessagePrefix + " " + "MiddleName not changed correctly!");
+            Assert.True(expectedResult.LastName == actualResult.LastName, errorMessagePrefix + " " + "LastName not changed correctly!");
+            Assert.True(expectedResult.PersonalPhoneNumber == actualResult.PersonalPhoneNumber, errorMessagePrefix + " " + "PersonalPhoneNumber not changed correctly!");
+            Assert.True(expectedResult.PhoneNumber == actualResult.PhoneNumber, errorMessagePrefix + " " + "PhoneNumber not changed correctly!");
+            Assert.True(expectedResult.Position == actualResult.Position, errorMessagePrefix + " " + "Position not changed correctly!");
+            Assert.True(expectedResult.Username == actualResult.Username, errorMessagePrefix + " " + "Username not changed correctly!");
+        }
 
         [Fact]
         public async Task EditAsync_WithInvalidEmployeeId_ShouldThrowNullReferenceException()
@@ -808,6 +813,172 @@ namespace OMM.Tests.Services
             var ex = await Assert.ThrowsAsync<NullReferenceException>(() => this.employeesService.EditAsync(employeeToEdit));
 
             Assert.Equal(string.Format(ErrorMessages.EmployeeIdNullReference, Employee_Id_5), ex.Message);
+        }
+
+        [Fact]
+        public async Task IsEmailValidToChange_WithValidDataSameMail_ShouldReturnTrue()
+        {
+            string errorMessagePrefix = "EmployeesService IsEmailValidToChange() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var emailSender = new Mock<ISendGrid>();
+            var departmentsService = new Mock<IDepartmentsService>();
+            var store = new Mock<IUserStore<Employee>>();
+            var userManager = new Mock<UserManager<Employee>>(store.Object, null, null, null, null, null, null, null, null);
+            var contextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<Employee>>();
+            var signInManager = new Mock<SignInManager<Employee>>(userManager.Object, contextAccessor.Object, userPrincipalFactory.Object, null, null, null);
+
+            this.employeesService = new EmployeesService(userManager.Object, signInManager.Object, context, departmentsService.Object, emailSender.Object);
+
+            var result = await this.employeesService.IsEmailValidToChange(Employee_Email_1, Employee_Id_1);
+
+            Assert.True(result, errorMessagePrefix);
+        }
+
+        [Fact]
+        public async Task IsEmailValidToChange_WithValidDataUniqueMail_ShouldReturnTrue()
+        {
+            string errorMessagePrefix = "EmployeesService IsEmailValidToChange() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var emailSender = new Mock<ISendGrid>();
+            var departmentsService = new Mock<IDepartmentsService>();
+            var store = new Mock<IUserStore<Employee>>();
+            var userManager = new Mock<UserManager<Employee>>(store.Object, null, null, null, null, null, null, null, null);
+            var contextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<Employee>>();
+            var signInManager = new Mock<SignInManager<Employee>>(userManager.Object, contextAccessor.Object, userPrincipalFactory.Object, null, null, null);
+
+            this.employeesService = new EmployeesService(userManager.Object, signInManager.Object, context, departmentsService.Object, emailSender.Object);
+
+            var result = await this.employeesService.IsEmailValidToChange(Employee_Email_5, Employee_Id_1);
+
+            Assert.True(result, errorMessagePrefix);
+        }
+
+        [Fact]
+        public async Task IsEmailValidToChange_WithInvalidDataAlreadyRegisterdMail_ShouldReturnFalse()
+        {
+            string errorMessagePrefix = "EmployeesService IsEmailValidToChange() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var emailSender = new Mock<ISendGrid>();
+            var departmentsService = new Mock<IDepartmentsService>();
+            var store = new Mock<IUserStore<Employee>>();
+            var userManager = new Mock<UserManager<Employee>>(store.Object, null, null, null, null, null, null, null, null);
+            var contextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<Employee>>();
+            var signInManager = new Mock<SignInManager<Employee>>(userManager.Object, contextAccessor.Object, userPrincipalFactory.Object, null, null, null);
+
+            this.employeesService = new EmployeesService(userManager.Object, signInManager.Object, context, departmentsService.Object, emailSender.Object);
+
+            var result = await this.employeesService.IsEmailValidToChange(Employee_Email_3, Employee_Id_1);
+
+            Assert.False(result, errorMessagePrefix);
+        }
+
+        [Fact]
+        public async Task IsEmailValidToChange_WithInvalidEmployeeId_ShouldThrowNullReferenceException()
+        {
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var emailSender = new Mock<ISendGrid>();
+            var departmentsService = new Mock<IDepartmentsService>();
+            var store = new Mock<IUserStore<Employee>>();
+            var userManager = new Mock<UserManager<Employee>>(store.Object, null, null, null, null, null, null, null, null);
+            var contextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<Employee>>();
+            var signInManager = new Mock<SignInManager<Employee>>(userManager.Object, contextAccessor.Object, userPrincipalFactory.Object, null, null, null);
+
+            this.employeesService = new EmployeesService(userManager.Object, signInManager.Object, context, departmentsService.Object, emailSender.Object);
+
+            var ex = await Assert.ThrowsAsync<NullReferenceException>(() => this.employeesService.IsEmailValidToChange(Employee_Email_3, Employee_Id_5));
+
+            Assert.Equal(string.Format(ErrorMessages.EmployeeIdNullReference, Employee_Id_5), ex.Message);
+        }
+
+        [Fact]
+        public async Task ReleaseAsync_WithValidData_ShouldChangeEmployeeCorrectlyAndReturnTrue()
+        {
+            string errorMessagePrefix = "EmployeesService ReleaseAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var emailSender = new Mock<ISendGrid>();
+            var departmentsService = new Mock<IDepartmentsService>();
+
+            var store = new Mock<IUserStore<Employee>>();
+            var userManager = new Mock<UserManager<Employee>>(store.Object, null, null, null, null, null, null, null, null);
+            userManager.Setup(um => um.GetRolesAsync(It.IsAny<Employee>())).ReturnsAsync(new List<string> { "Employe" });
+            userManager.Setup(um => um.GetClaimsAsync(It.IsAny<Employee>())).ReturnsAsync(new List<Claim> { new Claim("AccessLevel", "7") });
+
+            var contextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<Employee>>();
+            var signInManager = new Mock<SignInManager<Employee>>(userManager.Object, contextAccessor.Object, userPrincipalFactory.Object, null, null, null);
+
+            this.employeesService = new EmployeesService(userManager.Object, signInManager.Object, context, departmentsService.Object, emailSender.Object);
+
+            EmployeeReleaseDto expectedResult = (await context.Users.SingleAsync(e => e.Id == Employee_Id_1)).To<EmployeeReleaseDto>();
+            expectedResult.LeavingReasonId = LeavingReason_Fired_Id;
+            expectedResult.LeftOn = "31-08-2019";
+
+            var result = await this.employeesService.ReleaseAsync(expectedResult);
+
+            var actualResult = await context.Users.SingleAsync(e => e.Id == Employee_Id_1);
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.True(expectedResult.LeavingReasonId == actualResult.LeavingReasonId, errorMessagePrefix + " " + "LeavingReasonId is not changed correctly!");
+            Assert.True(actualResult.LeftOn.HasValue, errorMessagePrefix + " " + "LeftOn is not changed correctly!");
+            Assert.False(actualResult.IsActive, errorMessagePrefix + " " + "IsActive is not changed correctly!");
+            Assert.True(actualResult.PhoneNumber == null, errorMessagePrefix + " " + "PhoneNumber is not changed correctly!");
+            Assert.True(actualResult.PersonalPhoneNumber == null, errorMessagePrefix + " " + "PersonalPhoneNumber is not changed correctly!");
+        }
+
+        [Fact]
+        public async Task HireBackAsync_WithValidData_ShouldChangeEmployeeCorrectlyAndReturnTrue()
+        {
+            string errorMessagePrefix = "EmployeesService HireBackAsync() method does not work properly.";
+
+            var context = OmmDbContextInMemoryFactory.InitializeContext();
+            await SeedData(context);
+            var emailSender = new Mock<ISendGrid>();
+            emailSender.Setup(es => es.SendRegistrationMailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+            var departmentsService = new Mock<IDepartmentsService>();
+            departmentsService.Setup(ds => ds.GetDepartmentNameByIdAsync(It.IsAny<int>())).ReturnsAsync(Department_Name_4);
+
+            var store = new Mock<IUserStore<Employee>>();
+            var userManager = new Mock<UserManager<Employee>>(store.Object, null, null, null, null, null, null, null, null);
+            userManager.Setup(um => um.AddToRolesAsync(It.IsAny<Employee>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(new IdentityResult());
+            userManager.Setup(um => um.GetRolesAsync(It.IsAny<Employee>())).ReturnsAsync(new List<string> { "Employe" });
+            userManager.Setup(um => um.GetClaimsAsync(It.IsAny<Employee>())).ReturnsAsync(new List<Claim> { new Claim("AccessLevel", "7") });
+
+            var contextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<Employee>>();
+            var signInManager = new Mock<SignInManager<Employee>>(userManager.Object, contextAccessor.Object, userPrincipalFactory.Object, null, null, null);
+
+            this.employeesService = new EmployeesService(userManager.Object, signInManager.Object, context, departmentsService.Object, emailSender.Object);
+
+            EmployeeHireBackDto expectedResult = (await context.Users.SingleAsync(e => e.Id == Employee_Id_4)).To<EmployeeHireBackDto>();
+            expectedResult.PhoneNumber = Employee_PhoneNumber_5;
+            expectedResult.PersonalPhoneNumber = Employee_PersonalPhoneNumber_5;
+            expectedResult.AccessLevel = AccessLevel_5;
+            expectedResult.AppointedOn = "31-08-2019";
+
+            var result = await this.employeesService.HireBackAsync(expectedResult);
+
+            var actualResult = await context.Users.SingleAsync(e => e.Id == Employee_Id_4);
+
+            Assert.True(result, errorMessagePrefix);
+            Assert.False(actualResult.LeavingReasonId.HasValue, errorMessagePrefix + " " + "LeavingReasonId is not changed correctly!");
+            Assert.False(actualResult.LeftOn.HasValue, errorMessagePrefix + " " + "LeftOn is not changed correctly!");
+            Assert.True(actualResult.IsActive, errorMessagePrefix + " " + "IsActive is not changed correctly!");
+            Assert.True(expectedResult.PhoneNumber == actualResult.PhoneNumber, errorMessagePrefix + " " + "PhoneNumber is not changed correctly!");
+            Assert.True(expectedResult.PersonalPhoneNumber == actualResult.PersonalPhoneNumber, errorMessagePrefix + " " + "PersonalPhoneNumber is not changed correctly!");
+            Assert.True(expectedResult.AppointedOn == actualResult.AppointedOn.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture), errorMessagePrefix + " " + "AppointedOn is not changed correctly!");
         }
     }
 }
