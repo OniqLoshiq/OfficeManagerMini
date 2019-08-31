@@ -43,15 +43,21 @@ namespace OMM.App.Areas.Management.Controllers
 
             var participants = new List<SelectListItem>();
 
-            employeeSelectListInfo.ForEach(esli =>
-                participants.Add(
+            foreach (var department in departmentGroups)
+            {
+                var employees = employeeSelectListInfo.Where(esli => esli.DepartmentName == department.Name).ToList();
+
+                foreach (var employee in employees)
+                {
+                    participants.Add(
                     new SelectListItem
                     {
-                        Value = esli.Id,
-                        Text = esli.FullName,
-                        Group = departmentGroups.FirstOrDefault(d => d.Name == esli.DepartmentName)
-                    }));
-
+                        Value = employee.Id,
+                        Text = employee.FullName,
+                        Group = department
+                    });
+                }
+            }
 
             ViewBag.Employees = participants;
             ViewBag.ProjectPositions = new SelectList(this.projectPositionsService.GetProjectPositions().ToList(), "Id", "Name");
@@ -74,14 +80,21 @@ namespace OMM.App.Areas.Management.Controllers
 
                 var participants = new List<SelectListItem>();
 
-                employeeSelectListInfo.ForEach(esli =>
-                    participants.Add(
+                foreach (var department in departmentGroups)
+                {
+                    var employees = employeeSelectListInfo.Where(esli => esli.DepartmentName == department.Name).ToList();
+
+                    foreach (var employee in employees)
+                    {
+                        participants.Add(
                         new SelectListItem
                         {
-                            Value = esli.Id,
-                            Text = esli.FullName,
-                            Group = departmentGroups.FirstOrDefault(d => d.Name == esli.DepartmentName)
-                        }));
+                            Value = employee.Id,
+                            Text = employee.FullName,
+                            Group = department
+                        });
+                    }
+                }
 
 
                 ViewBag.Employees = participants;
@@ -141,14 +154,21 @@ namespace OMM.App.Areas.Management.Controllers
 
             var participants = new List<SelectListItem>();
 
-            employeeSelectListInfo.ForEach(esli =>
-                participants.Add(
+            foreach (var department in departmentGroups)
+            {
+                var employees = employeeSelectListInfo.Where(esli => esli.DepartmentName == department.Name).ToList();
+
+                foreach (var employee in employees)
+                {
+                    participants.Add(
                     new SelectListItem
                     {
-                        Value = esli.Id,
-                        Text = esli.FullName,
-                        Group = departmentGroups.FirstOrDefault(d => d.Name == esli.DepartmentName)
-                    }));
+                        Value = employee.Id,
+                        Text = employee.FullName,
+                        Group = department
+                    });
+                }
+            }
 
 
             ViewBag.Employees = participants;
@@ -170,14 +190,21 @@ namespace OMM.App.Areas.Management.Controllers
 
                 var participants = new List<SelectListItem>();
 
-                employeeSelectListInfo.ForEach(esli =>
-                    participants.Add(
+                foreach (var department in departmentGroups)
+                {
+                    var employees = employeeSelectListInfo.Where(esli => esli.DepartmentName == department.Name).ToList();
+
+                    foreach (var employee in employees)
+                    {
+                        participants.Add(
                         new SelectListItem
                         {
-                            Value = esli.Id,
-                            Text = esli.FullName,
-                            Group = departmentGroups.FirstOrDefault(d => d.Name == esli.DepartmentName)
-                        }));
+                            Value = employee.Id,
+                            Text = employee.FullName,
+                            Group = department
+                        });
+                    }
+                }
 
 
                 ViewBag.Employees = participants;

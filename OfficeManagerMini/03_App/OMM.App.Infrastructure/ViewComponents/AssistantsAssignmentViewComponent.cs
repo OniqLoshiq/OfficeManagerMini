@@ -31,14 +31,21 @@ namespace OMM.App.Infrastructure.ViewComponents
 
             var departmentGroups = departments.Select(d => new SelectListGroup { Name = d });
 
-            employeeSelectListInfo.ForEach(esli =>
-                vm.Assistants.Add(
+            foreach (var department in departmentGroups)
+            {
+                var employees = employeeSelectListInfo.Where(esli => esli.DepartmentName == department.Name).ToList();
+
+                foreach (var employee in employees)
+                {
+                    vm.Assistants.Add(
                     new SelectListItem
                     {
-                        Value = esli.Id,
-                        Text = esli.FullName,
-                        Group = departmentGroups.FirstOrDefault(d => d.Name == esli.DepartmentName)
-                    }));
+                        Value = employee.Id,
+                        Text = employee.FullName,
+                        Group = department
+                    });
+                }
+            }
 
             return View(vm);
         }
