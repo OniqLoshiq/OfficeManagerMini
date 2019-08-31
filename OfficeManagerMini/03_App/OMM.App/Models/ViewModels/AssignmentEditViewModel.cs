@@ -78,7 +78,7 @@ namespace OMM.App.Models.ViewModels
                 yield return new ValidationResult(ErrorMessages.INVALID_ASSISTANT, new List<string> { "AssistantsIds" });
             }
 
-            if (this.IsProjectRelated)
+            if (this.IsProjectRelated && this.ProjectId == null)
             {
                 yield return new ValidationResult(ErrorMessages.INVALID_PROJECT, new List<string> { "ProjectId" });
             }

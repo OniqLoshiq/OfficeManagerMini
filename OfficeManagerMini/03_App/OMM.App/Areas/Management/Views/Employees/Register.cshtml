@@ -53,6 +53,7 @@
             <div class="form-group">
                 <label asp-for="ProfilePicture"></label>
                 <input class="form-control" type="file" asp-for="ProfilePicture">
+                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-md-6 company-data px-3">
