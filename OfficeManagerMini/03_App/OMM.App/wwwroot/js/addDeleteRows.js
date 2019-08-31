@@ -12,16 +12,16 @@ $(".employee-id").on('change', function () {
 //Change Participant Additional Data (profile picture and department name)
 function changeAdditionalData(participantNumber, participantId) {
 
-    $.get({
-        url: `/Management/Employees/LoadProjectParticipantAdditionalData?employeeId=${participantId}`,
-        success: function success(result) {
-            importParticipantAdditionalInfo(result, participantNumber);
-        },
-        error: function error() {
-            alert('Please select an employee!');
-            resetParticipantAddionalInfo(participantNumber);
-        }
-    });
+    if (participantId) {
+        $.get({
+            url: `/Management/Employees/LoadProjectParticipantAdditionalData?employeeId=${participantId}`,
+            success: function success(result) {
+                importParticipantAdditionalInfo(result, participantNumber);
+            }
+        });
+    }
+    resetParticipantAddionalInfo(participantNumber);
+
 }
 
 function importParticipantAdditionalInfo(data, participantNumber) {
@@ -40,15 +40,18 @@ function fillAdditionalData() {
     var participants = document.getElementsByClassName('employee-id');
 
     for (var i = 0; i < participants.length; i++) {
-        
+
         var contentPanelId = participants[i].id;
         var participantId = document.getElementById(contentPanelId).value;
+        var regex = /\d+/;
+        var participantNumber = contentPanelId.match(regex)[0];
 
         if (participantId) {
-            var regex = /\d+/;
-            var participantNumber = contentPanelId.match(regex)[0];
-
             changeAdditionalData(participantNumber, participantId);
+        }
+
+        if (participantId === "") {
+            resetParticipantAddionalInfo(participantNumber);
         }
     }
 }

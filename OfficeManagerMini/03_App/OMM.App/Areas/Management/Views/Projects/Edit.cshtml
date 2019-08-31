@@ -124,6 +124,7 @@
                             <div class="input-group mb-2">
                                 <div class="input-group">
                                     <select class="form-control" asp-for="@Model.Participants[i].ProjectPositionId" asp-items="@((ViewBag.ProjectPositions as SelectList))">
+                                        <option selected disabled>--Choose a position--</option>
                                     </select>
                                 </div>
                                 <span asp-validation-for="@Model.Participants[i].ProjectPositionId" class="text-danger"></span>
