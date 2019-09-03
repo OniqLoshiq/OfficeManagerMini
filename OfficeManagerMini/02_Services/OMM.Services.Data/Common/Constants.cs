@@ -37,5 +37,11 @@
         public const string PROJECT_MANAGER_ROLE = "Project Manager";
 
         public const int MINUTES_IN_HOUR = 60;
+
+        public const string EMPTY_STRING = "";
+
+        public const string CHANGE_DATA_EMPTY_DATE = "-";
+
+        public const string WORKING_TIME_SPLIT_VALUE = ":";
     }
 }

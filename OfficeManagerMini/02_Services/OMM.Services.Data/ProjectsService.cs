@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,8 +22,8 @@ namespace OMM.Services.Data
         private readonly IEmployeesProjectsPositionsService employeesProjectsPositionsService;
         private readonly IAssignmentsService assignmentsService;
 
-        public ProjectsService(OmmDbContext context, IReportsService reportsService, IStatusesService statusesService, 
-            IEmployeesService employeesService, IProjectPositionsService projectPositionsService, 
+        public ProjectsService(OmmDbContext context, IReportsService reportsService, IStatusesService statusesService,
+            IEmployeesService employeesService, IProjectPositionsService projectPositionsService,
             IEmployeesProjectsPositionsService employeesProjectsPositionsService, IAssignmentsService assignmentsService)
         {
             this.context = context;
@@ -66,8 +67,8 @@ namespace OMM.Services.Data
         public IQueryable<ProjectAllListDto> GetMyProjects(string employeeId)
         {
             var isEmployeeIdValid = this.context.Users.Any(e => e.Id == employeeId);
-            
-            if(!isEmployeeIdValid)
+
+            if (!isEmployeeIdValid)
             {
                 throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, employeeId));
             }
@@ -79,7 +80,7 @@ namespace OMM.Services.Data
         {
             var isProjectIdValid = this.context.Projects.Any(p => p.Id == projectId);
 
-            if(!isProjectIdValid)
+            if (!isProjectIdValid)
             {
                 throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, projectId));
             }
@@ -93,68 +94,21 @@ namespace OMM.Services.Data
         {
             var project = await this.context.Projects.FirstOrDefaultAsync(p => p.Id == input.Id);
 
-            if(project == null)
+            if (project == null)
             {
                 throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, input.Id));
             }
-
-            var projectStatusName = await this.statusesService.GetStatusNameByIdAsync(project.StatusId);
-            var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
 
             if (input.Deadline != "-" && input.Deadline != null)
             {
                 project.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             }
-            else if(input.Deadline == null)
+            else if (input.Deadline == null)
             {
                 project.Deadline = null;
             }
 
-            if ((input.EndDate != "-" && input.EndDate != null) && projectStatusName != Constants.STATUS_COMPLETED)
-            {
-                project.Progress = Constants.PROGRESS_MAX_VALUE;
-                project.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
-                project.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
-            }
-            else if ((input.EndDate != "-" && input.EndDate != null) && projectStatusName == Constants.STATUS_COMPLETED)
-            {
-                if (inputStatusName != Constants.STATUS_COMPLETED)
-                {
-                    project.EndDate = null;
-                    project.StatusId = input.StatusId;
-                }
-
-                project.Progress = input.Progress;
-            }
-            else if ((input.EndDate == "-" || input.EndDate == null) && projectStatusName == Constants.STATUS_COMPLETED)
-            {
-                project.EndDate = null;
-
-                if (inputStatusName == Constants.STATUS_COMPLETED)
-                {
-                    project.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
-                }
-                else
-                {
-                    project.StatusId = input.StatusId;
-                }
-
-                project.Progress = input.Progress;
-            }
-            else if ((input.EndDate == "-" || input.EndDate == null) && projectStatusName != Constants.STATUS_COMPLETED)
-            {
-                if (inputStatusName == Constants.STATUS_COMPLETED)
-                {
-                    project.EndDate = DateTime.UtcNow;
-                    project.StatusId = input.StatusId;
-                    project.Progress = Constants.PROGRESS_MAX_VALUE;
-                }
-                else
-                {
-                    project.Progress = input.Progress;
-                    project.StatusId = input.StatusId;
-                }
-            }
+            await this.ChangeDataEndDateStatusProgressLogic(project, input);
 
             this.context.Projects.Update(project);
             var result = await this.context.SaveChangesAsync();
@@ -185,7 +139,7 @@ namespace OMM.Services.Data
         {
             var project = await this.context.Projects.SingleOrDefaultAsync(p => p.Id == input.ProjectId);
 
-            if(project == null)
+            if (project == null)
             {
                 throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, input.ProjectId));
             }
@@ -194,25 +148,23 @@ namespace OMM.Services.Data
 
             var participantToChange = projectParticipants.SingleOrDefault(p => p.EmployeeId == input.EmployeeId);
 
-            if(participantToChange == null)
+            if (participantToChange == null)
             {
                 throw new ArgumentException(string.Format(ErrorMessages.ProjectParticipantArgumentException, input.EmployeeId, input.ProjectId));
             }
 
             var newProjectPosition = await this.projectPositionsService.GetProjectPositionNameByIdAsync(input.ProjectPositionId);
 
-            if(participantToChange.ProjectPosition.Name == Constants.PROJECT_MANAGER_ROLE && newProjectPosition != Constants.PROJECT_MANAGER_ROLE)
+            if (participantToChange.ProjectPosition.Name == Constants.PROJECT_MANAGER_ROLE && newProjectPosition != Constants.PROJECT_MANAGER_ROLE)
             {
                 var projectManagerRolesCount = projectParticipants.Where(p => p.ProjectPosition.Name == Constants.PROJECT_MANAGER_ROLE).Count();
 
-                if(projectManagerRolesCount > 1)
+                if (projectManagerRolesCount > 1)
                 {
                     return false;
                 }
-
                 return true;
             }
-
             return false;
         }
 
@@ -220,7 +172,7 @@ namespace OMM.Services.Data
         {
             var project = await this.context.Projects.Where(p => p.Id == projectId).SingleOrDefaultAsync();
 
-            if(project == null)
+            if (project == null)
             {
                 throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, projectId));
             }
@@ -265,7 +217,7 @@ namespace OMM.Services.Data
 
             return isCurrentUserParticipant;
         }
-        
+
         public async Task<bool> EditProjectAsync(ProjectEditDto projectToEdit)
         {
             var project = await this.context.Projects.Where(p => p.Id == projectToEdit.Id).SingleOrDefaultAsync();
@@ -277,7 +229,7 @@ namespace OMM.Services.Data
 
             project.CreatedOn = DateTime.ParseExact(projectToEdit.CreatedOn, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
 
-            if (projectToEdit.Deadline != "" && projectToEdit.Deadline != null)
+            if (projectToEdit.Deadline != Constants.EMPTY_STRING && projectToEdit.Deadline != null)
             {
                 project.Deadline = DateTime.ParseExact(projectToEdit.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             }
@@ -286,7 +238,40 @@ namespace OMM.Services.Data
                 project.Deadline = null;
             }
 
-            #region ChangeStatusLogic 
+            await this.ChangeStatusAndProgressLogic(project, projectToEdit);
+
+            await this.AddRemoveParticipants(project, projectToEdit);
+
+            this.context.Projects.Update(project);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteProjectAsync(string id)
+        {
+            var project = await this.context.Projects.Where(p => p.Id == id).SingleOrDefaultAsync();
+
+            if (project == null)
+            {
+                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, id));
+            }
+
+            if (project.Assignments.Count > 0)
+            {
+                await this.assignmentsService.DeleteProjectAssignmentsAsync(project.Assignments.ToList());
+            }
+
+            this.context.Projects.Remove(project);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        //Helper methods
+
+        private async Task ChangeStatusAndProgressLogic(Project project, ProjectEditDto projectToEdit)
+        {
             if (project.Status.Name == Constants.STATUS_COMPLETED && project.StatusId != projectToEdit.StatusId)
             {
                 project.EndDate = null;
@@ -304,12 +289,13 @@ namespace OMM.Services.Data
                 project.StatusId = projectToEdit.StatusId;
                 project.Progress = projectToEdit.Progress;
             }
-            #endregion  
+        }
 
-
+        private async Task AddRemoveParticipants(Project project, ProjectEditDto projectToEdit)
+        {
             var participantsWithPositionsToRemove = project.Participants
-                .Where(p => !projectToEdit.Participants
-                        .Any(pp => p.EmployeeId == pp.EmployeeId && p.ProjectPositionId == pp.ProjectPositionId)).Select(p => p.To<ProjectEditParticipantDto>()).ToList();
+                            .Where(p => !projectToEdit.Participants
+                                    .Any(pp => p.EmployeeId == pp.EmployeeId && p.ProjectPositionId == pp.ProjectPositionId)).Select(p => p.To<ProjectEditParticipantDto>()).ToList();
 
             var participantsWithPositionsToAdd = projectToEdit.Participants
                 .Where(pp => !project.Participants
@@ -329,31 +315,58 @@ namespace OMM.Services.Data
 
                 await this.employeesProjectsPositionsService.AddParticipantsAsync(participantsWithPositionsToAdd);
             }
-
-            this.context.Projects.Update(project);
-            var result = await this.context.SaveChangesAsync();
-
-            return result > 0;
         }
 
-        public async Task<bool> DeleteProjectAsync(string id)
+        private async Task ChangeDataEndDateStatusProgressLogic(Project project, ProjectDetailsChangeDto input)
         {
-            var project = await this.context.Projects.Where(p => p.Id == id).SingleOrDefaultAsync();
+            var projectStatusName = await this.statusesService.GetStatusNameByIdAsync(project.StatusId);
+            var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
 
-            if(project == null)
+            if ((input.EndDate != Constants.CHANGE_DATA_EMPTY_DATE && input.EndDate != null) && projectStatusName != Constants.STATUS_COMPLETED)
             {
-                throw new NullReferenceException(string.Format(ErrorMessages.ProjectIdNullReference, id));
+                project.Progress = Constants.PROGRESS_MAX_VALUE;
+                project.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+                project.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
             }
-
-            if(project.Assignments.Count > 0)
+            else if ((input.EndDate != "-" && input.EndDate != null) && projectStatusName == Constants.STATUS_COMPLETED)
             {
-                await this.assignmentsService.DeleteProjectAssignmentsAsync(project.Assignments.ToList());
+                if (inputStatusName != Constants.STATUS_COMPLETED)
+                {
+                    project.EndDate = null;
+                    project.StatusId = input.StatusId;
+                }
+
+                project.Progress = input.Progress;
             }
+            else if ((input.EndDate == Constants.CHANGE_DATA_EMPTY_DATE || input.EndDate == null) && projectStatusName == Constants.STATUS_COMPLETED)
+            {
+                project.EndDate = null;
 
-            this.context.Projects.Remove(project);
-            var result = await this.context.SaveChangesAsync();
+                if (inputStatusName == Constants.STATUS_COMPLETED)
+                {
+                    project.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
+                }
+                else
+                {
+                    project.StatusId = input.StatusId;
+                }
 
-            return result > 0;
+                project.Progress = input.Progress;
+            }
+            else if ((input.EndDate == Constants.CHANGE_DATA_EMPTY_DATE || input.EndDate == null) && projectStatusName != Constants.STATUS_COMPLETED)
+            {
+                if (inputStatusName == Constants.STATUS_COMPLETED)
+                {
+                    project.EndDate = DateTime.UtcNow;
+                    project.StatusId = input.StatusId;
+                    project.Progress = Constants.PROGRESS_MAX_VALUE;
+                }
+                else
+                {
+                    project.Progress = input.Progress;
+                    project.StatusId = input.StatusId;
+                }
+            }
         }
     }
 }

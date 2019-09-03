@@ -26,15 +26,7 @@ namespace OMM.Services.Data
                 throw new NullReferenceException(string.Format(ErrorMessages.AssignmentIdNullReference, assignmentId));
             }
 
-            for (int i = 0; i < assistantsToAdd.Count; i++)
-            {
-                var isEmployeeIdValid = this.context.Users.Any(e => e.Id == assistantsToAdd[i]);
-
-                if(!isEmployeeIdValid)
-                {
-                    throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, assistantsToAdd[i]));
-                }
-            }
+            this.CheckIfValidEmployees(assistantsToAdd);
 
             var isEmployeeAlreadyAnAssistantInAssignment = await this.context.AssignmentsEmployees
                 .AnyAsync(ae => ae.AssignmentId == assignmentId 
@@ -60,15 +52,7 @@ namespace OMM.Services.Data
 
         public IEnumerable<AssignmentsEmployees> CreateWithAssistantsIds(List<string> assistantsIds)
         {
-            for (int i = 0; i < assistantsIds.Count; i++)
-            {
-                var isEmployeeIdValid = this.context.Users.Any(e => e.Id == assistantsIds[i]);
-
-                if (!isEmployeeIdValid)
-                {
-                    throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, assistantsIds[i]));
-                }
-            }
+            this.CheckIfValidEmployees(assistantsIds);
 
             var assignmentEmployees = assistantsIds.Select(id => new AssignmentsEmployees { AssistantId = id });
 
@@ -84,15 +68,7 @@ namespace OMM.Services.Data
                 throw new NullReferenceException(string.Format(ErrorMessages.AssignmentIdNullReference, assignmentId));
             }
 
-            for (int i = 0; i < assistantsToRemove.Count; i++)
-            {
-                var isEmployeeIdValid = this.context.Users.Any(e => e.Id == assistantsToRemove[i]);
-
-                if (!isEmployeeIdValid)
-                {
-                    throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, assistantsToRemove[i]));
-                }
-            }
+            this.CheckIfValidEmployees(assistantsToRemove);
 
             var assistants = this.context.AssignmentsEmployees
                 .Where(ae => ae.AssignmentId == assignmentId)
@@ -102,6 +78,23 @@ namespace OMM.Services.Data
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
+        }
+
+        //Helper methods
+
+        private void CheckIfValidEmployees(List<string> assistantsToAdd)
+        {
+            var employeeIds = this.context.Users.Select(e => e.Id).ToList();
+
+            for (int i = 0; i < assistantsToAdd.Count; i++)
+            {
+                var isEmployeeIdValid = employeeIds.Any(e => e == assistantsToAdd[i]);
+
+                if (!isEmployeeIdValid)
+                {
+                    throw new NullReferenceException(string.Format(ErrorMessages.EmployeeIdNullReference, assistantsToAdd[i]));
+                }
+            }
         }
     }
 }

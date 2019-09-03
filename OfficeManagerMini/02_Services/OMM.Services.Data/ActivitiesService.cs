@@ -70,7 +70,7 @@ namespace OMM.Services.Data
 
             activity.Date = DateTime.ParseExact(input.Date, Constants.ACTIVITY_DATETIME_FORMAT, CultureInfo.InvariantCulture);
             activity.Description = input.Description;
-            var workingTime = input.WorkingTime.Split(":", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            var workingTime = input.WorkingTime.Split(Constants.WORKING_TIME_SPLIT_VALUE, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
             activity.WorkingMinutes = workingTime[0] * Constants.MINUTES_IN_HOUR + workingTime[1];
 
             this.context.Activities.Update(activity);

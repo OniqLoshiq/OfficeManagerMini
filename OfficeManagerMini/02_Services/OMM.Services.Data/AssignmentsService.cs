@@ -143,10 +143,7 @@ namespace OMM.Services.Data
                 throw new NullReferenceException(string.Format(ErrorMessages.AssignmentIdNullReference, input.Id));
             }
 
-            var assignmentStatusName = await this.statusesService.GetStatusNameByIdAsync(assignment.StatusId);
-            var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
-
-            if (input.Deadline != "-" && input.Deadline != null)
+            if (input.Deadline != Constants.CHANGE_DATA_EMPTY_DATE && input.Deadline != null)
             {
                 assignment.Deadline = DateTime.ParseExact(input.Deadline, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
             }
@@ -155,57 +152,12 @@ namespace OMM.Services.Data
                 assignment.Deadline = null;
             }
 
-            if ((input.EndDate != "-" && input.EndDate != null) && assignmentStatusName != Constants.STATUS_COMPLETED)
-            {
-                assignment.Progress = Constants.PROGRESS_MAX_VALUE;
-                assignment.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
-                assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
-            }
-            else if ((input.EndDate != "-" && input.EndDate != null) && assignmentStatusName == Constants.STATUS_COMPLETED)
-            {
-                if (inputStatusName != Constants.STATUS_COMPLETED)
-                {
-                    assignment.EndDate = null;
-                    assignment.StatusId = input.StatusId;
-                }
-
-                assignment.Progress = input.Progress;
-            }
-            else if ((input.EndDate == "-" || input.EndDate == null) && assignmentStatusName == Constants.STATUS_COMPLETED)
-            {
-                assignment.EndDate = null;
-
-                if (inputStatusName == Constants.STATUS_COMPLETED)
-                {
-                    assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
-                }
-                else
-                {
-                    assignment.StatusId = input.StatusId;
-                }
-
-                assignment.Progress = input.Progress;
-            }
-            else if ((input.EndDate == "-" || input.EndDate == null) && assignmentStatusName != Constants.STATUS_COMPLETED)
-            {
-                if (inputStatusName == Constants.STATUS_COMPLETED)
-                {
-                    assignment.EndDate = DateTime.UtcNow;
-                    assignment.StatusId = input.StatusId;
-                    assignment.Progress = Constants.PROGRESS_MAX_VALUE;
-                }
-                else
-                {
-                    assignment.Progress = input.Progress;
-                    assignment.StatusId = input.StatusId;
-                }
-            }
+            await this.ChangeDataEndDateStatsusAndProgress(assignment, input);
 
             this.context.Assignments.Update(assignment);
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
-
         }
 
         public async Task<bool> DeleteAsync(string id)
@@ -247,7 +199,7 @@ namespace OMM.Services.Data
 
             assignment.StartingDate = DateTime.ParseExact(input.StartingDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
                         
-            if (input.Deadline == "")
+            if (input.Deadline == Constants.EMPTY_STRING)
             {
                 assignment.Deadline = null;
             }
@@ -275,7 +227,30 @@ namespace OMM.Services.Data
                 assignment.ProjectId = null;
             }
 
-            #region ChangeStatusLogic 
+            await this.ChangeStatusAndProgressLogic(assignment, input);
+
+            await this.AddRemoveAssistants(assignment, input);
+
+            this.context.Assignments.Update(assignment);
+
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteProjectAssignmentsAsync(List<Assignment> assignmentsToDelete)
+        {
+            this.context.Assignments.RemoveRange(assignmentsToDelete);
+
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        //Helper methods
+
+        private async Task ChangeStatusAndProgressLogic(Assignment assignment, AssignmentEditDto input)
+        {
             if (assignment.Status.Name == Constants.STATUS_COMPLETED && assignment.StatusId != input.StatusId)
             {
                 assignment.EndDate = null;
@@ -293,8 +268,10 @@ namespace OMM.Services.Data
                 assignment.StatusId = input.StatusId;
                 assignment.Progress = input.Progress;
             }
-            #endregion  
+        }
 
+        private async Task AddRemoveAssistants(Assignment assignment, AssignmentEditDto input)
+        {
             var assignmentAssistantsIds = assignment.AssignmentsAssistants.Select(aa => aa.AssistantId).ToList();
 
             var assistantsToRemove = assignmentAssistantsIds.Except(input.AssistantsIds).ToList();
@@ -310,21 +287,58 @@ namespace OMM.Services.Data
             {
                 await this.assignmentsEmployeesService.AddAssistantsAsync(assistantsToAdd, assignment.Id);
             }
-
-            this.context.Assignments.Update(assignment);
-
-            var result = await this.context.SaveChangesAsync();
-
-            return result > 0;
         }
 
-        public async Task<bool> DeleteProjectAssignmentsAsync(List<Assignment> assignmentsToDelete)
+        private async Task ChangeDataEndDateStatsusAndProgress(Assignment assignment, AssignmentDetailsChangeDto input)
         {
-            this.context.Assignments.RemoveRange(assignmentsToDelete);
+            var assignmentStatusName = await this.statusesService.GetStatusNameByIdAsync(assignment.StatusId);
+            var inputStatusName = await this.statusesService.GetStatusNameByIdAsync(input.StatusId);
 
-            var result = await this.context.SaveChangesAsync();
+            if ((input.EndDate != Constants.CHANGE_DATA_EMPTY_DATE && input.EndDate != null) && assignmentStatusName != Constants.STATUS_COMPLETED)
+            {
+                assignment.Progress = Constants.PROGRESS_MAX_VALUE;
+                assignment.EndDate = DateTime.ParseExact(input.EndDate, Constants.DATETIME_FORMAT, CultureInfo.InvariantCulture);
+                assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_COMPLETED);
+            }
+            else if ((input.EndDate != Constants.CHANGE_DATA_EMPTY_DATE && input.EndDate != null) && assignmentStatusName == Constants.STATUS_COMPLETED)
+            {
+                if (inputStatusName != Constants.STATUS_COMPLETED)
+                {
+                    assignment.EndDate = null;
+                    assignment.StatusId = input.StatusId;
+                }
 
-            return result > 0;
+                assignment.Progress = input.Progress;
+            }
+            else if ((input.EndDate == Constants.CHANGE_DATA_EMPTY_DATE || input.EndDate == null) && assignmentStatusName == Constants.STATUS_COMPLETED)
+            {
+                assignment.EndDate = null;
+
+                if (inputStatusName == Constants.STATUS_COMPLETED)
+                {
+                    assignment.StatusId = await this.statusesService.GetStatusIdByNameAsync(Constants.STATUS_INPROGRESS);
+                }
+                else
+                {
+                    assignment.StatusId = input.StatusId;
+                }
+
+                assignment.Progress = input.Progress;
+            }
+            else if ((input.EndDate == Constants.CHANGE_DATA_EMPTY_DATE || input.EndDate == null) && assignmentStatusName != Constants.STATUS_COMPLETED)
+            {
+                if (inputStatusName == Constants.STATUS_COMPLETED)
+                {
+                    assignment.EndDate = DateTime.UtcNow;
+                    assignment.StatusId = input.StatusId;
+                    assignment.Progress = Constants.PROGRESS_MAX_VALUE;
+                }
+                else
+                {
+                    assignment.Progress = input.Progress;
+                    assignment.StatusId = input.StatusId;
+                }
+            }
         }
     }
 }
