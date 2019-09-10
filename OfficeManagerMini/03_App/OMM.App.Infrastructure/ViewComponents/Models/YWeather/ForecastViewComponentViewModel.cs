@@ -22,7 +22,7 @@ namespace OMM.App.Infrastructure.ViewComponents.Models.YWeather
             configuration
                 .CreateMap<Forecast, ForecastViewComponentViewModel>()
                 .ForMember(destination => destination.DayOfWeek,
-                            opts => opts.MapFrom(origin => DateTimeOffset.FromUnixTimeSeconds(origin.Date).ToLocalTime().DayOfWeek));
+                            opts => opts.MapFrom(origin => DateTimeOffset.FromUnixTimeSeconds(origin.Date).ToOffset(new TimeSpan(12,0,0)).DayOfWeek));
         }
     }
 }
